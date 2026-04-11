@@ -279,6 +279,24 @@
         ];
 
         // --- FUNCIONES GLOBALES (Solución ReferenceError) ---
+        window.goHome = function() {
+            document.getElementById('page-detail').classList.add('hidden');
+            document.getElementById('main-view').classList.remove('hidden');
+            window.scrollTo(0, 0);
+            updateHeaderOnScroll();
+        };
+
+        window.scrollToFleet = function() {
+            const section = document.getElementById('section-fleet');
+            if(section) section.scrollIntoView({ behavior: 'smooth' });
+        };
+
+        window.syncDetailLocation = function() {
+            globalLocation = document.getElementById('detailLocation').value;
+            const searchLoc = document.getElementById('searchLocation');
+            if(searchLoc) searchLoc.value = globalLocation;
+        };
+
         window.showNotif = function(msg) {
             const n = document.getElementById('notif');
             if (n) {
@@ -490,7 +508,7 @@
                                 <h1 class="oswald text-3xl font-bold text-gray-900 uppercase mb-4">${selectedCar.name}</h1>
                                 <div class="text-3xl font-bold text-gray-900 mb-6 border-b pb-6">Q${selectedCar.price.toLocaleString()} <span class="text-xs text-gray-400 uppercase tracking-widest">/ Día</span></div>
                                 <div id="booking-step-1" class="space-y-5">
-                                    <select id="detailLocation" class="w-full border-gray-200 rounded-xl py-3 text-sm bg-gray-50 font-bold">${selectedLocationHTML}</select>
+                                    <select id="detailLocation" onchange="syncDetailLocation()" class="w-full border-gray-200 rounded-xl py-3 text-sm bg-gray-50 font-bold">${selectedLocationHTML}</select>
                                     <div class="relative calendar-wrapper">
                                         <input id="detailDateInput" type="text" class="w-full border-gray-200 rounded-xl py-3.5 pl-4 pr-10 text-sm bg-gray-50 font-bold text-gray-700 cursor-pointer" value="${dateText}" readonly onclick="toggleCalendar(event, 'detailCalendarModal')">
                                         <div id="detailCalendarModal" class="calendar-modal bg-white rounded-3xl shadow-2xl border border-gray-100 p-6 fade-in">
