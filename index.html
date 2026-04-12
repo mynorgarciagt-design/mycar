@@ -93,7 +93,6 @@
                 <a class="hover:text-brand-orange transition-colors text-white cursor-pointer" href="#section-banners">Por qué elegirnos</a>
                 <a class="hover:text-brand-orange transition-colors text-white cursor-pointer" href="#section-faq">FAQ</a>
             </nav>
-            <button onclick="showNotif('Sección de cuenta próximamente')" class="bg-white/10 hover:bg-white/20 px-5 py-2 rounded-full text-xs font-bold backdrop-blur-md transition-all border border-white/20 uppercase tracking-widest">Mi Cuenta</button>
         </header>
 
         <!-- VISTA PRINCIPAL -->
@@ -105,15 +104,12 @@
                         <p id="heroSubtitle" class="text-lg md:text-xl text-gray-200 mb-10 max-w-md"></p>
                     </div>
 
-                    <div class="bg-white rounded-lg p-8 shadow-2xl w-full max-w-2xl fade-in relative mb-10 calendar-wrapper">
-                        <form class="grid grid-cols-1 md:grid-cols-2 gap-6" onsubmit="handleSearch(event)">
+                    <div class="bg-white rounded-lg p-8 shadow-2xl w-full max-w-3xl fade-in relative mb-10 calendar-wrapper">
+                        <form class="grid grid-cols-1 md:grid-cols-3 gap-6" onsubmit="handleSearch(event)">
                             <div>
                                 <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Punto de Recogida</label>
                                 <select id="searchLocation" class="block w-full border-gray-100 rounded py-3 text-sm bg-gray-50 font-bold focus:ring-brand-orange">
-                                    <option value="">Seleccionar ubicación</option>
-                                    <option value="Panajachel, Sololá">Panajachel, Sololá</option>
-                                    <option value="Aeropuerto La Aurora, GT">Aeropuerto La Aurora, GT</option>
-                                    <option value="Antigua Guatemala">Antigua Guatemala</option>
+                                    <!-- Dinamico -->
                                 </select>
                             </div>
                             <div class="relative">
@@ -122,13 +118,13 @@
                                 
                                 <div id="homeCalendarModal" class="calendar-modal bg-white rounded-xl border p-5 fade-in">
                                     <div class="flex gap-2 mb-4 text-center">
-                                        <div class="flex-1 bg-gray-50 p-2 rounded border"><p class="text-[9px] font-bold text-gray-400">Entrega</p><p id="startDateDisplay" class="text-xs font-bold">--/--/--</p></div>
-                                        <div class="flex-1 bg-gray-50 p-2 rounded border"><p class="text-[9px] font-bold text-gray-400">Devolución</p><p id="endDateDisplay" class="text-xs font-bold">--/--/--</p></div>
+                                        <div class="flex-1 bg-gray-50 p-2 rounded border"><p class="text-[9px] font-bold text-gray-400">Entrega</p><p id="startDateDisplay" class="text-xs font-bold text-gray-900">--/--/--</p></div>
+                                        <div class="flex-1 bg-gray-50 p-2 rounded border"><p class="text-[9px] font-bold text-gray-400">Devolución</p><p id="endDateDisplay" class="text-xs font-bold text-gray-900">--/--/--</p></div>
                                     </div>
                                     <div class="flex justify-between items-center mb-4">
-                                        <button type="button" onclick="changeMonth(event, -1, 'homeCalendar')"><i class="fa-solid fa-chevron-left"></i></button>
-                                        <h4 id="homeCalendarMonthTitle" class="text-sm font-bold uppercase oswald">Abril 2026</h4>
-                                        <button type="button" onclick="changeMonth(event, 1, 'homeCalendar')"><i class="fa-solid fa-chevron-right"></i></button>
+                                        <button type="button" class="text-gray-800 p-2" onclick="changeMonth(event, -1, 'homeCalendar')"><i class="fa-solid fa-chevron-left"></i></button>
+                                        <h4 id="homeCalendarMonthTitle" class="text-sm font-bold uppercase oswald text-gray-900">Abril 2026</h4>
+                                        <button type="button" class="text-gray-800 p-2" onclick="changeMonth(event, 1, 'homeCalendar')"><i class="fa-solid fa-chevron-right"></i></button>
                                     </div>
                                     <div class="grid grid-cols-7 gap-y-1" id="homeCalendarGrid"></div>
                                     <div class="mt-4 flex justify-end gap-2 border-t pt-4">
@@ -137,7 +133,11 @@
                                     </div>
                                 </div>
                             </div>
-                            <button type="submit" class="md:col-span-2 w-full bg-brand-orange text-white font-bold py-4 rounded shadow-lg uppercase tracking-wider text-sm hover:bg-yellow-500 transition-colors">Buscar Vehículo</button>
+                            <div>
+                                <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Horario (07:00 - 17:00)</label>
+                                <input id="homeTime" type="time" min="07:00" max="17:00" class="block w-full border-gray-100 rounded py-3 text-sm bg-gray-50 font-bold focus:ring-brand-orange">
+                            </div>
+                            <button type="submit" class="md:col-span-3 w-full bg-brand-orange text-white font-bold py-4 rounded shadow-lg uppercase tracking-wider text-sm hover:bg-yellow-500 transition-colors">Buscar Vehículo</button>
                         </form>
                     </div>
                 </main>
@@ -216,17 +216,22 @@
                     <div class="bg-white p-8 rounded-xl border shadow-sm">
                         <h3 class="font-bold uppercase text-xs tracking-widest mb-4 border-b pb-2 text-brand-orange">1. Agregar Carro Nuevo</h3>
                         <form id="adminForm" onsubmit="addCar(event)" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <input id="adminCarName" type="text" required class="border-gray-200 rounded py-3 text-sm bg-gray-50 focus:border-brand-orange focus:ring-brand-orange" placeholder="Nombre (Ej. BYD Seagull)">
-                            <input id="adminCarPrice" type="number" required class="border-gray-200 rounded py-3 text-sm bg-gray-50 focus:border-brand-orange focus:ring-brand-orange" placeholder="Precio x Día (Q)">
+                            <input id="adminCarName" type="text" required class="md:col-span-2 border-gray-200 rounded py-3 text-sm bg-gray-50 focus:border-brand-orange" placeholder="Nombre del Vehículo">
                             
                             <div>
-                                <select id="adminCarType" required class="w-full border-gray-200 rounded py-3 text-sm bg-gray-50 focus:border-brand-orange focus:ring-brand-orange">
-                                    <option value="">Seleccionar Categoría...</option>
-                                </select>
+                                <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Precio Normal (Q)</label>
+                                <input id="adminCarPrice" type="number" required class="w-full border-gray-200 rounded py-3 text-sm bg-gray-50 focus:border-brand-orange" placeholder="Ej. 450" oninput="document.getElementById('adminCarPriceHigh').value = Math.round(this.value * 1.1)">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Precio Demanda Alta (Q) (+10%)</label>
+                                <input id="adminCarPriceHigh" type="number" required class="w-full border-gray-200 rounded py-3 text-sm bg-gray-50 focus:border-brand-orange" placeholder="Ej. 495">
                             </div>
 
-                            <select id="adminCarTrans" required class="w-full border-gray-200 rounded py-3 text-sm bg-gray-50 focus:border-brand-orange focus:ring-brand-orange">
-                                <option value="">Tipo de Transmisión...</option>
+                            <select id="adminCarType" required class="w-full border-gray-200 rounded py-3 text-sm bg-gray-50 focus:border-brand-orange">
+                                <option value="">Categoría...</option>
+                            </select>
+                            <select id="adminCarTrans" required class="w-full border-gray-200 rounded py-3 text-sm bg-gray-50 focus:border-brand-orange">
+                                <option value="">Transmisión...</option>
                                 <option value="Automático">Automático</option>
                                 <option value="Mecánico">Mecánico</option>
                             </select>
@@ -234,15 +239,14 @@
                             <div class="flex gap-4 md:col-span-2">
                                 <div class="flex-1 relative">
                                     <span class="absolute left-3 top-3.5 text-gray-400"><i class="fa-solid fa-users"></i></span>
-                                    <input id="adminCarPax" type="number" min="1" max="15" required class="w-full pl-9 border-gray-200 rounded py-3 text-sm bg-gray-50 focus:border-brand-orange focus:ring-brand-orange" placeholder="Pasajeros (Ej. 5)">
+                                    <input id="adminCarPax" type="number" min="1" required class="w-full pl-9 border-gray-200 rounded py-3 text-sm bg-gray-50 focus:border-brand-orange" placeholder="Pasajeros">
                                 </div>
                                 <div class="flex-1 relative">
                                     <span class="absolute left-3 top-3.5 text-gray-400"><i class="fa-solid fa-suitcase"></i></span>
-                                    <input id="adminCarLuggage" type="number" min="0" max="10" required class="w-full pl-9 border-gray-200 rounded py-3 text-sm bg-gray-50 focus:border-brand-orange focus:ring-brand-orange" placeholder="Maletas (Ej. 2)">
+                                    <input id="adminCarLuggage" type="number" min="0" required class="w-full pl-9 border-gray-200 rounded py-3 text-sm bg-gray-50 focus:border-brand-orange" placeholder="Maletas">
                                 </div>
                             </div>
                             
-                            <!-- Carga de Imagen Múltiple Local -->
                             <div class="md:col-span-2 border-2 border-dashed border-gray-300 rounded p-4 text-center bg-gray-50 relative hover:bg-gray-100 transition-colors">
                                 <input type="file" id="adminCarImage" accept="image/*" multiple required class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" onchange="previewFileName(this)">
                                 <div class="text-sm text-gray-500 font-medium">
@@ -252,13 +256,11 @@
                             </div>
 
                             <div class="md:col-span-2 border-t pt-4 mt-2">
-                                <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">Equipamiento (Opcional)</label>
-                                <div id="adminEquipmentCheckboxes" class="flex flex-wrap gap-3">
-                                    <!-- Se llena dinámicamente -->
-                                </div>
+                                <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">Equipamiento Incluido (Opcional)</label>
+                                <div id="adminEquipmentCheckboxes" class="flex flex-wrap gap-3"></div>
                             </div>
 
-                            <button type="submit" id="btnGuardarCarro" class="md:col-span-2 mt-4 bg-brand-dark text-white font-bold py-3 rounded uppercase text-xs hover:bg-black transition-colors">Guardar Carro en Base de Datos</button>
+                            <button type="submit" id="btnGuardarCarro" class="md:col-span-2 mt-4 bg-brand-dark text-white font-bold py-3 rounded uppercase text-xs hover:bg-black transition-colors">Guardar Carro</button>
                         </form>
                     </div>
 
@@ -271,46 +273,71 @@
                 <!-- COLUMNA DERECHA: Configuración del Sistema -->
                 <div class="space-y-8">
                     
-                    <!-- Configuración de Portada -->
                     <div class="bg-white p-6 rounded-xl border shadow-sm">
                         <h3 class="font-bold uppercase text-xs tracking-widest mb-4 border-b pb-2 text-brand-orange">Diseño de Portada (Hero)</h3>
                         <div class="space-y-3">
                             <input type="text" id="adminHeroTitle" placeholder="Título principal" class="w-full border-gray-200 rounded text-sm bg-gray-50">
                             <textarea id="adminHeroSubtitle" placeholder="Subtítulo corto" rows="2" class="w-full border-gray-200 rounded text-sm bg-gray-50"></textarea>
-                            
                             <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-2">Imagen de Fondo</label>
-                            <input type="file" id="adminHeroBgInput" accept="image/*" class="w-full text-xs text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-gray-100 file:text-brand-dark hover:file:bg-gray-200 cursor-pointer">
-                            
-                            <button onclick="saveHeroSettings()" class="w-full bg-brand-dark text-white py-2 rounded text-xs font-bold uppercase mt-2 hover:bg-black">Guardar Textos / Fondo</button>
+                            <input type="file" id="adminHeroBgInput" accept="image/*" class="w-full text-xs text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:bg-gray-100 file:text-brand-dark cursor-pointer">
+                            <button onclick="saveHeroSettings()" class="w-full bg-brand-dark text-white py-2 rounded text-xs font-bold uppercase mt-2 hover:bg-black">Actualizar Portada</button>
                         </div>
                     </div>
 
-                    <div class="bg-white p-6 rounded-xl border shadow-sm">
-                        <h3 class="font-bold uppercase text-xs tracking-widest mb-4 border-b pb-2">Preguntas Frecuentes</h3>
-                        <div class="space-y-2 mb-4">
-                            <input type="text" id="newFaqQ" placeholder="Pregunta (Ej. ¿Hay límite de millaje?)" class="w-full border-gray-200 rounded text-sm bg-gray-50">
-                            <textarea id="newFaqA" placeholder="Respuesta..." rows="2" class="w-full border-gray-200 rounded text-sm bg-gray-50"></textarea>
-                            <button onclick="addFaq()" class="w-full bg-gray-200 text-gray-800 py-2 rounded text-xs font-bold uppercase hover:bg-gray-300">Agregar Pregunta</button>
+                    <div class="bg-white p-6 rounded-xl border shadow-sm border-red-100">
+                        <h3 class="font-bold uppercase text-xs tracking-widest mb-4 border-b pb-2 text-red-500"><i class="fa-solid fa-fire mr-1"></i> Fechas de Demanda Alta</h3>
+                        <div class="flex gap-2 mb-4">
+                            <input type="date" id="hdStartDate" class="flex-1 border-gray-200 rounded text-sm bg-gray-50 text-xs">
+                            <input type="date" id="hdEndDate" class="flex-1 border-gray-200 rounded text-sm bg-gray-50 text-xs">
+                            <button onclick="addHighDemand()" class="bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded text-xs font-bold"><i class="fa-solid fa-plus"></i></button>
                         </div>
-                        <ul id="faqAdminList" class="space-y-2 mt-4 pt-4 border-t"></ul>
+                        <ul id="hdListAdmin" class="space-y-2"></ul>
                     </div>
 
                     <div class="bg-white p-6 rounded-xl border shadow-sm">
-                        <h3 class="font-bold uppercase text-xs tracking-widest mb-4 border-b pb-2">Categorías</h3>
+                        <h3 class="font-bold uppercase text-xs tracking-widest mb-4 border-b pb-2">Lugares de Recogida</h3>
+                        <div class="flex gap-2 mb-4">
+                            <input type="text" id="newLocInput" placeholder="Ej. Aeropuerto" class="flex-1 border-gray-200 rounded text-sm bg-gray-50">
+                            <button onclick="addSettingString('locations', 'newLocInput')" class="bg-brand-dark text-white px-3 py-2 rounded text-xs font-bold"><i class="fa-solid fa-plus"></i></button>
+                        </div>
+                        <ul id="locListAdmin" class="space-y-2"></ul>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-xl border shadow-sm">
+                        <h3 class="font-bold uppercase text-xs tracking-widest mb-4 border-b pb-2">Accesorios Extra (Cliente elige)</h3>
+                        <div class="flex gap-2 mb-4">
+                            <input type="text" id="newExtraInput" placeholder="Ej. Silla de bebé" class="flex-1 border-gray-200 rounded text-sm bg-gray-50">
+                            <button onclick="addSettingString('extras', 'newExtraInput')" class="bg-brand-dark text-white px-3 py-2 rounded text-xs font-bold"><i class="fa-solid fa-plus"></i></button>
+                        </div>
+                        <ul id="extraListAdmin" class="space-y-2"></ul>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-xl border shadow-sm">
+                        <h3 class="font-bold uppercase text-xs tracking-widest mb-4 border-b pb-2">Categorías de Vehículos</h3>
                         <div class="flex gap-2 mb-4">
                             <input type="text" id="newCategoryInput" placeholder="Ej. Pickup" class="flex-1 border-gray-200 rounded text-sm bg-gray-50">
-                            <button onclick="addCategory()" class="bg-brand-dark text-white px-3 py-2 rounded text-xs font-bold"><i class="fa-solid fa-plus"></i></button>
+                            <button onclick="addSettingString('categories', 'newCategoryInput')" class="bg-brand-dark text-white px-3 py-2 rounded text-xs font-bold"><i class="fa-solid fa-plus"></i></button>
                         </div>
-                        <ul id="categoriesList" class="space-y-2"></ul>
+                        <ul id="categoriesListAdmin" class="space-y-2"></ul>
                     </div>
 
                     <div class="bg-white p-6 rounded-xl border shadow-sm">
                         <h3 class="font-bold uppercase text-xs tracking-widest mb-4 border-b pb-2">Equipamiento Básico</h3>
                         <div class="flex gap-2 mb-4">
                             <input type="text" id="newEquipmentInput" placeholder="Ej. Apple CarPlay" class="flex-1 border-gray-200 rounded text-sm bg-gray-50">
-                            <button onclick="addEquipment()" class="bg-brand-dark text-white px-3 py-2 rounded text-xs font-bold"><i class="fa-solid fa-plus"></i></button>
+                            <button onclick="addSettingString('equipment', 'newEquipmentInput')" class="bg-brand-dark text-white px-3 py-2 rounded text-xs font-bold"><i class="fa-solid fa-plus"></i></button>
                         </div>
-                        <ul id="equipmentList" class="space-y-2"></ul>
+                        <ul id="equipmentListAdmin" class="space-y-2"></ul>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-xl border shadow-sm">
+                        <h3 class="font-bold uppercase text-xs tracking-widest mb-4 border-b pb-2">Preguntas Frecuentes</h3>
+                        <div class="space-y-2 mb-4">
+                            <input type="text" id="newFaqQ" placeholder="Pregunta" class="w-full border-gray-200 rounded text-sm bg-gray-50">
+                            <textarea id="newFaqA" placeholder="Respuesta" rows="2" class="w-full border-gray-200 rounded text-sm bg-gray-50"></textarea>
+                            <button onclick="addFaq()" class="w-full bg-gray-200 text-gray-800 py-2 rounded text-xs font-bold uppercase hover:bg-gray-300">Agregar FAQ</button>
+                        </div>
+                        <ul id="faqAdminList" class="space-y-2 mt-4 pt-4 border-t"></ul>
                     </div>
                 </div>
             </div>
@@ -326,16 +353,17 @@
             <div class="bg-white p-8 rounded-xl w-full max-w-sm shadow-2xl border">
                 <h3 class="oswald text-xl font-bold mb-2 uppercase">Bloquear Fechas</h3>
                 <p id="blockDatesCarName" class="text-sm text-gray-500 mb-5 font-bold"></p>
-                
                 <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Fecha de Inicio</label>
                 <input type="date" id="blockStartDate" class="w-full mb-4 rounded border-gray-200 text-sm bg-gray-50 focus:ring-brand-orange">
-                
                 <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Fecha de Fin</label>
                 <input type="date" id="blockEndDate" class="w-full mb-6 rounded border-gray-200 text-sm bg-gray-50 focus:ring-brand-orange">
-                
                 <div class="flex justify-end gap-3">
                     <button onclick="closeBlockModal()" class="px-4 py-2 text-xs font-bold text-gray-500 hover:text-gray-900 uppercase transition-colors">Cancelar</button>
                     <button onclick="saveBlockedDates()" class="px-6 py-2 bg-red-600 hover:bg-red-700 text-white text-xs font-bold uppercase rounded transition-colors">Confirmar Bloqueo</button>
+                </div>
+                <div class="mt-6 pt-4 border-t">
+                    <h4 class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Bloqueos Activos</h4>
+                    <ul id="activeBlocksList" class="space-y-2 text-sm"></ul>
                 </div>
             </div>
         </div>
@@ -347,7 +375,7 @@
                     <i class="fa-solid fa-lock text-2xl"></i>
                 </div>
                 <h3 class="oswald text-2xl font-bold mb-2 uppercase">Acceso Restringido</h3>
-                <p class="text-xs text-gray-500 mb-6">Ingresa la clave de administrador para gestionar la flota.</p>
+                <p class="text-xs text-gray-500 mb-6">Ingresa la clave de administrador.</p>
                 <input type="password" id="adminPassword" placeholder="Contraseña" class="w-full mb-4 rounded border-gray-200 text-center tracking-widest focus:ring-brand-orange">
                 <div class="flex gap-2">
                     <button onclick="closeLoginModal()" class="flex-1 py-3 text-xs font-bold text-gray-500 bg-gray-100 rounded hover:bg-gray-200 uppercase transition-colors">Cancelar</button>
@@ -362,7 +390,7 @@
         <p id="notif-text" class="text-sm font-bold"></p>
     </div>
 
-    <!-- WHATSAPP FLOTANTE (NUEVO NÚMERO) -->
+    <!-- WHATSAPP FLOTANTE -->
     <a href="https://wa.me/50258627567" target="_blank" class="whatsapp-float fixed bottom-8 left-8 bg-green-500 text-white w-16 h-16 rounded-full shadow-2xl z-[150] flex items-center justify-center hover:bg-green-600 transition-colors">
         <i class="fa-brands fa-whatsapp text-3xl"></i>
     </a>
@@ -388,15 +416,18 @@
         const currentAppId = typeof __app_id !== 'undefined' ? __app_id : 'mycar-532b2';
         let currentBlockingCarId = null;
 
-        // --- ESTADO GLOBAL Y VALORES POR DEFECTO ---
+        // --- ESTADO GLOBAL ---
         window.CARS = [];
+        window.searchData = { location: '', time: '' }; // Guarda datos del home
         
         const defaultSettings = { 
             categories: ['SUV Compacto', 'Sedán', 'Pickup', 'Lujo', 'Familiar'], 
-            equipment: ['A/C', 'Bluetooth', 'GPS', 'Silla de Bebé'],
+            equipment: ['A/C', 'Bluetooth', 'GPS', 'Cámara de Retroceso'],
+            locations: ['Panajachel, Sololá', 'Aeropuerto La Aurora', 'Antigua Guatemala'],
+            extras: ['Silla de bebé', 'Seguro Premium', 'Conductor Adicional'],
+            highDemandRanges: [],
             faqs: [
-                { q: "¿Cuáles son los requisitos para rentar?", a: "DPI o Pasaporte vigente y licencia de conducir al día." },
-                { q: "¿Tienen límite de kilometraje?", a: "Nuestras tarifas incluyen kilometraje libre dentro del territorio nacional." }
+                { q: "¿Cuáles son los requisitos para rentar?", a: "DPI o Pasaporte vigente y licencia de conducir al día." }
             ],
             hero: {
                 title: "MAKE YOUR RIDE EASY & FAST WITH TURBO",
@@ -410,11 +441,10 @@
         window.startDay = null;
         window.endDay = null;
         window.selectedCar = null;
-        window.currentMonth = 3; // Abril
+        window.currentMonth = 3; 
         window.currentYear = 2026;
         window.monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
 
-        // --- SEGURIDAD ADMIN BÁSICA ---
         const ADMIN_PIN = "turbo2026";
 
         window.openLoginModal = () => {
@@ -423,21 +453,15 @@
             document.getElementById('adminPassword').focus();
         };
 
-        window.closeLoginModal = () => {
-            document.getElementById('loginModal').classList.add('hidden');
-        };
+        window.closeLoginModal = () => document.getElementById('loginModal').classList.add('hidden');
 
         window.verifyAdmin = () => {
-            const pass = document.getElementById('adminPassword').value;
-            if(pass === ADMIN_PIN) {
+            if(document.getElementById('adminPassword').value === ADMIN_PIN) {
                 window.closeLoginModal();
                 window.openAdmin();
-            } else {
-                window.showNotif("Contraseña incorrecta");
-            }
+            } else window.showNotif("Contraseña incorrecta");
         };
 
-        // --- FUNCIONES UI GENERALES ---
         window.showNotif = (msg) => {
             const n = document.getElementById('notif');
             if (n) {
@@ -467,11 +491,7 @@
         };
         
         window.closeDetail = window.goHome;
-
-        window.scrollToFleet = () => {
-            const el = document.getElementById('section-fleet');
-            if (el) el.scrollIntoView({ behavior: 'smooth' });
-        };
+        window.scrollToFleet = () => { const el = document.getElementById('section-fleet'); if (el) el.scrollIntoView({ behavior: 'smooth' }); };
 
         window.updateHeaderOnScroll = () => {
             const h = document.getElementById('mainHeader');
@@ -485,7 +505,7 @@
         window.previewFileName = (input) => {
             const display = document.getElementById('fileNameDisplay');
             if (input.files && input.files.length > 0) {
-                display.innerText = `✓ ${input.files.length} imagen(es) seleccionada(s)`;
+                display.innerText = `✓ ${input.files.length} foto(s) lista(s)`;
                 display.classList.add('text-green-600');
             } else {
                 display.innerText = "Seleccionar Múltiples Fotos (Click aquí)";
@@ -494,7 +514,7 @@
         };
 
         window.compressImage = (file) => {
-            return new Promise((resolve, reject) => {
+            return new Promise((resolve) => {
                 const reader = new FileReader();
                 reader.onload = (e) => {
                     const img = new Image();
@@ -504,7 +524,6 @@
                         const max = 800; 
                         if(w > h && w > max) { h *= max/w; w = max; }
                         else if(h > max) { w *= max/h; h = max; }
-                        
                         canvas.width = w; canvas.height = h;
                         const ctx = canvas.getContext('2d');
                         ctx.drawImage(img, 0, 0, w, h);
@@ -516,6 +535,17 @@
             });
         };
 
+        // --- LÓGICA DE PRECIOS Y DEMANDA ALTA ---
+        window.isHighDemand = (dateObj) => {
+            if(!window.SETTINGS.highDemandRanges || !dateObj) return false;
+            const checkTime = new Date(dateObj.y, dateObj.m, dateObj.d).getTime();
+            return window.SETTINGS.highDemandRanges.some(r => {
+                const s = new Date(r.start).getTime();
+                const e = new Date(r.end).getTime();
+                return checkTime >= s && checkTime <= e;
+            });
+        };
+
         window.updateTotalPrice = () => {
             const el = document.getElementById('detailTotalPrice');
             if(!el || !window.selectedCar) return;
@@ -524,18 +554,41 @@
                 const start = new Date(window.startDay.y, window.startDay.m, window.startDay.d).getTime();
                 const end = new Date(window.endDay.y, window.endDay.m, window.endDay.d).getTime();
                 
-                // Calculo de días (mismo día = 1 día)
                 let days = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
                 if (days === 0) days = 1;
 
-                const total = days * window.selectedCar.price;
-                el.innerHTML = `Total por ${days} día(s): <span class="text-brand-orange text-2xl font-bold ml-1">Q${total.toLocaleString()}</span>`;
+                // Chequear Demanda Alta en fecha inicio
+                let isHD = window.isHighDemand(window.startDay);
+                let baseDaily = isHD && window.selectedCar.highDemandPrice ? window.selectedCar.highDemandPrice : window.selectedCar.price;
+
+                let subtotal = baseDaily * days;
+                let discountPct = 0;
+                
+                // Descuentos escalonados
+                if(days >= 4 && days <= 8) discountPct = 0.06;
+                else if(days >= 9) discountPct = 0.08;
+
+                let total = subtotal * (1 - discountPct);
+
+                let html = `<p class="text-xs font-bold text-gray-500 mb-1">Tarifa base: Q${baseDaily.toLocaleString()}/día ${isHD ? '<span class="text-red-500">(Demanda Alta)</span>' : ''}</p>`;
+                if(discountPct > 0) {
+                    html += `<p class="text-xs text-green-600 font-bold mb-1">¡Descuento por volumen aplicado (${discountPct*100}%)!</p>`;
+                    html += `<div class="text-brand-orange text-2xl font-bold">Total por ${days} día(s): <span class="line-through text-gray-400 text-sm mr-2 font-normal">Q${subtotal.toLocaleString()}</span> Q${total.toLocaleString()}</div>`;
+                } else {
+                    html += `<div class="text-brand-orange text-2xl font-bold">Total por ${days} día(s): Q${total.toLocaleString()}</div>`;
+                }
+                el.innerHTML = html;
             } else {
                 el.innerHTML = '';
             }
         };
 
-        // --- LÓGICA DE DATOS PRINCIPAL ---
+        window.changeMainImage = (src) => {
+            const img = document.getElementById('mainGalleryImage');
+            if(img) img.src = src;
+        };
+
+        // --- RENDER DE CARROS ---
         window.renderCars = (list = window.CARS) => {
             const grid = document.getElementById('car-grid');
             if(!grid) return;
@@ -551,7 +604,7 @@
                         <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">${car.type}</span>
                         <h3 class="oswald text-2xl font-bold uppercase text-gray-900 mb-4">${car.name}</h3>
                         
-                        <div class="flex items-center gap-4 text-xs text-gray-500 font-bold mb-5 bg-gray-50 py-2 px-3 rounded w-fit">
+                        <div class="flex flex-wrap items-center gap-3 text-[11px] text-gray-500 font-bold mb-5 bg-gray-50 py-2 px-3 rounded w-fit">
                             <span title="Pasajeros" class="flex items-center gap-1"><i class="fa-solid fa-users text-gray-400"></i> ${car.passengers || 4}</span>
                             <span class="text-gray-300">|</span>
                             <span title="Maletas" class="flex items-center gap-1"><i class="fa-solid fa-suitcase text-gray-400"></i> ${car.luggage || 2}</span>
@@ -577,22 +630,36 @@
             const format = (d) => d ? `${String(d.d).padStart(2,'0')}/${String(d.m + 1).padStart(2,'0')}` : "";
             const dateText = window.startDay && window.endDay ? `${format(window.startDay)} - ${format(window.endDay)}` : "Seleccionar fechas";
 
-            // Botones o viñetas de equipamiento
+            // Equipamiento incluido
             let eqHtml = '';
             if (window.selectedCar.equipment && window.selectedCar.equipment.length > 0) {
                 eqHtml = window.selectedCar.equipment.map(e => `<span class="bg-gray-100 text-gray-600 px-3 py-1.5 rounded text-[10px] font-bold uppercase"><i class="fa-solid fa-check text-green-500 mr-1.5"></i>${e}</span>`).join('');
             }
 
-            // Slider de imágenes horizontal
-            const imagesHtml = window.selectedCar.images.map(img => `<img src="${img}" class="w-full shrink-0 h-[400px] md:h-[500px] object-cover rounded-xl border shadow-sm snap-center">`).join('');
+            // Accesorios Extras (Checkboxes)
+            let extrasCheckboxes = '';
+            if(window.SETTINGS.extras && window.SETTINGS.extras.length > 0) {
+                extrasCheckboxes = `<div class="mb-4"><label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Añadir Extras a tu reserva</label><div class="flex flex-col gap-2">` + 
+                window.SETTINGS.extras.map(ex => `
+                    <label class="inline-flex items-center cursor-pointer bg-white border border-gray-200 rounded px-3 py-2 hover:bg-gray-50">
+                        <input type="checkbox" class="client-extra-checkbox rounded text-brand-orange focus:ring-brand-orange w-4 h-4" value="${ex}">
+                        <span class="ml-2 text-xs font-bold text-gray-700">${ex}</span>
+                    </label>
+                `).join('') + `</div></div>`;
+            }
+
+            // Ubicaciones Select
+            const locOptions = (window.SETTINGS.locations || []).map(l => `<option value="${l}">${l}</option>`).join('');
+
+            // Galería
+            const mainImg = window.selectedCar.images[0];
+            const thumbsHtml = window.selectedCar.images.map(img => `<img src="${img}" onclick="changeMainImage('${img}')" class="w-20 h-16 object-cover rounded cursor-pointer border-2 border-transparent hover:border-brand-orange transition-colors">`).join('');
 
             document.getElementById('detail-content').innerHTML = `
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
                     <div class="lg:col-span-2">
-                        <div class="flex overflow-x-auto gap-4 snap-x hide-scrollbar pb-4">
-                            ${imagesHtml}
-                        </div>
-                        ${window.selectedCar.images.length > 1 ? '<p class="text-center text-xs text-gray-400 mt-2"><i class="fa-solid fa-arrows-left-right mr-1"></i> Desliza para ver más fotos</p>' : ''}
+                        <img id="mainGalleryImage" src="${mainImg}" class="w-full h-[350px] md:h-[500px] object-cover rounded-xl border shadow-sm mb-4 transition-all">
+                        ${window.selectedCar.images.length > 1 ? `<div class="flex gap-2 overflow-x-auto hide-scrollbar pb-2">${thumbsHtml}</div>` : ''}
                     </div>
                     
                     <div class="bg-white p-8 rounded-xl border shadow-xl self-start sticky top-28">
@@ -606,39 +673,55 @@
                             ${eqHtml}
                         </div>
 
-                        <div class="mb-8 border-b pb-6">
-                            <p class="text-4xl font-bold text-brand-orange">Q${window.selectedCar.price} <span class="text-sm text-gray-400 uppercase font-normal text-gray-400">/ Día</span></p>
-                            <div id="detailTotalPrice" class="mt-2 text-gray-500 font-medium"></div>
+                        <div class="mb-6 border-b pb-6">
+                            <p class="text-4xl font-bold text-brand-orange">Q${window.selectedCar.price} <span class="text-sm text-gray-400 uppercase font-normal">/ Día</span></p>
+                            <div id="detailTotalPrice" class="mt-3"></div>
                         </div>
                         
-                        <div id="booking-step-1" class="space-y-5">
+                        <div id="booking-step-1" class="space-y-4">
                             <div>
-                                <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Fechas requeridas</label>
+                                <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Fechas requeridas</label>
                                 <input type="text" id="detailDateInput" class="w-full rounded border-gray-200 py-3 bg-gray-50 font-bold cursor-pointer focus:ring-brand-orange" value="${dateText}" readonly onclick="toggleCalendar(event, 'detailCalendarModal')">
+                                <p class="text-[10px] text-green-600 font-bold mt-1">¡Descuentos automáticos: 6% (4 a 8 días) y 8% (9+ días)!</p>
                             </div>
 
                             <div id="detailCalendarModal" class="calendar-modal bg-white rounded-xl border p-5">
                                 <div class="grid grid-cols-7 gap-y-1" id="detailCalendarGrid"></div>
                                 <button onclick="applyDates(event, 'detailCalendarModal')" class="w-full mt-4 bg-brand-dark text-white py-2 rounded font-bold uppercase text-xs hover:bg-black">Aceptar Fechas</button>
                             </div>
+                            
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Recogida</label>
+                                    <select id="detailLocation" class="w-full rounded border-gray-200 py-2 text-sm bg-gray-50 focus:ring-brand-orange">
+                                        <option value="">Lugar...</option>
+                                        ${locOptions}
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Hora (7am-5pm)</label>
+                                    <input id="detailTime" type="time" min="07:00" max="17:00" class="w-full rounded border-gray-200 py-2 text-sm bg-gray-50 focus:ring-brand-orange">
+                                </div>
+                            </div>
 
-                            <button onclick="validateAndProceed()" class="w-full bg-brand-orange hover:bg-yellow-500 text-white font-bold py-4 rounded shadow-md uppercase transition-colors">Continuar Reserva</button>
+                            ${extrasCheckboxes}
+
+                            <button onclick="validateAndProceed()" class="w-full bg-brand-orange hover:bg-yellow-500 text-white font-bold py-4 rounded shadow-md uppercase transition-colors mt-2">Continuar Reserva</button>
                         </div>
 
                         <div id="booking-step-2" class="hidden space-y-4 fade-in">
+                            <p class="text-xs font-bold text-gray-500 uppercase tracking-widest border-b pb-2 mb-2">Tus Datos</p>
                             <input id="clientName" type="text" class="w-full rounded border-gray-200 py-3 text-sm focus:ring-brand-orange" placeholder="Nombre completo">
                             <input id="clientPhone" type="tel" class="w-full rounded border-gray-200 py-3 text-sm focus:ring-brand-orange" placeholder="Número de WhatsApp">
                             <input id="clientEmail" type="email" class="w-full rounded border-gray-200 py-3 text-sm focus:ring-brand-orange" placeholder="Correo electrónico">
                             <input id="clientAddress" type="text" class="w-full rounded border-gray-200 py-3 text-sm focus:ring-brand-orange" placeholder="Dirección de hospedaje">
                             
-                            <div class="bg-gray-50 p-4 rounded border border-gray-100">
-                                <label class="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Horario de recogida</label>
-                                <input id="clientTime" type="time" class="w-full rounded border-gray-200 py-2 text-sm focus:ring-brand-orange" required>
-                                <p class="text-[10px] text-gray-500 mt-2 font-medium leading-tight">* Nota importante: El mismo horario de recogida será considerado como el horario máximo de entrega.</p>
+                            <div class="bg-gray-50 p-3 rounded border border-gray-100 mt-2">
+                                <p class="text-[10px] text-gray-500 font-medium leading-tight"><i class="fa-solid fa-circle-info mr-1 text-brand-orange"></i> El mismo horario y lugar de recogida serán considerados para la entrega del vehículo.</p>
                             </div>
 
-                            <button onclick="submitBooking(event)" class="w-full bg-[#25D366] hover:bg-[#128C7E] text-white font-bold py-4 rounded shadow-md uppercase transition-colors mt-2"><i class="fa-brands fa-whatsapp mr-2 text-xl align-middle"></i> Enviar Reserva</button>
-                            <button onclick="document.getElementById('booking-step-2').classList.add('hidden'); document.getElementById('booking-step-1').classList.remove('hidden');" class="w-full text-xs text-gray-400 font-bold uppercase hover:text-gray-600 py-2">← Cambiar Fechas</button>
+                            <button onclick="submitBooking(event)" class="w-full bg-[#25D366] hover:bg-[#128C7E] text-white font-bold py-4 rounded shadow-md uppercase transition-colors mt-2"><i class="fa-brands fa-whatsapp mr-2 text-xl align-middle"></i> Confirmar y Enviar</button>
+                            <button onclick="document.getElementById('booking-step-2').classList.add('hidden'); document.getElementById('booking-step-1').classList.remove('hidden');" class="w-full text-xs text-gray-400 font-bold uppercase hover:text-gray-600 py-2">← Regresar a detalles</button>
                         </div>
                     </div>
                 </div>
@@ -649,11 +732,30 @@
             window.scrollTo(0, 0);
             window.updateHeaderOnScroll();
             window.generateCalendar('detailCalendarGrid');
-            window.updateTotalPrice(); // Calcula si ya había fechas globales elegidas
+            
+            // Jalar datos del buscador de inicio
+            if(window.searchData.location) document.getElementById('detailLocation').value = window.searchData.location;
+            if(window.searchData.time) document.getElementById('detailTime').value = window.searchData.time;
+
+            window.updateTotalPrice();
         };
 
         window.handleSearch = (e) => {
             if (e) e.preventDefault();
+            const loc = document.getElementById('searchLocation');
+            const time = document.getElementById('homeTime');
+            
+            // Validar hora
+            if (time && time.value) {
+                if (time.value < "07:00" || time.value > "17:00") {
+                    window.showNotif("El horario de atención es de 07:00 a 17:00");
+                    return;
+                }
+            }
+
+            if(loc) window.searchData.location = loc.value;
+            if(time) window.searchData.time = time.value;
+            
             window.renderCars(window.getAvailableCars());
             window.scrollToFleet();
         };
@@ -664,9 +766,10 @@
             const p = document.getElementById('clientPhone').value;
             const email = document.getElementById('clientEmail').value;
             const address = document.getElementById('clientAddress').value;
-            const time = document.getElementById('clientTime').value;
+            const location = document.getElementById('detailLocation').value;
+            const time = document.getElementById('detailTime').value;
             
-            if(!n || !p || !email || !address || !time) return window.showNotif("Por favor, llena todos los datos para continuar.");
+            if(!n || !p || !email || !address) return window.showNotif("Llená tus datos de contacto para finalizar.");
             
             const btn = e.target.closest('button');
             const originalBtnText = btn.innerHTML;
@@ -676,15 +779,24 @@
             const startDate = fmt(window.startDay);
             const endDate = fmt(window.endDay);
 
-            // Calcular total nuevamente para el mensaje
+            // Re-calcular para obtener total limpio
             const sTime = new Date(window.startDay.y, window.startDay.m, window.startDay.d).getTime();
             const eTime = new Date(window.endDay.y, window.endDay.m, window.endDay.d).getTime();
             let days = Math.ceil((eTime - sTime) / (1000 * 60 * 60 * 24));
             if (days === 0) days = 1;
-            const totalStr = `Q${(days * window.selectedCar.price).toLocaleString()}`;
+            
+            let isHD = window.isHighDemand(window.startDay);
+            let baseDaily = isHD && window.selectedCar.highDemandPrice ? window.selectedCar.highDemandPrice : window.selectedCar.price;
+            let subtotal = baseDaily * days;
+            let discountPct = (days >= 4 && days <= 8) ? 0.06 : (days >= 9 ? 0.08 : 0);
+            let finalTotal = subtotal * (1 - discountPct);
+            const totalStr = `Q${finalTotal.toLocaleString()}`;
+
+            // Accesorios seleccionados
+            let extrasStr = '';
+            document.querySelectorAll('.client-extra-checkbox:checked').forEach(cb => extrasStr += `- ${cb.value}\n`);
 
             try {
-                // Guarda la reserva en Firebase
                 const resRef = collection(db, 'artifacts', currentAppId, 'public', 'data', 'reservations');
                 await addDoc(resRef, {
                     carId: window.selectedCar.id,
@@ -693,22 +805,23 @@
                     clientPhone: p,
                     clientEmail: email,
                     clientAddress: address,
+                    pickupLocation: location,
                     pickupTime: time,
+                    extras: extrasStr,
                     startDate: startDate,
                     endDate: endDate,
                     totalPrice: totalStr,
                     timestamp: new Date().toISOString()
                 });
 
-                // Envía el mensaje al nuevo WhatsApp
-                const msg = `🚗 *Nueva Reserva en Turbo*\n\n*Vehículo:* ${window.selectedCar.name}\n*Total Estimado:* ${totalStr}\n\n*Fechas:* ${startDate} al ${endDate}\n*Horario:* ${time} hrs (Recogida y Entrega)\n\n*Cliente:* ${n}\n*WhatsApp:* ${p}\n*Correo:* ${email}\n*Hospedaje:* ${address}`;
+                const msg = `🚗 *Nueva Reserva en Turbo*\n\n*Vehículo:* ${window.selectedCar.name}\n*Total Estimado:* ${totalStr}\n\n*Fechas:* ${startDate} al ${endDate}\n*Horario:* ${time} hrs\n*Lugar:* ${location}\n\n*Extras Solicitados:*\n${extrasStr || 'Ninguno'}\n\n*Cliente:* ${n}\n*WhatsApp:* ${p}\n*Hospedaje:* ${address}`;
                 window.open(`https://wa.me/50258627567?text=${encodeURIComponent(msg)}`, '_blank');
                 
                 window.goHome();
-                window.showNotif("¡Reserva confirmada!");
+                window.showNotif("¡Reserva enviada exitosamente!");
             } catch(err) {
                 console.error(err);
-                window.showNotif("Error al guardar la reserva");
+                window.showNotif("Error al procesar reserva");
             } finally {
                 btn.innerHTML = originalBtnText;
                 btn.disabled = false;
@@ -716,7 +829,12 @@
         };
 
         window.validateAndProceed = () => {
-            if(!window.startDay || !window.endDay) return window.showNotif("Elegí fechas de viaje primero");
+            if(!window.startDay || !window.endDay) return window.showNotif("Elegí fechas de viaje.");
+            const loc = document.getElementById('detailLocation').value;
+            const time = document.getElementById('detailTime').value;
+            if(!loc || !time) return window.showNotif("Seleccioná lugar y horario.");
+            if(time < "07:00" || time > "17:00") return window.showNotif("Horario fuera de servicio (7am-5pm).");
+            
             document.getElementById('booking-step-1').classList.add('hidden');
             document.getElementById('booking-step-2').classList.remove('hidden');
         };
@@ -726,23 +844,23 @@
             if (!car || !car.bookedRanges) return false;
             const checkTime = new Date(dateObj.y, dateObj.m, dateObj.d).getTime();
             return car.bookedRanges.some(range => {
-                const start = new Date(range.start).getTime();
-                const end = new Date(range.end).getTime();
+                const start = new Date(range.start + 'T00:00:00').getTime();
+                const end = new Date(range.end + 'T23:59:59').getTime();
                 return checkTime >= start && checkTime <= end;
             });
         };
 
+        // --- CALENDARIO ---
         window.generateCalendar = (gridId) => {
             const grid = document.getElementById(gridId);
             if(!grid) return;
             grid.innerHTML = '';
             const daysInMonth = new Date(window.currentYear, window.currentMonth + 1, 0).getDate();
-            
             const carToValidate = (gridId === 'detailCalendarGrid') ? window.selectedCar : null;
 
             for (let i = 1; i <= daysInMonth; i++) {
                 const day = document.createElement('div');
-                day.className = 'calendar-day py-2 text-[12px] font-bold text-center rounded-full transition-colors';
+                day.className = 'calendar-day py-2 text-[12px] font-bold text-center rounded-full transition-colors text-gray-800';
                 day.innerText = i;
                 
                 const currentDateObj = { d: i, m: window.currentMonth, y: window.currentYear };
@@ -751,7 +869,6 @@
                     day.classList.add('disabled', 'line-through', 'text-gray-300');
                 } else {
                     day.classList.add('cursor-pointer', 'hover:bg-gray-100');
-                    
                     if (window.startDay && window.startDay.d === i && window.startDay.m === window.currentMonth && window.startDay.y === window.currentYear) day.classList.add('selected');
                     if (window.endDay && window.endDay.d === i && window.endDay.m === window.currentMonth && window.endDay.y === window.currentYear) day.classList.add('selected');
                     
@@ -765,7 +882,6 @@
                     day.onclick = (e) => {
                         e.stopPropagation();
                         const clickedTime = new Date(currentDateObj.y, currentDateObj.m, currentDateObj.d).getTime();
-                        
                         if (!window.startDay || (window.startDay && window.endDay)) {
                             window.startDay = currentDateObj; window.endDay = null;
                         } else {
@@ -821,8 +937,14 @@
             const txt = window.startDay && window.endDay ? `${fmt(window.startDay)} - ${fmt(window.endDay)}` : "Seleccionar fechas";
             const inputHome = document.getElementById('dateInput');
             const inputDetail = document.getElementById('detailDateInput');
+            
+            const startDisp = document.getElementById('startDateDisplay');
+            const endDisp = document.getElementById('endDateDisplay');
+
             if(inputHome) inputHome.value = txt;
             if(inputDetail) inputDetail.value = txt;
+            if(startDisp) startDisp.innerText = window.startDay ? `${fmt(window.startDay)}/${window.startDay.y.toString().slice(-2)}` : "--/--/--";
+            if(endDisp) endDisp.innerText = window.endDay ? `${fmt(window.endDay)}/${window.endDay.y.toString().slice(-2)}` : "--/--/--";
         };
 
         window.getAvailableCars = () => {
@@ -849,8 +971,6 @@
                 return;
             }
             list.innerHTML = window.CARS.map(car => {
-                
-                // Mostrar etiquetas de fechas bloqueadas
                 let blockedHtml = '';
                 if (car.bookedRanges && car.bookedRanges.length > 0) {
                     blockedHtml = `<div class="mt-2 flex flex-wrap gap-1">` + 
@@ -864,7 +984,7 @@
                         <img src="${car.images[0]}" class="w-20 h-14 object-cover rounded shadow-sm shrink-0">
                         <div>
                             <p class="font-bold text-sm text-gray-900">${car.name}</p>
-                            <p class="text-[10px] text-gray-500 font-medium uppercase tracking-widest mt-0.5">${car.type} • ${car.transmission} • Q${car.price}/día</p>
+                            <p class="text-[10px] text-gray-500 font-medium uppercase tracking-widest mt-0.5">${car.type} • ${car.transmission || 'Automático'} • Q${car.price}/día</p>
                             ${blockedHtml}
                         </div>
                     </div>
@@ -883,6 +1003,7 @@
 
             const n = document.getElementById('adminCarName').value;
             const p = Number(document.getElementById('adminCarPrice').value);
+            const ph = Number(document.getElementById('adminCarPriceHigh').value);
             const t = document.getElementById('adminCarType').value;
             const trans = document.getElementById('adminCarTrans').value;
             const pax = Number(document.getElementById('adminCarPax').value);
@@ -899,32 +1020,25 @@
                         base64Images.push(await compressImage(fileInput.files[i]));
                     }
                 } else {
-                    throw new Error("Agregá al menos una foto maje.");
+                    throw new Error("Faltan fotos");
                 }
 
                 btn.innerText = "Guardando...";
                 const carsRef = collection(db, 'artifacts', currentAppId, 'public', 'data', 'cars');
                 await addDoc(carsRef, { 
-                    name: n, 
-                    price: p, 
-                    type: t, 
-                    transmission: trans,
-                    passengers: pax,
-                    luggage: lug,
-                    images: base64Images, 
-                    equipment: selectedEq,
-                    bookedRanges: [] 
+                    name: n, price: p, highDemandPrice: ph || p,
+                    type: t, transmission: trans, passengers: pax, luggage: lug,
+                    images: base64Images, equipment: selectedEq, bookedRanges: [] 
                 });
                 
-                window.showNotif('¡Carro agregado exitosamente!'); 
+                window.showNotif('¡Carro guardado!'); 
                 document.getElementById('adminForm').reset();
                 document.getElementById('fileNameDisplay').innerText = "Seleccionar Múltiples Fotos (Click aquí)";
                 document.getElementById('fileNameDisplay').classList.remove('text-green-600');
             } catch(err) {
-                console.error(err);
-                window.showNotif(err.message || "Error al guardar en Firebase");
+                console.error(err); window.showNotif("Error al guardar");
             } finally {
-                btn.innerText = "Guardar Carro en Base de Datos"; btn.disabled = false;
+                btn.innerText = "Guardar Carro"; btn.disabled = false;
             }
         };
 
@@ -933,7 +1047,7 @@
                 try {
                     await deleteDoc(doc(db, 'artifacts', currentAppId, 'public', 'data', 'cars', id));
                     window.showNotif('Carro eliminado');
-                } catch(err) { console.error(err); window.showNotif('Error al borrar'); }
+                } catch(err) { window.showNotif('Error al borrar'); }
             }
         };
 
@@ -956,98 +1070,79 @@
             } else {
                 ul.innerHTML = '<li class="text-gray-400 italic text-sm text-center py-2">No hay fechas bloqueadas.</li>';
             }
-
             document.getElementById('blockDatesModal').classList.remove('hidden');
         };
 
-        window.closeBlockModal = () => {
-            document.getElementById('blockDatesModal').classList.add('hidden');
-            currentBlockingCarId = null;
-        };
+        window.closeBlockModal = () => { document.getElementById('blockDatesModal').classList.add('hidden'); currentBlockingCarId = null; };
 
         window.saveBlockedDates = async () => {
             if (!currentBlockingCarId) return;
             const start = document.getElementById('blockStartDate').value;
             const end = document.getElementById('blockEndDate').value;
-            
-            if (!start || !end) {
-                window.showNotif("Seleccioná ambas fechas."); return;
-            }
-            if (new Date(start) > new Date(end)) {
-                window.showNotif("La fecha de inicio debe ser antes que el fin."); return;
-            }
+            if (!start || !end || start > end) return window.showNotif("Verifica las fechas");
 
             try {
-                const carRef = doc(db, 'artifacts', currentAppId, 'public', 'data', 'cars', currentBlockingCarId);
-                await updateDoc(carRef, {
+                await updateDoc(doc(db, 'artifacts', currentAppId, 'public', 'data', 'cars', currentBlockingCarId), {
                     bookedRanges: arrayUnion({ start: start, end: end })
                 });
-                window.showNotif("Fechas bloqueadas con éxito.");
-                window.openBlockModal(currentBlockingCarId); // Refresh modal
-            } catch (err) {
-                console.error(err); window.showNotif("Error al bloquear fechas.");
-            }
+                window.showNotif("Fechas bloqueadas."); window.openBlockModal(currentBlockingCarId);
+            } catch (err) { window.showNotif("Error."); }
         };
 
         window.removeBlock = async (carId, index) => {
             const car = window.CARS.find(c => c.id === carId);
-            const rangeToRemove = car.bookedRanges[index];
             try {
-                const carRef = doc(db, 'artifacts', currentAppId, 'public', 'data', 'cars', carId);
-                await updateDoc(carRef, {
-                    bookedRanges: arrayRemove(rangeToRemove)
+                await updateDoc(doc(db, 'artifacts', currentAppId, 'public', 'data', 'cars', carId), {
+                    bookedRanges: arrayRemove(car.bookedRanges[index])
                 });
-                window.showNotif("Bloqueo eliminado.");
-                window.openBlockModal(carId); // Refrescar modal
+                window.openBlockModal(carId);
             } catch (err) { console.error(err); }
         };
 
-        // --- ADMIN: CONFIGURACIÓN GLOBAL (TEXTOS Y FAQS) ---
+        // --- ADMIN: SETTINGS ---
         window.renderAdminSettings = () => {
-            // Hero Form
             if(window.SETTINGS.hero) {
                 document.getElementById('adminHeroTitle').value = window.SETTINGS.hero.title || '';
                 document.getElementById('adminHeroSubtitle').value = window.SETTINGS.hero.subtitle || '';
             }
 
-            // Select Tipos
-            const selectType = document.getElementById('adminCarType');
-            if(selectType) {
-                selectType.innerHTML = `<option value="">Seleccionar Categoría...</option>` + 
-                    window.SETTINGS.categories.map(c => `<option value="${c}">${c}</option>`).join('');
-            }
+            const fillSelect = (id, list) => {
+                const el = document.getElementById(id);
+                if(el) el.innerHTML = `<option value="">Seleccionar...</option>` + list.map(c => `<option value="${c}">${c}</option>`).join('');
+            };
+            fillSelect('adminCarType', window.SETTINGS.categories || []);
 
-            // Checkboxes Equipamiento
             const eqContainer = document.getElementById('adminEquipmentCheckboxes');
             if(eqContainer) {
-                eqContainer.innerHTML = window.SETTINGS.equipment.map(e => `
+                eqContainer.innerHTML = (window.SETTINGS.equipment || []).map(e => `
                     <label class="inline-flex items-center cursor-pointer bg-white border border-gray-200 rounded px-3 py-2 hover:bg-gray-50">
                         <input type="checkbox" class="eq-checkbox rounded text-brand-orange focus:ring-brand-orange w-4 h-4" value="${e}">
                         <span class="ml-2 text-xs font-bold text-gray-700">${e}</span>
-                    </label>
-                `).join('');
+                    </label>`).join('');
             }
 
-            // Listas Categorias y Equipos
-            const catList = document.getElementById('categoriesList');
-            if(catList) {
-                catList.innerHTML = window.SETTINGS.categories.map((c, i) => `
+            const fillList = (id, listKey) => {
+                const el = document.getElementById(id);
+                if(el) el.innerHTML = (window.SETTINGS[listKey] || []).map((v, i) => `
                     <li class="flex justify-between items-center bg-gray-50 p-2 rounded border text-sm">
-                        ${c} <button onclick="deleteSetting('categories', ${i})" class="text-red-500 hover:text-red-700"><i class="fa-solid fa-trash text-xs"></i></button>
+                        ${v} <button onclick="deleteSetting('${listKey}', ${i})" class="text-red-500 hover:text-red-700"><i class="fa-solid fa-trash text-xs"></i></button>
+                    </li>`).join('');
+            };
+            fillList('categoriesListAdmin', 'categories');
+            fillList('equipmentListAdmin', 'equipment');
+            fillList('locListAdmin', 'locations');
+            fillList('extraListAdmin', 'extras');
+
+            const hdList = document.getElementById('hdListAdmin');
+            if(hdList) {
+                hdList.innerHTML = (window.SETTINGS.highDemandRanges || []).map((r, i) => `
+                    <li class="bg-red-50 p-2 rounded border border-red-100 flex justify-between items-center text-sm">
+                        <span class="font-bold text-red-800">${r.start} <i class="fa-solid fa-arrow-right text-red-300 mx-2 text-xs"></i> ${r.end}</span>
+                        <button onclick="deleteSetting('highDemandRanges', ${i})" class="text-red-500 hover:text-red-700"><i class="fa-solid fa-trash text-xs"></i></button>
                     </li>
                 `).join('');
             }
 
-            const eqList = document.getElementById('equipmentList');
-            if(eqList) {
-                eqList.innerHTML = window.SETTINGS.equipment.map((e, i) => `
-                    <li class="flex justify-between items-center bg-gray-50 p-2 rounded border text-sm">
-                        ${e} <button onclick="deleteSetting('equipment', ${i})" class="text-red-500 hover:text-red-700"><i class="fa-solid fa-trash text-xs"></i></button>
-                    </li>
-                `).join('');
-            }
-
-            // Lista FAQs
             const faqAdminList = document.getElementById('faqAdminList');
             if(faqAdminList && window.SETTINGS.faqs) {
                 faqAdminList.innerHTML = window.SETTINGS.faqs.map((f, i) => `
@@ -1061,31 +1156,18 @@
         };
 
         window.saveSettingsToFirebase = async () => {
-            try {
-                const settingsRef = doc(db, 'artifacts', currentAppId, 'public', 'data', 'config', 'appSettings');
-                await setDoc(settingsRef, window.SETTINGS, { merge: true });
-            } catch (err) { console.error("Error saving settings", err); }
+            try { await setDoc(doc(db, 'artifacts', currentAppId, 'public', 'data', 'config', 'appSettings'), window.SETTINGS, { merge: true }); } 
+            catch (err) { console.error("Error", err); }
         };
 
         window.saveHeroSettings = async () => {
-            const title = document.getElementById('adminHeroTitle').value.trim();
-            const subtitle = document.getElementById('adminHeroSubtitle').value.trim();
-            const bgInput = document.getElementById('adminHeroBgInput');
-
             if(!window.SETTINGS.hero) window.SETTINGS.hero = {};
-            window.SETTINGS.hero.title = title;
-            window.SETTINGS.hero.subtitle = subtitle;
-
+            window.SETTINGS.hero.title = document.getElementById('adminHeroTitle').value.trim();
+            window.SETTINGS.hero.subtitle = document.getElementById('adminHeroSubtitle').value.trim();
+            const bgInput = document.getElementById('adminHeroBgInput');
             window.showNotif("Guardando diseño...");
-            
-            if(bgInput.files && bgInput.files.length > 0) {
-                window.SETTINGS.hero.bg = await compressImage(bgInput.files[0]);
-            }
-
-            await window.saveSettingsToFirebase();
-            window.applyPublicSettings();
-            window.showNotif("¡Portada actualizada!");
-            bgInput.value = ''; // limpiar input
+            if(bgInput.files && bgInput.files.length > 0) window.SETTINGS.hero.bg = await compressImage(bgInput.files[0]);
+            await window.saveSettingsToFirebase(); window.applyPublicSettings(); window.showNotif("¡Portada actualizada!"); bgInput.value = ''; 
         };
 
         window.addFaq = () => {
@@ -1093,100 +1175,74 @@
             const a = document.getElementById('newFaqA').value.trim();
             if (q && a) {
                 if(!window.SETTINGS.faqs) window.SETTINGS.faqs = [];
-                window.SETTINGS.faqs.push({q, a});
-                document.getElementById('newFaqQ').value = '';
-                document.getElementById('newFaqA').value = '';
-                window.renderAdminSettings();
-                window.saveSettingsToFirebase();
-                window.applyPublicSettings();
-            } else {
-                window.showNotif("Llena pregunta y respuesta");
+                window.SETTINGS.faqs.push({q, a}); document.getElementById('newFaqQ').value = ''; document.getElementById('newFaqA').value = '';
+                window.renderAdminSettings(); window.saveSettingsToFirebase(); window.applyPublicSettings();
+            } else window.showNotif("Llena todo");
+        };
+
+        window.addSettingString = (key, inputId) => {
+            const val = document.getElementById(inputId).value.trim();
+            if (val && !(window.SETTINGS[key]||[]).includes(val)) {
+                if(!window.SETTINGS[key]) window.SETTINGS[key] = [];
+                window.SETTINGS[key].push(val); document.getElementById(inputId).value = '';
+                window.renderAdminSettings(); window.saveSettingsToFirebase(); window.applyPublicSettings();
             }
         };
 
-        window.addCategory = () => {
-            const val = document.getElementById('newCategoryInput').value.trim();
-            if (val && !window.SETTINGS.categories.includes(val)) {
-                window.SETTINGS.categories.push(val);
-                document.getElementById('newCategoryInput').value = '';
-                window.renderAdminSettings();
-                window.saveSettingsToFirebase();
-            }
-        };
-
-        window.addEquipment = () => {
-            const val = document.getElementById('newEquipmentInput').value.trim();
-            if (val && !window.SETTINGS.equipment.includes(val)) {
-                window.SETTINGS.equipment.push(val);
-                document.getElementById('newEquipmentInput').value = '';
-                window.renderAdminSettings();
-                window.saveSettingsToFirebase();
-            }
+        window.addHighDemand = () => {
+            const start = document.getElementById('hdStartDate').value;
+            const end = document.getElementById('hdEndDate').value;
+            if(start && end && start <= end) {
+                if(!window.SETTINGS.highDemandRanges) window.SETTINGS.highDemandRanges = [];
+                window.SETTINGS.highDemandRanges.push({start, end});
+                document.getElementById('hdStartDate').value = ''; document.getElementById('hdEndDate').value = '';
+                window.renderAdminSettings(); window.saveSettingsToFirebase();
+            } else window.showNotif("Revisá las fechas");
         };
 
         window.deleteSetting = (type, index) => {
-            if(confirm('¿Borrar esta opción definitivamente?')) {
+            if(confirm('¿Borrar definitivamente?')) {
                 window.SETTINGS[type].splice(index, 1);
-                window.renderAdminSettings();
-                window.saveSettingsToFirebase();
-                window.applyPublicSettings();
+                window.renderAdminSettings(); window.saveSettingsToFirebase(); window.applyPublicSettings();
             }
         };
 
-        // --- APLICAR SETTINGS A LA VISTA PÚBLICA ---
         window.applyPublicSettings = () => {
-            // Aplicar Hero
             if (window.SETTINGS.hero) {
                 const heroEl = document.getElementById('hero');
-                if(window.SETTINGS.hero.bg) {
-                    heroEl.style.backgroundImage = `linear-gradient(to right, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0) 100%), url('${window.SETTINGS.hero.bg}')`;
-                }
+                if(window.SETTINGS.hero.bg) heroEl.style.backgroundImage = `linear-gradient(to right, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0) 100%), url('${window.SETTINGS.hero.bg}')`;
                 const titleEl = document.getElementById('heroTitle');
                 if(titleEl && window.SETTINGS.hero.title) titleEl.innerText = window.SETTINGS.hero.title;
                 const subEl = document.getElementById('heroSubtitle');
                 if(subEl && window.SETTINGS.hero.subtitle) subEl.innerText = window.SETTINGS.hero.subtitle;
             }
 
-            // Aplicar FAQs
+            const locSelect = document.getElementById('searchLocation');
+            if(locSelect) locSelect.innerHTML = `<option value="">Seleccionar ubicación</option>` + (window.SETTINGS.locations||[]).map(l => `<option value="${l}">${l}</option>`).join('');
+
             const faqContainer = document.getElementById('faq-public-container');
             if (faqContainer) {
-                if(!window.SETTINGS.faqs || window.SETTINGS.faqs.length === 0) {
-                    faqContainer.innerHTML = '<p class="text-center text-gray-500">Aún no hay preguntas frecuentes.</p>';
-                } else {
-                    faqContainer.innerHTML = window.SETTINGS.faqs.map(faq => `
-                        <div class="bg-gray-50 p-6 rounded-xl border border-gray-100 shadow-sm text-left">
-                            <h4 class="font-bold text-lg mb-2 oswald uppercase tracking-wide"><i class="fa-solid fa-circle-question text-brand-orange mr-2"></i>${faq.q}</h4>
-                            <p class="text-gray-600 text-sm leading-relaxed">${faq.a}</p>
-                        </div>
-                    `).join('');
-                }
+                faqContainer.innerHTML = (!window.SETTINGS.faqs || window.SETTINGS.faqs.length === 0) ? '<p class="text-center text-gray-500">Aún no hay preguntas.</p>' : 
+                window.SETTINGS.faqs.map(faq => `
+                    <div class="bg-gray-50 p-6 rounded-xl border border-gray-100 shadow-sm text-left">
+                        <h4 class="font-bold text-lg mb-2 oswald uppercase tracking-wide"><i class="fa-solid fa-circle-question text-brand-orange mr-2"></i>${faq.q}</h4>
+                        <p class="text-gray-600 text-sm leading-relaxed">${faq.a}</p>
+                    </div>`).join('');
             }
         };
 
-
         // --- INIT APP ---
         function listenToData() {
-            const carsRef = collection(db, 'artifacts', currentAppId, 'public', 'data', 'cars');
-            onSnapshot(carsRef, (snap) => {
-                if (!snap.empty) {
-                    window.CARS = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-                } else {
-                    window.CARS = [];
-                }
+            onSnapshot(collection(db, 'artifacts', currentAppId, 'public', 'data', 'cars'), (snap) => {
+                window.CARS = snap.empty ? [] : snap.docs.map(d => ({ id: d.id, ...d.data() }));
                 window.renderCars(window.getAvailableCars());
                 if(!document.getElementById('admin-view').classList.contains('hidden')) window.renderAdminCars();
             });
 
-            const settingsRef = doc(db, 'artifacts', currentAppId, 'public', 'data', 'config', 'appSettings');
-            onSnapshot(settingsRef, (docSnap) => {
-                if (docSnap.exists()) {
-                    // Mezclar default con lo que viene de firebase para que no falten llaves
-                    window.SETTINGS = { ...window.SETTINGS, ...docSnap.data() };
-                } else {
-                    setDoc(settingsRef, window.SETTINGS);
-                }
-                window.applyPublicSettings();
-                window.renderAdminSettings();
+            onSnapshot(doc(db, 'artifacts', currentAppId, 'public', 'data', 'config', 'appSettings'), (docSnap) => {
+                if (docSnap.exists()) window.SETTINGS = { ...window.SETTINGS, ...docSnap.data() };
+                else setDoc(docSnap.ref, window.SETTINGS);
+                window.applyPublicSettings(); window.renderAdminSettings();
             });
         }
 
@@ -1194,38 +1250,21 @@
             try {
                 const configToUse = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : myFirebaseConfig;
                 const appInstance = initializeApp(configToUse);
-                auth = getAuth(appInstance);
-                db = getFirestore(appInstance);
-
-                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                    await signInWithCustomToken(auth, __initial_auth_token);
-                } else {
-                    await signInAnonymously(auth);
-                }
-
-                onAuthStateChanged(auth, (u) => {
-                    if (u) listenToData();
-                });
-
-            } catch(err) {
-                console.error("Firebase Init Error:", err);
-            }
+                auth = getAuth(appInstance); db = getFirestore(appInstance);
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) await signInWithCustomToken(auth, __initial_auth_token);
+                else await signInAnonymously(auth);
+                onAuthStateChanged(auth, (u) => { if (u) listenToData(); });
+            } catch(err) { console.error("Firebase Error"); }
         }
 
-        // --- SETUP ---
         window.addEventListener('scroll', window.updateHeaderOnScroll);
         window.onload = () => { 
-            window.updateHeaderOnScroll(); 
-            window.generateCalendar('homeCalendarGrid'); 
-            window.applyPublicSettings(); // Carga textos base iniciales
-            initApp();
+            window.updateHeaderOnScroll(); window.generateCalendar('homeCalendarGrid'); 
+            window.applyPublicSettings(); initApp();
         };
         
-        // Cierre de modales
         document.addEventListener('click', (e) => {
-            if (!e.target.closest('.calendar-wrapper')) {
-                document.querySelectorAll('.calendar-modal').forEach(m => m.style.display = 'none');
-            }
+            if (!e.target.closest('.calendar-wrapper')) document.querySelectorAll('.calendar-modal').forEach(m => m.style.display = 'none');
             if (e.target.id === 'loginModal') window.closeLoginModal();
             if (e.target.id === 'blockDatesModal') window.closeBlockModal();
         });
