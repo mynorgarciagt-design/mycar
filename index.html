@@ -12,10 +12,11 @@
         h1, h2, h3, .oswald { font-family: 'Oswald', sans-serif; }
         
         .hero-bg {
-            background: linear-gradient(to right, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0) 100%), 
-                        url('https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&q=80&w=2070');
+            background-color: #111827;
+            background-image: linear-gradient(to right, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0) 100%), 
+                              url('https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&q=80&w=2070'); 
             background-size: cover;
-            background-position: right center;
+            background-position: center;
             background-repeat: no-repeat;
         }
 
@@ -37,6 +38,7 @@
             width: 310px;
             box-shadow: 0 0 0 100vmax rgba(0,0,0,0.6), 0 25px 50px -12px rgba(0,0,0,0.25) !important;
         }
+        
         .calendar-day.selected {
             background-color: #f59e0b !important;
             color: white !important;
@@ -80,10 +82,9 @@
 <body class="antialiased text-gray-800">
 
     <div id="app">
-        <!-- HEADER -->
         <header class="fixed w-full z-[100] py-6 px-8 flex items-center justify-between text-white transition-all duration-500" id="mainHeader">
-            <a class="text-3xl font-bold tracking-wider flex items-center gap-1 oswald cursor-pointer" onclick="goHome()">
-                TURB<span class="bg-brand-orange text-white px-2 py-0.5 rounded">O</span>
+            <a class="text-3xl font-bold tracking-wider flex items-center gap-1 oswald cursor-pointer select-none" onclick="goHome()">
+                TURB<span class="bg-brand-orange text-white px-2 py-0.5 rounded" ondblclick="openAdmin(); event.stopPropagation();" title="Doble clic para Admin">O</span>
             </a>
             <nav class="hidden md:flex space-x-8 uppercase text-sm tracking-wide font-medium">
                 <a class="hover:text-brand-orange transition-colors text-white cursor-pointer" onclick="goHome()">Inicio</a>
@@ -93,13 +94,11 @@
             <button onclick="showNotif('Sección de cuenta próximamente')" class="bg-white/10 hover:bg-white/20 px-5 py-2 rounded-full text-xs font-bold backdrop-blur-md transition-all border border-white/20 uppercase tracking-widest">Mi Cuenta</button>
         </header>
 
-        <!-- VISTA DE SCROLL CONTINUO -->
         <div id="main-view">
-            <!-- SECCIÓN 1: HERO & BUSCADOR -->
             <section id="hero" class="min-h-screen flex flex-col hero-bg">
                 <main class="flex-grow flex flex-col justify-center items-start px-8 md:px-16 lg:px-24 pt-36">
-                    <div class="max-w-xl md:max-w-2xl fade-in text-left">
-                        <h1 class="text-5xl md:text-7xl font-bold text-white uppercase leading-tight mb-4 tracking-wide oswald">
+                    <div class="max-w-xl md:max-w-2xl fade-in text-left text-white">
+                        <h1 class="text-5xl md:text-7xl font-bold uppercase leading-tight mb-4 tracking-wide oswald">
                             Make Your Ride Easy & Fast With Turbo
                         </h1>
                         <p class="text-lg md:text-xl text-gray-200 mb-10 max-w-md">
@@ -109,196 +108,123 @@
 
                     <div class="bg-white rounded-lg p-8 shadow-2xl w-full max-w-2xl fade-in relative mb-10 calendar-wrapper">
                         <form class="grid grid-cols-1 md:grid-cols-2 gap-6" onsubmit="handleSearch(event)">
-                            <div class="w-full">
+                            <div>
                                 <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Punto de Recogida</label>
-                                <select id="searchLocation" class="block w-full border-gray-100 rounded py-3.5 focus:ring-brand-orange focus:border-brand-orange text-sm bg-gray-50 font-bold">
+                                <select id="searchLocation" class="block w-full border-gray-100 rounded py-3 text-sm bg-gray-50 font-bold">
                                     <option value="">Seleccionar ubicación</option>
                                     <option value="Panajachel, Sololá">Panajachel, Sololá</option>
                                     <option value="Aeropuerto La Aurora, GT">Aeropuerto La Aurora, GT</option>
                                     <option value="Antigua Guatemala">Antigua Guatemala</option>
                                 </select>
                             </div>
-                            
-                            <div class="w-full relative">
+                            <div class="relative">
                                 <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Fechas de Viaje</label>
-                                <div class="relative cursor-pointer" onclick="toggleCalendar(event, 'homeCalendarModal')">
-                                    <input id="dateInput" type="text" class="block w-full border-gray-100 rounded py-3.5 text-sm cursor-pointer bg-gray-50 focus:ring-brand-orange font-bold" value="Seleccionar fechas" readonly>
-                                    <div class="absolute right-4 top-3.5 text-brand-orange">
-                                        <i class="fa-regular fa-calendar"></i>
-                                    </div>
-                                </div>
-
-                                <!-- MODAL CALENDARIO (HOME) -->
-                                <div id="homeCalendarModal" class="calendar-modal bg-white rounded-xl shadow-2xl border border-gray-100 p-5 fade-in">
+                                <input id="dateInput" type="text" class="block w-full border-gray-100 rounded py-3 text-sm cursor-pointer bg-gray-50 font-bold" value="Seleccionar fechas" readonly onclick="toggleCalendar(event, 'homeCalendarModal')">
+                                
+                                <div id="homeCalendarModal" class="calendar-modal bg-white rounded-xl border p-5 fade-in">
                                     <div class="flex gap-2 mb-4 text-center">
-                                        <div class="flex-1 bg-gray-50 p-3 rounded border border-gray-100">
-                                            <p class="text-[9px] font-bold text-gray-400 uppercase">Entrega</p>
-                                            <p id="startDateDisplay" class="text-xs font-bold text-gray-900">--/--/--</p>
-                                        </div>
-                                        <div class="flex-1 bg-gray-50 p-3 rounded border border-gray-100">
-                                            <p class="text-[9px] font-bold text-gray-400 uppercase">Devolución</p>
-                                            <p id="endDateDisplay" class="text-xs font-bold text-gray-900">--/--/--</p>
-                                        </div>
+                                        <div class="flex-1 bg-gray-50 p-2 rounded border"><p class="text-[9px] font-bold text-gray-400">Entrega</p><p id="startDateDisplay" class="text-xs font-bold">--/--/--</p></div>
+                                        <div class="flex-1 bg-gray-50 p-2 rounded border"><p class="text-[9px] font-bold text-gray-400">Devolución</p><p id="endDateDisplay" class="text-xs font-bold">--/--/--</p></div>
                                     </div>
-                                    <div class="flex justify-between items-center mb-4 px-2">
-                                        <button type="button" onclick="changeMonth(event, -1, 'homeCalendar')" class="text-gray-400 hover:text-brand-orange"><i class="fa-solid fa-chevron-left"></i></button>
-                                        <h4 id="homeCalendarMonthTitle" class="text-sm font-bold text-gray-800 uppercase tracking-widest">Abril 2026</h4>
-                                        <button type="button" onclick="changeMonth(event, 1, 'homeCalendar')" class="text-gray-400 hover:text-brand-orange"><i class="fa-solid fa-chevron-right"></i></button>
-                                    </div>
-                                    <div class="grid grid-cols-7 gap-1 text-center text-[10px] font-bold text-gray-400 mb-2 uppercase">
-                                        <div>Su</div><div>Mo</div><div>Tu</div><div>We</div><div>Th</div><div>Fr</div><div>Sa</div>
+                                    <div class="flex justify-between items-center mb-4">
+                                        <button type="button" onclick="changeMonth(event, -1, 'homeCalendar')"><i class="fa-solid fa-chevron-left"></i></button>
+                                        <h4 id="homeCalendarMonthTitle" class="text-sm font-bold uppercase oswald">Abril 2026</h4>
+                                        <button type="button" onclick="changeMonth(event, 1, 'homeCalendar')"><i class="fa-solid fa-chevron-right"></i></button>
                                     </div>
                                     <div class="grid grid-cols-7 gap-y-1" id="homeCalendarGrid"></div>
-                                    <div class="mt-6 flex justify-end gap-3 border-t border-gray-50 pt-4">
-                                        <button type="button" onclick="clearDates(event)" class="text-[10px] font-bold text-gray-400 uppercase px-4 py-2 hover:text-gray-900 transition-colors">Limpiar</button>
-                                        <button type="button" onclick="applyDates(event, 'homeCalendarModal')" class="bg-brand-dark text-white text-[10px] font-bold uppercase px-6 py-2.5 rounded shadow-md transition-transform active:scale-95">Confirmar</button>
+                                    <div class="mt-4 flex justify-end gap-2 border-t pt-4">
+                                        <button type="button" onclick="clearDates(event)" class="text-[10px] font-bold text-gray-400 uppercase">Limpiar</button>
+                                        <button type="button" onclick="applyDates(event, 'homeCalendarModal')" class="bg-brand-dark text-white text-[10px] font-bold px-4 py-2 rounded">Confirmar</button>
                                     </div>
                                 </div>
                             </div>
-
-                            <div class="md:col-span-2">
-                                <button type="submit" class="w-full bg-brand-orange hover:bg-yellow-500 text-white font-bold py-4 rounded transition-all shadow-lg uppercase tracking-wider text-sm active:scale-95">
-                                    Buscar Vehículo
-                                </button>
-                            </div>
+                            <button type="submit" class="md:col-span-2 w-full bg-brand-orange text-white font-bold py-4 rounded shadow-lg uppercase tracking-wider text-sm">Buscar Vehículo</button>
                         </form>
                     </div>
                 </main>
             </section>
 
-            <!-- SECCIÓN 2: POR QUÉ RENTAR CON NOSOTROS -->
-            <section id="section-banners" class="py-16 bg-white px-8 md:px-16 lg:px-24">
-                <div class="text-center mb-12">
-                    <h2 class="oswald text-3xl md:text-4xl uppercase font-bold text-brand-dark">¿Por qué rentar con Turbo?</h2>
-                    <p class="text-gray-500 mt-2">La mejor experiencia de viaje asegurada.</p>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <div class="bg-gray-50 p-8 rounded-lg text-center border border-gray-100 hover:shadow-xl transition-all">
-                        <div class="w-16 h-16 bg-brand-orange text-white rounded-full flex items-center justify-center mx-auto mb-4">
-                            <i class="fa-solid fa-tags text-2xl"></i>
-                        </div>
-                        <h3 class="oswald text-xl uppercase font-bold mb-2">Mejores Precios</h3>
-                        <p class="text-sm text-gray-500">Tarifas transparentes sin cobros ocultos ni sorpresas.</p>
-                    </div>
-                    <div class="bg-gray-50 p-8 rounded-lg text-center border border-gray-100 hover:shadow-xl transition-all">
-                        <div class="w-16 h-16 bg-brand-dark text-white rounded-full flex items-center justify-center mx-auto mb-4">
-                            <i class="fa-solid fa-bolt text-2xl"></i>
-                        </div>
-                        <h3 class="oswald text-xl uppercase font-bold mb-2">Entrega Veloz</h3>
-                        <p class="text-sm text-gray-500">Recibí tu vehículo en minutos, limpio y con tanque lleno.</p>
-                    </div>
-                    <div class="bg-gray-50 p-8 rounded-lg text-center border border-gray-100 hover:shadow-xl transition-all">
-                        <div class="w-16 h-16 bg-brand-orange text-white rounded-full flex items-center justify-center mx-auto mb-4">
-                            <i class="fa-solid fa-headset text-2xl"></i>
-                        </div>
-                        <h3 class="oswald text-xl uppercase font-bold mb-2">Soporte 24/7</h3>
-                        <p class="text-sm text-gray-500">Asistencia vial garantizada en todo el territorio.</p>
-                    </div>
-                </div>
-            </section>
-
-            <!-- SECCIÓN 3: FLOTA (LISTADO) -->
             <section id="section-fleet" class="py-20 bg-gray-100 px-8 md:px-16 lg:px-24 border-t border-gray-200">
-                <div class="flex flex-col lg:flex-row gap-12">
-                    <aside class="w-full lg:w-1/4">
-                        <div class="bg-white p-8 rounded-xl border border-gray-100 sticky top-32 shadow-sm">
-                            <h3 class="oswald text-2xl uppercase mb-8 border-b border-gray-200 pb-4 tracking-widest font-bold text-gray-900">Filtros</h3>
-                            <div class="mb-10">
-                                <label class="block text-xs font-bold text-gray-400 uppercase mb-5 tracking-widest">Categoría</label>
-                                <div class="space-y-4">
-                                    <label class="flex items-center gap-3 cursor-pointer group">
-                                        <input type="checkbox" class="w-5 h-5 rounded border-gray-300 text-brand-orange focus:ring-brand-orange" checked>
-                                        <span class="text-sm font-medium text-gray-700 group-hover:text-brand-orange transition-colors">Todos</span>
-                                    </label>
-                                    <label class="flex items-center gap-3 cursor-pointer group">
-                                        <input type="checkbox" class="w-5 h-5 rounded border-gray-300 text-brand-orange focus:ring-brand-orange">
-                                        <span class="text-sm font-medium text-gray-700 group-hover:text-brand-orange transition-colors">SUV</span>
-                                    </label>
-                                    <label class="flex items-center gap-3 cursor-pointer group">
-                                        <input type="checkbox" class="w-5 h-5 rounded border-gray-300 text-brand-orange focus:ring-brand-orange">
-                                        <span class="text-sm font-medium text-gray-700 group-hover:text-brand-orange transition-colors">Sedán</span>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                    </aside>
-
-                    <div class="flex-1">
-                        <div class="flex justify-between items-end mb-10">
-                            <h2 class="oswald text-4xl uppercase font-bold tracking-tight text-gray-900">Nuestra Flota</h2>
-                            <p id="fleet-count" class="text-gray-500 text-sm font-medium">Cargando vehículos...</p>
-                        </div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8" id="car-grid"></div>
-                    </div>
+                <div class="flex justify-between items-end mb-10">
+                    <h2 class="oswald text-4xl uppercase font-bold tracking-tight text-gray-900">Nuestra Flota</h2>
+                    <p id="fleet-count" class="text-gray-500 text-sm font-medium">Cargando...</p>
                 </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8" id="car-grid"></div>
             </section>
         </div>
 
-        <!-- VISTA DETALLE -->
         <section id="page-detail" class="hidden pt-32 pb-20 px-8 md:px-16 lg:px-24 fade-in min-h-screen bg-gray-50">
-            <button onclick="closeDetail()" class="mb-8 flex items-center gap-2 text-gray-500 hover:text-gray-900 font-bold text-xs uppercase tracking-widest transition-colors">
+            <button onclick="closeDetail()" class="mb-8 flex items-center gap-2 text-gray-500 hover:text-gray-900 font-bold text-xs uppercase transition-colors">
                 <i class="fa-solid fa-arrow-left"></i> Regresar a la flota
             </button>
             <div id="detail-content"></div>
         </section>
+
+        <section id="admin-view" class="hidden pt-32 pb-20 px-8 md:px-16 lg:px-24 fade-in min-h-screen bg-gray-50">
+            <button onclick="goHome()" class="mb-8 flex items-center gap-2 text-gray-500 hover:text-gray-900 font-bold text-xs uppercase">
+                <i class="fa-solid fa-arrow-left"></i> Salir de Admin
+            </button>
+            <div class="max-w-4xl mx-auto">
+                <h2 class="oswald text-4xl font-bold mb-8 uppercase">Gestión de Flota</h2>
+                
+                <div class="bg-white p-8 rounded-xl border mb-12 shadow-sm">
+                    <h3 class="font-bold uppercase text-xs tracking-widest mb-4 border-b pb-2">Agregar Carro</h3>
+                    <form id="adminForm" onsubmit="addCar(event)" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <input id="adminCarName" type="text" required class="border-gray-200 rounded py-3 text-sm bg-gray-50" placeholder="Nombre (Ej. Toyota Hilux)">
+                        <input id="adminCarPrice" type="number" required class="border-gray-200 rounded py-3 text-sm bg-gray-50" placeholder="Precio x Día">
+                        <input id="adminCarType" type="text" required class="border-gray-200 rounded py-3 text-sm bg-gray-50" placeholder="Tipo (SUV, Sedán)">
+                        <input id="adminCarImages" type="text" required class="border-gray-200 rounded py-3 text-sm bg-gray-50" placeholder="URL imagen (directo .jpg)">
+                        <button type="submit" class="md:col-span-2 bg-brand-dark text-white font-bold py-3 rounded uppercase text-xs">Guardar en Base de Datos</button>
+                    </form>
+                </div>
+
+                <div class="bg-white p-8 rounded-xl border shadow-sm">
+                    <h3 class="font-bold uppercase text-xs tracking-widest mb-6 border-b pb-2">Inventario</h3>
+                    <div id="admin-car-list" class="space-y-4"></div>
+                </div>
+            </div>
+        </section>
     </div>
 
-    <!-- NOTIFICACIÓN -->
     <div id="notif" class="fixed bottom-10 right-10 bg-gray-900 text-white p-5 rounded-lg shadow-2xl translate-y-40 transition-transform duration-300 z-[200] border-l-4 border-brand-orange">
         <p id="notif-text" class="text-sm font-bold"></p>
     </div>
 
-    <!-- BOTÓN WHATSAPP -->
-    <a href="https://wa.me/50200000000" target="_blank" class="whatsapp-float fixed bottom-8 left-8 bg-green-500 text-white p-4 rounded-full shadow-2xl hover:bg-green-600 hover:scale-110 transition-all duration-300 z-[150] flex items-center justify-center">
+    <a href="https://wa.me/50200000000" target="_blank" class="whatsapp-float fixed bottom-8 left-8 bg-green-500 text-white p-4 rounded-full shadow-2xl z-[150] flex items-center justify-center">
         <i class="fa-brands fa-whatsapp text-3xl"></i>
     </a>
 
-    <script>
-        // --- ESTADO GLOBAL (CEREBRO) ---
-        let globalLocation = '';
-        let startDay = null; // {d, m, y}
-        let endDay = null;
-        let selectedCar = null;
-        const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
-        let currentMonth = 3; // Abril
-        let currentYear = 2026;
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, doc, addDoc, updateDoc, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // INVENTARIO (12 Carros con disponibilidad simulada)
-        const CARS = [
-            { id: 1, name: 'Toyota Raize 2024', price: 450, type: 'SUV Compacto', bookedRanges: [], images: ['https://images.unsplash.com/photo-1594502184342-2e12f877aa73?auto=format&fit=crop&q=80&w=800','https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&q=80&w=800','https://images.unsplash.com/photo-1503376760366-5a413e537c46?auto=format&fit=crop&q=80&w=800'] },
-            { id: 2, name: 'Audi A4 Allroad', price: 1000, type: 'Lujo', bookedRanges: [{ start: 10, end: 15 }], images: ['https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?auto=format&fit=crop&q=80&w=800','https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?auto=format&fit=crop&q=80&w=800'] },
-            { id: 3, name: 'Range Rover Sport', price: 1500, type: 'SUV', bookedRanges: [{ start: 8, end: 12 }], images: ['https://images.unsplash.com/photo-1506469717960-433cebe3f181?auto=format&fit=crop&q=80&w=800','https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&q=80&w=800'] },
-            { id: 4, name: 'Tesla Model 3', price: 1200, type: 'Sedán', bookedRanges: [], images: ['https://images.unsplash.com/photo-1560958089-b8a1929cea89?auto=format&fit=crop&q=80&w=800'] },
-            { id: 5, name: 'Jeep Wrangler', price: 1100, type: 'SUV 4x4', bookedRanges: [], images: ['https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&q=80&w=800'] },
-            { id: 6, name: 'Honda CR-V', price: 600, type: 'SUV', bookedRanges: [], images: ['https://images.unsplash.com/photo-1568844293986-8d0400bc4745?auto=format&fit=crop&q=80&w=800'] },
-            { id: 7, name: 'BMW X5', price: 1600, type: 'Lujo', bookedRanges: [], images: ['https://images.unsplash.com/photo-1555215695-3004980ad54e?auto=format&fit=crop&q=80&w=800'] },
-            { id: 8, name: 'Hyundai Tucson', price: 550, type: 'SUV', bookedRanges: [], images: ['https://images.unsplash.com/photo-1633511090164-b4bfdef3a207?auto=format&fit=crop&q=80&w=800'] },
-            { id: 9, name: 'Nissan Kicks', price: 400, type: 'SUV Compacto', bookedRanges: [], images: ['https://images.unsplash.com/photo-1609521263047-f8f205293f24?auto=format&fit=crop&q=80&w=800'] },
-            { id: 10, name: 'Kia Sportage', price: 500, type: 'SUV', bookedRanges: [], images: ['https://images.unsplash.com/photo-1620392634458-9a67a066ebbc?auto=format&fit=crop&q=80&w=800'] },
-            { id: 11, name: 'Ford Explorer', price: 900, type: 'SUV Familiar', bookedRanges: [], images: ['https://images.unsplash.com/photo-1559416523-140ddc3d238c?auto=format&fit=crop&q=80&w=800'] },
-            { id: 12, name: 'Mercedes-Benz GLC', price: 1400, type: 'Lujo', bookedRanges: [], images: ['https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?auto=format&fit=crop&q=80&w=800'] }
-        ];
-
-        // --- FUNCIONES GLOBALES ---
-        window.goHome = function() {
-            document.getElementById('page-detail').classList.add('hidden');
-            document.getElementById('main-view').classList.remove('hidden');
-            window.scrollTo(0, 0);
-            updateHeaderOnScroll();
+        // ==========================================
+        // CONFIGURACIÓN EXACTA DE TU FIREBASE
+        // ==========================================
+        const myFirebaseConfig = {
+            apiKey: "AIzaSyDN5m6y0D06qmjxC5aJgTIJgFqWTrkWM3g",
+            authDomain: "mycar-532b2.firebaseapp.com",
+            projectId: "mycar-532b2",
+            storageBucket: "mycar-532b2.firebasestorage.app",
+            messagingSenderId: "999070913490",
+            appId: "1:999070913490:web:0f79b5cc64c4f429fe2e0b"
         };
 
-        window.scrollToFleet = function() {
-            const section = document.getElementById('section-fleet');
-            if(section) section.scrollIntoView({ behavior: 'smooth' });
-        };
+        let db, auth;
+        const currentAppId = typeof __app_id !== 'undefined' ? __app_id : 'mycar-532b2';
 
-        window.syncDetailLocation = function() {
-            globalLocation = document.getElementById('detailLocation').value;
-            const searchLoc = document.getElementById('searchLocation');
-            if(searchLoc) searchLoc.value = globalLocation;
-        };
+        // --- ESTADO GLOBAL ---
+        window.CARS = [];
+        window.startDay = null;
+        window.endDay = null;
+        window.selectedCar = null;
+        window.currentMonth = 3; 
+        window.currentYear = 2026;
+        window.monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
 
-        window.showNotif = function(msg) {
+        // --- FUNCIONES UI ---
+        window.showNotif = (msg) => {
             const n = document.getElementById('notif');
             if (n) {
                 n.querySelector('p').innerText = msg;
@@ -307,244 +233,85 @@
             }
         };
 
-        window.submitBooking = function(e) {
-            e.preventDefault();
-            const name = document.getElementById('clientName').value;
-            const email = document.getElementById('clientEmail').value;
-            const phone = document.getElementById('clientPhone').value;
-            const location = document.getElementById('detailLocation').value;
-            if(!name || !email || !phone) return showNotif("Por favor llena tus datos de contacto.");
-
-            const fmt = (d) => `${d.d}/${d.m+1}/${d.y}`;
-            const msg = `Hola Turbo! Quisiera reservar un vehículo:
-🚗 Vehículo: ${selectedCar.name}
-📍 Recogida: ${location}
-📅 Desde: ${fmt(startDay)}
-📅 Hasta: ${fmt(endDay)}
-👤 Cliente: ${name}
-✉️ Correo: ${email}
-📞 Tel: ${phone}`;
-
-            window.open(`https://wa.me/50200000000?text=${encodeURIComponent(msg)}`, '_blank');
-            showNotif('¡Redirigiendo a WhatsApp!');
-            setTimeout(() => goHome(), 2500);
+        window.goHome = () => {
+            document.getElementById('page-detail').classList.add('hidden');
+            document.getElementById('admin-view').classList.add('hidden');
+            document.getElementById('main-view').classList.remove('hidden');
+            window.scrollTo(0, 0);
+            window.updateHeaderOnScroll();
         };
 
-        window.validateAndProceed = function() {
-            const loc = document.getElementById('detailLocation').value;
-            if (!loc) return showNotif("Por favor selecciona un Lugar de Recogida.");
-            if (!startDay || !endDay) return showNotif("Por favor selecciona las Fechas completas.");
-            document.getElementById('booking-step-1').classList.add('hidden');
-            document.getElementById('booking-step-2').classList.remove('hidden');
+        window.openAdmin = () => {
+            document.getElementById('main-view').classList.add('hidden');
+            document.getElementById('admin-view').classList.remove('hidden');
+            window.scrollTo(0, 0);
+            window.renderAdminCars();
+        };
+        
+        window.closeDetail = window.goHome;
+
+        window.scrollToFleet = () => {
+            const el = document.getElementById('section-fleet');
+            if (el) el.scrollIntoView({ behavior: 'smooth' });
         };
 
-        window.backToStep1 = function() {
-            document.getElementById('booking-step-2').classList.add('hidden');
-            document.getElementById('booking-step-1').classList.remove('hidden');
+        window.updateHeaderOnScroll = () => {
+            const h = document.getElementById('mainHeader');
+            if (!h) return;
+            const isMain = !document.getElementById('main-view').classList.contains('hidden');
+            if (isMain && window.scrollY > 50) h.classList.add('scrolled');
+            else if (!isMain) h.classList.add('scrolled');
+            else h.classList.remove('scrolled');
         };
 
-        window.changeMonth = function(e, delta, prefix) {
-            e.stopPropagation();
-            currentMonth += delta;
-            if (currentMonth > 11) { currentMonth = 0; currentYear++; }
-            if (currentMonth < 0) { currentMonth = 11; currentYear--; }
-            document.getElementById(prefix + 'MonthTitle').innerText = `${monthNames[currentMonth]} ${currentYear}`;
-            generateCalendar(prefix + 'Grid');
-        };
-
-        window.generateCalendar = function(gridId) {
-            const grid = document.getElementById(gridId);
-            if (!grid) return;
-            grid.innerHTML = '';
-            const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-            
-            for (let i = 1; i <= daysInMonth; i++) {
-                const day = document.createElement('div');
-                day.className = 'calendar-day py-2 text-[12px] font-bold cursor-pointer text-center transition-all relative z-10 rounded-full hover:bg-gray-100';
-                day.innerText = i;
-                
-                if (startDay && startDay.d === i && startDay.m === currentMonth && startDay.y === currentYear) day.classList.add('selected');
-                if (endDay && endDay.d === i && endDay.m === currentMonth && endDay.y === currentYear) day.classList.add('selected');
-                
-                if (startDay && endDay) {
-                    const current = new Date(currentYear, currentMonth, i);
-                    const start = new Date(startDay.y, startDay.m, startDay.d);
-                    const end = new Date(endDay.y, endDay.m, endDay.d);
-                    if (current > start && current < end) day.classList.add('in-range');
-                }
-
-                day.onclick = (e) => {
-                    e.stopPropagation();
-                    const clicked = {d: i, m: currentMonth, y: currentYear};
-                    const clickedTime = new Date(currentYear, currentMonth, i).getTime();
-                    
-                    if (!startDay || (startDay && endDay)) {
-                        startDay = clicked; endDay = null;
-                    } else {
-                        const startTime = new Date(startDay.y, startDay.m, startDay.d).getTime();
-                        if (clickedTime > startTime) endDay = clicked;
-                        else { startDay = clicked; endDay = null; }
-                    }
-                    updateAllDateDisplays();
-                    document.querySelectorAll('[id$="Grid"]').forEach(g => generateCalendar(g.id));
-                };
-                grid.appendChild(day);
-            }
-        };
-
-        window.updateAllDateDisplays = function() {
-            const fmt = (d) => `${String(d.d).padStart(2, '0')}/${String(d.m + 1).padStart(2, '0')}/${String(d.y).slice(-2)}`;
-            const text = startDay && endDay ? `${fmt(startDay)} - ${fmt(endDay)}` : "Seleccionar fechas";
-            if(document.getElementById('dateInput')) document.getElementById('dateInput').value = text;
-            if(document.getElementById('detailDateInput')) document.getElementById('detailDateInput').value = text;
-            document.querySelectorAll('#startDateDisplay').forEach(el => el.innerText = startDay ? fmt(startDay) : '--/--/--');
-            document.querySelectorAll('#endDateDisplay').forEach(el => el.innerText = endDay ? fmt(endDay) : '--/--/--');
-        };
-
-        window.clearDates = function(e) {
-            e.stopPropagation(); startDay = null; endDay = null;
-            updateAllDateDisplays();
-            document.querySelectorAll('[id$="Grid"]').forEach(g => generateCalendar(g.id));
-        };
-
-        window.applyDates = function(e, modalId) {
-            e.stopPropagation();
-            if (startDay && endDay) {
-                updateAllDateDisplays();
-                document.getElementById(modalId).style.display = 'none';
-            } else if (startDay) showNotif("Selecciona fecha de devolución");
-        };
-
-        window.toggleCalendar = function(e, modalId) {
-            e.stopPropagation();
-            const modal = document.getElementById(modalId);
-            const isHidden = modal.style.display === '' || modal.style.display === 'none';
-            document.querySelectorAll('.calendar-modal').forEach(m => m.style.display = 'none');
-            if(isHidden) {
-                modal.style.display = 'block';
-                generateCalendar(modalId.replace('Modal', 'Grid'));
-            }
-        };
-
-        window.handleSearch = function(e) {
-            e.preventDefault();
-            globalLocation = document.getElementById('searchLocation').value;
-            renderCars(getAvailableCars());
-            scrollToFleet();
-        };
-
-        function getAvailableCars() {
-            if (!startDay || !endDay) return CARS; 
-            return CARS.filter(car => {
-                if (startDay.m !== 3) return true; // Simulación solo en Abril
-                return !car.bookedRanges.some(booking => (startDay.d <= booking.end && endDay.d >= booking.start));
-            });
-        }
-
-        window.renderCars = function(carsToRender = CARS) {
+        // --- LÓGICA DE DATOS ---
+        window.renderCars = (list = window.CARS) => {
             const grid = document.getElementById('car-grid');
-            document.getElementById('fleet-count').innerText = `${carsToRender.length} vehículos disponibles`;
-            if (carsToRender.length === 0) {
-                grid.innerHTML = `<div class="col-span-full text-center py-10 text-gray-500 font-bold">No disponible para estas fechas.</div>`;
-                return;
-            }
-            grid.innerHTML = carsToRender.map(car => `
-                <div class="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100 group cursor-pointer hover:shadow-xl transition-all duration-300" onclick="openDetail(${car.id})">
-                    <div class="h-56 overflow-hidden bg-gray-100 p-2">
-                        <img src="${car.images[0]}" class="w-full h-full object-cover rounded-lg group-hover:scale-105 transition-transform duration-500">
+            if(!grid) return;
+            const countEl = document.getElementById('fleet-count');
+            if (countEl) countEl.innerText = `${list.length} disponibles`;
+            
+            grid.innerHTML = list.map(car => `
+                <div class="bg-white rounded-lg overflow-hidden border shadow-sm cursor-pointer group" onclick="openDetail('${car.id}')">
+                    <div class="h-48 overflow-hidden">
+                        <img src="${car.images[0]}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                     </div>
-                    <div class="p-8">
-                        <span class="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em]">${car.type}</span>
-                        <h3 class="oswald text-xl uppercase font-bold mt-2 text-gray-900">${car.name}</h3>
-                        <div class="flex justify-between items-center mt-6 pt-6 border-t border-gray-50">
-                            <p class="text-gray-900 font-bold text-xl">Q${car.price.toLocaleString()} <span class="text-[10px] text-gray-400 font-bold">/ día</span></p>
-                            <div class="bg-gray-100 text-gray-900 w-10 h-10 rounded flex items-center justify-center group-hover:bg-brand-orange group-hover:text-white transition-colors">
-                                <i class="fa-solid fa-arrow-right"></i>
-                            </div>
-                        </div>
+                    <div class="p-6">
+                        <span class="text-[9px] font-bold text-gray-400 uppercase tracking-widest">${car.type}</span>
+                        <h3 class="oswald text-xl font-bold uppercase text-gray-900">${car.name}</h3>
+                        <p class="text-gray-900 font-bold mt-4">Q${car.price.toLocaleString()} <span class="text-[10px] text-gray-400">/ DÍA</span></p>
                     </div>
                 </div>
             `).join('');
         };
 
-        window.openDetail = function(carId) {
-            selectedCar = CARS.find(c => c.id === carId);
-            const thumbsHTML = selectedCar.images.map(img => `
-                <button onclick="changeMainImage('${img}')" class="flex-shrink-0 w-28 h-20 rounded overflow-hidden border-2 border-transparent hover:border-brand-orange focus:border-brand-orange transition-colors bg-white shadow-sm">
-                    <img src="${img}" class="w-full h-full object-cover">
-                </button>
-            `).join('');
+        window.openDetail = (id) => {
+            window.selectedCar = window.CARS.find(c => c.id === id);
+            if (!window.selectedCar) return;
 
-            const selectedLocationHTML = `
-                <option value="">Seleccionar ubicación...</option>
-                <option value="Panajachel, Sololá" ${globalLocation === 'Panajachel, Sololá' ? 'selected' : ''}>Panajachel, Sololá</option>
-                <option value="Aeropuerto La Aurora, GT" ${globalLocation === 'Aeropuerto La Aurora, GT' ? 'selected' : ''}>Aeropuerto La Aurora, GT</option>
-                <option value="Antigua Guatemala" ${globalLocation === 'Antigua Guatemala' ? 'selected' : ''}>Antigua Guatemala</option>
-            `;
-            const format = (d) => `${String(d.d).padStart(2, '0')}/${String(d.m + 1).padStart(2, '0')}/${String(d.y).slice(-2)}`;
-            const dateText = startDay && endDay ? `${format(startDay)} - ${format(endDay)}` : "Seleccionar fechas";
+            const format = (d) => d ? `${d.d}/${d.m + 1}` : "--/--";
+            const dateText = window.startDay && window.endDay ? `${format(window.startDay)} - ${format(window.endDay)}` : "Seleccionar fechas";
 
             document.getElementById('detail-content').innerHTML = `
-                <div class="max-w-7xl mx-auto py-2">
-                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
-                        <div class="lg:col-span-2 space-y-4">
-                            <div class="rounded-xl overflow-hidden bg-white border border-gray-100 h-[450px] shadow-sm">
-                                <img id="main-car-image" src="${selectedCar.images[0]}" class="w-full h-full object-cover transition-opacity duration-300">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <div class="lg:col-span-2">
+                        <img src="${window.selectedCar.images[0]}" class="w-full h-[450px] object-cover rounded-xl border shadow-sm">
+                    </div>
+                    <div class="bg-white p-8 rounded-xl border shadow-xl">
+                        <h1 class="oswald text-3xl font-bold uppercase mb-4">${window.selectedCar.name}</h1>
+                        <p class="text-3xl font-bold mb-6 text-brand-orange">Q${window.selectedCar.price}</p>
+                        <div id="booking-step-1" class="space-y-4">
+                            <input type="text" id="detailDateInput" class="w-full rounded border-gray-200 py-3 bg-gray-50 font-bold cursor-pointer" value="${dateText}" readonly onclick="toggleCalendar(event, 'detailCalendarModal')">
+                            <div id="detailCalendarModal" class="calendar-modal bg-white rounded-xl border p-5">
+                                <div class="grid grid-cols-7 gap-y-1" id="detailCalendarGrid"></div>
+                                <button onclick="applyDates(event, 'detailCalendarModal')" class="w-full mt-4 bg-brand-dark text-white py-2 rounded">Aceptar</button>
                             </div>
-                            <div class="flex space-x-4 overflow-x-auto pb-4 pt-2 hide-scrollbar">${thumbsHTML}</div>
-                            <div class="bg-white p-8 rounded-xl border border-gray-100 shadow-sm mt-8">
-                                <h2 class="oswald text-2xl font-bold text-gray-900 mb-6 uppercase border-b pb-4">Características</h2>
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-sm font-medium text-gray-600">
-                                    <ul class="space-y-4">
-                                        <li><i class="fa-solid fa-location-arrow text-brand-orange mr-2"></i> GPS Incluido</li>
-                                        <li><i class="fa-brands fa-bluetooth text-brand-orange mr-2"></i> Bluetooth / CarPlay</li>
-                                    </ul>
-                                    <ul class="space-y-4">
-                                        <li><i class="fa-solid fa-gas-pump mr-2"></i> Full to Full</li>
-                                        <li><i class="fa-solid fa-credit-card mr-2"></i> Depósito: Q2,500</li>
-                                    </ul>
-                                </div>
-                            </div>
+                            <button onclick="validateAndProceed()" class="w-full bg-brand-orange text-white font-bold py-4 rounded uppercase">Continuar Reserva</button>
                         </div>
-                        <div class="lg:col-span-1">
-                            <div class="bg-white rounded-xl shadow-xl border border-gray-100 p-8 sticky top-32">
-                                <h1 class="oswald text-3xl font-bold text-gray-900 uppercase mb-4">${selectedCar.name}</h1>
-                                <div class="text-3xl font-bold text-gray-900 mb-6 border-b pb-6">Q${selectedCar.price.toLocaleString()} <span class="text-xs text-gray-400 uppercase tracking-widest">/ Día</span></div>
-                                <div id="booking-step-1" class="space-y-5">
-                                    <select id="detailLocation" onchange="syncDetailLocation()" class="w-full border-gray-200 rounded py-3 text-sm bg-gray-50 font-bold">${selectedLocationHTML}</select>
-                                    <div class="relative calendar-wrapper">
-                                        <input id="detailDateInput" type="text" class="w-full border-gray-200 rounded py-3.5 pl-4 pr-10 text-sm bg-gray-50 font-bold text-gray-700 cursor-pointer" value="${dateText}" readonly onclick="toggleCalendar(event, 'detailCalendarModal')">
-                                        
-                                        <div id="detailCalendarModal" class="calendar-modal bg-white rounded-xl border border-gray-100 p-5 fade-in">
-                                            <div class="flex gap-2 mb-4 text-center">
-                                                <div class="flex-1 bg-gray-50 p-3 rounded border border-gray-100"><p class="text-[9px] font-bold text-gray-400 uppercase">Entrega</p><p id="startDateDisplay" class="text-xs font-bold text-gray-900">${startDay ? format(startDay) : '--/--/--'}</p></div>
-                                                <div class="flex-1 bg-gray-50 p-3 rounded border border-gray-100"><p class="text-[9px] font-bold text-gray-400 uppercase">Devolución</p><p id="endDateDisplay" class="text-xs font-bold text-gray-900">${endDay ? format(endDay) : '--/--/--'}</p></div>
-                                            </div>
-                                            <div class="flex justify-between items-center mb-4 px-2">
-                                                <button type="button" onclick="changeMonth(event, -1, 'detailCalendar')" class="text-gray-400 hover:text-brand-orange"><i class="fa-solid fa-chevron-left"></i></button>
-                                                <h4 id="detailCalendarMonthTitle" class="text-sm font-bold text-gray-800 uppercase tracking-widest">${monthNames[currentMonth]} ${currentYear}</h4>
-                                                <button type="button" onclick="changeMonth(event, 1, 'detailCalendar')" class="text-gray-400 hover:text-brand-orange"><i class="fa-solid fa-chevron-right"></i></button>
-                                            </div>
-                                            <div class="grid grid-cols-7 gap-y-1" id="detailCalendarGrid"></div>
-                                            <div class="mt-6 flex justify-end gap-3 border-t pt-4">
-                                                <button type="button" onclick="clearDates(event)" class="text-[10px] font-bold text-gray-400 uppercase">Limpiar</button>
-                                                <button type="button" onclick="applyDates(event, 'detailCalendarModal')" class="bg-brand-dark text-white text-[10px] font-bold uppercase px-6 py-2.5 rounded">Confirmar</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <button onclick="validateAndProceed()" class="w-full bg-brand-orange text-white font-bold py-4 rounded shadow-lg uppercase tracking-widest transition-colors hover:bg-yellow-500">Continuar</button>
-                                </div>
-                                
-                                <div id="booking-step-2" class="hidden fade-in space-y-4">
-                                    <button onclick="backToStep1()" class="text-[10px] font-bold text-gray-400 uppercase hover:text-brand-orange mb-2 block"><i class="fa-solid fa-arrow-left"></i> Editar Fechas</button>
-                                    <form onsubmit="submitBooking(event)" class="space-y-4">
-                                        <input id="clientName" type="text" required class="w-full border-gray-200 rounded py-3 px-4 bg-gray-50 text-sm font-bold" placeholder="Nombre Completo">
-                                        <input id="clientEmail" type="email" required class="w-full border-gray-200 rounded py-3 px-4 bg-gray-50 text-sm font-bold" placeholder="Correo Electrónico">
-                                        <input id="clientPhone" type="tel" required class="w-full border-gray-200 rounded py-3 px-4 bg-gray-50 text-sm font-bold" placeholder="WhatsApp / Teléfono">
-                                        <button type="submit" class="w-full bg-brand-dark text-white font-bold py-4 rounded shadow-lg uppercase tracking-widest hover:bg-brand-orange transition-colors">Confirmar Reserva</button>
-                                    </form>
-                                </div>
-                            </div>
+                        <div id="booking-step-2" class="hidden space-y-4 fade-in">
+                            <input id="clientName" type="text" class="w-full rounded border-gray-200 py-3 text-sm" placeholder="Nombre completo">
+                            <input id="clientPhone" type="tel" class="w-full rounded border-gray-200 py-3 text-sm" placeholder="WhatsApp">
+                            <button onclick="submitBooking(event)" class="w-full bg-brand-dark text-white font-bold py-4 rounded uppercase">Enviar por WhatsApp</button>
                         </div>
                     </div>
                 </div>
@@ -552,51 +319,236 @@
             document.getElementById('main-view').classList.add('hidden');
             document.getElementById('page-detail').classList.remove('hidden');
             window.scrollTo(0, 0);
-            updateHeaderOnScroll();
-            generateCalendar('detailCalendarGrid');
+            window.updateHeaderOnScroll();
+            window.generateCalendar('detailCalendarGrid');
         };
 
-        window.changeMainImage = function(url) {
-            const img = document.getElementById('main-car-image');
-            if(img) { img.style.opacity = '0.5'; setTimeout(() => { img.src = url; img.style.opacity = '1'; }, 100); }
+        window.handleSearch = (e) => {
+            if (e) e.preventDefault();
+            window.renderCars(window.getAvailableCars());
+            window.scrollToFleet();
         };
 
-        window.closeDetail = function() {
-            document.getElementById('page-detail').classList.add('hidden');
-            document.getElementById('main-view').classList.remove('hidden');
-            renderCars(getAvailableCars());
-            scrollToFleet();
-            updateHeaderOnScroll();
-        };
-
-        // --- SOLUCIÓN: VISIBILIDAD DEL MENÚ ---
-        window.updateHeaderOnScroll = function() {
-            const header = document.getElementById('mainHeader');
-            const isMainView = !document.getElementById('main-view').classList.contains('hidden');
+        window.submitBooking = (e) => {
+            if (e) e.preventDefault();
+            const n = document.getElementById('clientName').value;
+            const p = document.getElementById('clientPhone').value;
+            if(!n || !p) return window.showNotif("Llená tus datos maje");
             
-            // Si estamos en la página del detalle (!isMainView), mantenemos la barra oscura siempre
-            if (isMainView && window.scrollY > 50) {
-                header.classList.add('scrolled');
-            } else if (isMainView) {
-                header.classList.remove('scrolled');
-            } else {
-                header.classList.add('scrolled');
+            const fmt = (d) => `${d.d}/${d.m + 1}/${d.y}`;
+            const msg = `Reserva: ${window.selectedCar.name}\nDesde: ${fmt(window.startDay)}\nHasta: ${fmt(window.endDay)}\nCliente: ${n}`;
+            window.open(`https://wa.me/50200000000?text=${encodeURIComponent(msg)}`, '_blank');
+        };
+
+        window.validateAndProceed = () => {
+            if(!window.startDay || !window.endDay) return window.showNotif("Elegí fechas primero");
+            document.getElementById('booking-step-1').classList.add('hidden');
+            document.getElementById('booking-step-2').classList.remove('hidden');
+        };
+
+        // --- CALENDARIO ---
+        window.generateCalendar = (gridId) => {
+            const grid = document.getElementById(gridId);
+            if(!grid) return;
+            grid.innerHTML = '';
+            const daysInMonth = new Date(window.currentYear, window.currentMonth + 1, 0).getDate();
+            
+            for (let i = 1; i <= daysInMonth; i++) {
+                const day = document.createElement('div');
+                day.className = 'calendar-day py-2 text-[12px] font-bold cursor-pointer text-center rounded-full hover:bg-gray-100';
+                day.innerText = i;
+                
+                if (window.startDay && window.startDay.d === i && window.startDay.m === window.currentMonth) day.classList.add('selected');
+                if (window.endDay && window.endDay.d === i && window.endDay.m === window.currentMonth) day.classList.add('selected');
+                
+                if (window.startDay && window.endDay) {
+                    const current = new Date(window.currentYear, window.currentMonth, i).getTime();
+                    const s = new Date(window.startDay.y, window.startDay.m, window.startDay.d).getTime();
+                    const e = new Date(window.endDay.y, window.endDay.m, window.endDay.d).getTime();
+                    if (current > s && current < e) day.classList.add('in-range');
+                }
+
+                day.onclick = (e) => {
+                    e.stopPropagation();
+                    const clicked = { d: i, m: window.currentMonth, y: window.currentYear };
+                    const clickedTime = new Date(clicked.y, clicked.m, clicked.d).getTime();
+                    
+                    if (!window.startDay || (window.startDay && window.endDay)) {
+                        window.startDay = clicked; window.endDay = null;
+                    } else {
+                        const startTime = new Date(window.startDay.y, window.startDay.m, window.startDay.d).getTime();
+                        if (clickedTime > startTime) window.endDay = clicked;
+                        else { window.startDay = clicked; window.endDay = null; }
+                    }
+                    window.updateAllDateDisplays();
+                    document.querySelectorAll('[id$="Grid"]').forEach(g => window.generateCalendar(g.id));
+                };
+                grid.appendChild(day);
             }
         };
 
-        window.addEventListener('scroll', updateHeaderOnScroll);
+        window.changeMonth = (e, delta, prefix) => {
+            if (e) e.stopPropagation();
+            window.currentMonth += delta;
+            if (window.currentMonth > 11) { window.currentMonth = 0; window.currentYear++; }
+            if (window.currentMonth < 0) { window.currentMonth = 11; window.currentYear--; }
+            const el = document.getElementById(prefix + 'MonthTitle');
+            if (el) el.innerText = `${window.monthNames[window.currentMonth]} ${window.currentYear}`;
+            window.generateCalendar(prefix + 'Grid');
+        };
+
+        window.toggleCalendar = (e, id) => { 
+            if (e) e.stopPropagation(); 
+            const m = document.getElementById(id); 
+            if (!m) return;
+            const isVisible = m.style.display === 'block';
+            m.style.display = isVisible ? 'none' : 'block'; 
+            if (!isVisible) window.generateCalendar(id.replace('Modal', 'Grid')); 
+        };
+
+        window.applyDates = (e, id) => { 
+            if (e) e.stopPropagation(); 
+            const m = document.getElementById(id);
+            if (m) m.style.display = 'none'; 
+        };
+
+        window.clearDates = (e) => { 
+            if (e) e.stopPropagation(); 
+            window.startDay = null; 
+            window.endDay = null; 
+            window.updateAllDateDisplays(); 
+            document.querySelectorAll('[id$="Grid"]').forEach(g => window.generateCalendar(g.id)); 
+        };
+
+        window.updateAllDateDisplays = () => {
+            const fmt = (d) => d ? `${d.d}/${d.m + 1}` : "";
+            const txt = window.startDay && window.endDay ? `${fmt(window.startDay)} - ${fmt(window.endDay)}` : "Seleccionar fechas";
+            const inputHome = document.getElementById('dateInput');
+            const inputDetail = document.getElementById('detailDateInput');
+            if(inputHome) inputHome.value = txt;
+            if(inputDetail) inputDetail.value = txt;
+        };
+
+        // --- ADMIN ---
+        window.renderAdminCars = () => {
+            const list = document.getElementById('admin-car-list');
+            if (!list) return;
+            list.innerHTML = window.CARS.map(car => `
+                <div class="flex items-center justify-between p-4 border rounded bg-gray-50">
+                    <div class="flex items-center gap-3">
+                        <img src="${car.images[0]}" class="w-12 h-10 object-cover rounded">
+                        <p class="font-bold text-sm text-gray-900">${car.name}</p>
+                    </div>
+                    <div class="flex gap-2">
+                        <button onclick="deleteCar('${car.id}')" class="text-red-500 text-xs font-bold uppercase">Borrar</button>
+                    </div>
+                </div>
+            `).join('');
+        };
+
+        window.addCar = async (e) => {
+            if (e) e.preventDefault();
+            const n = document.getElementById('adminCarName').value;
+            const p = Number(document.getElementById('adminCarPrice').value);
+            const img = document.getElementById('adminCarImages').value;
+            const t = document.getElementById('adminCarType').value;
+            
+            try {
+                const carsRef = collection(db, 'artifacts', currentAppId, 'public', 'data', 'cars');
+                await addDoc(carsRef, { name: n, price: p, images: [img], type: t, bookedRanges: [] });
+                window.showNotif('¡Carro agregado exitosamente!'); 
+                document.getElementById('adminForm').reset();
+            } catch(err) {
+                console.error(err);
+                window.showNotif("Error al guardar en Firebase");
+            }
+        };
+
+        window.deleteCar = async (id) => {
+            if(confirm('¿Seguro que querés borrar este carro?')) {
+                try {
+                    await deleteDoc(doc(db, 'artifacts', currentAppId, 'public', 'data', 'cars', id));
+                    window.showNotif('Carro eliminado');
+                } catch(err) { console.error(err); }
+            }
+        };
+
+        // --- FALLBACK ---
+        function getLocalFallbackCars() { 
+            return [
+                { id: '1', name: 'Carro de Prueba', price: 500, type: 'SUV', bookedRanges: [], images: ['https://images.unsplash.com/photo-1594502184342-2e12f877aa73?auto=format&fit=crop&q=80&w=800'] }
+            ]; 
+        }
+
+        window.getAvailableCars = () => {
+            if (!window.startDay || !window.endDay) return window.CARS;
+            return window.CARS.filter(car => {
+                const booked = car.bookedRanges || [];
+                return !booked.some(range => {
+                    const s = window.startDay.d;
+                    const e = window.endDay.d;
+                    return (s <= range.end && e >= range.start);
+                });
+            });
+        };
+
+        // --- INIT APP ---
+        function listenToCars() {
+            const carsRef = collection(db, 'artifacts', currentAppId, 'public', 'data', 'cars');
+            onSnapshot(carsRef, (snap) => {
+                if (snap.empty) {
+                    window.CARS = [];
+                } else {
+                    window.CARS = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+                }
+                window.renderCars();
+                if(!document.getElementById('admin-view').classList.contains('hidden')) window.renderAdminCars();
+            }, (err) => {
+                console.warn("Firestore Error:", err);
+                window.CARS = getLocalFallbackCars();
+                window.renderCars();
+            });
+        }
+
+        async function initApp() {
+            try {
+                // Prioriza la configuración generada en el código local
+                const appInstance = initializeApp(myFirebaseConfig);
+                auth = getAuth(appInstance);
+                db = getFirestore(appInstance);
+
+                // Autenticación anónima por defecto para Firebase de usuario
+                await signInAnonymously(auth);
+
+                onAuthStateChanged(auth, (u) => {
+                    if (u) listenToCars();
+                    else {
+                        window.CARS = getLocalFallbackCars();
+                        window.renderCars();
+                    }
+                });
+
+            } catch(err) {
+                console.error("Firebase Init Error:", err);
+                window.CARS = getLocalFallbackCars();
+                window.renderCars();
+            }
+        }
+
+        // --- SETUP ---
+        window.addEventListener('scroll', window.updateHeaderOnScroll);
+        window.onload = () => { 
+            window.updateHeaderOnScroll(); 
+            window.generateCalendar('homeCalendarGrid'); 
+            initApp();
+        };
         
+        // Cierre de modales al hacer clic fuera
         document.addEventListener('click', (e) => {
             if (!e.target.closest('.calendar-wrapper')) {
                 document.querySelectorAll('.calendar-modal').forEach(m => m.style.display = 'none');
             }
         });
-
-        window.onload = () => { 
-            renderCars(); 
-            generateCalendar('homeCalendarGrid'); 
-            updateHeaderOnScroll();
-        };
     </script>
 </body>
 </html>
