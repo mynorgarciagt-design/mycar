@@ -11,13 +11,12 @@
         body { font-family: 'Roboto', sans-serif; scroll-behavior: smooth; background-color: #f9fafb; }
         h1, h2, h3, .oswald { font-family: 'Oswald', sans-serif; }
         
-        .hero-bg {
+        #hero {
             background-color: #111827;
-            background-image: linear-gradient(to right, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0) 100%), 
-                              url('https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&q=80&w=2070'); 
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
+            transition: background-image 0.5s ease-in-out;
         }
 
         header.scrolled {
@@ -92,28 +91,25 @@
                 <a class="hover:text-brand-orange transition-colors text-white cursor-pointer" onclick="goHome()">Inicio</a>
                 <a class="hover:text-brand-orange transition-colors text-white cursor-pointer" onclick="scrollToFleet()">Flota</a>
                 <a class="hover:text-brand-orange transition-colors text-white cursor-pointer" href="#section-banners">Por qué elegirnos</a>
+                <a class="hover:text-brand-orange transition-colors text-white cursor-pointer" href="#section-faq">FAQ</a>
             </nav>
             <button onclick="showNotif('Sección de cuenta próximamente')" class="bg-white/10 hover:bg-white/20 px-5 py-2 rounded-full text-xs font-bold backdrop-blur-md transition-all border border-white/20 uppercase tracking-widest">Mi Cuenta</button>
         </header>
 
         <!-- VISTA PRINCIPAL -->
         <div id="main-view">
-            <section id="hero" class="min-h-screen flex flex-col hero-bg">
+            <section id="hero" class="min-h-screen flex flex-col">
                 <main class="flex-grow flex flex-col justify-center items-start px-8 md:px-16 lg:px-24 pt-36">
                     <div class="max-w-xl md:max-w-2xl fade-in text-left text-white">
-                        <h1 class="text-5xl md:text-7xl font-bold uppercase leading-tight mb-4 tracking-wide oswald">
-                            Make Your Ride Easy & Fast With Turbo
-                        </h1>
-                        <p class="text-lg md:text-xl text-gray-200 mb-10 max-w-md">
-                            Explora Guatemala con estilo. Tu vehículo ideal te espera para la próxima aventura.
-                        </p>
+                        <h1 id="heroTitle" class="text-5xl md:text-7xl font-bold uppercase leading-tight mb-4 tracking-wide oswald"></h1>
+                        <p id="heroSubtitle" class="text-lg md:text-xl text-gray-200 mb-10 max-w-md"></p>
                     </div>
 
                     <div class="bg-white rounded-lg p-8 shadow-2xl w-full max-w-2xl fade-in relative mb-10 calendar-wrapper">
                         <form class="grid grid-cols-1 md:grid-cols-2 gap-6" onsubmit="handleSearch(event)">
                             <div>
                                 <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Punto de Recogida</label>
-                                <select id="searchLocation" class="block w-full border-gray-100 rounded py-3 text-sm bg-gray-50 font-bold">
+                                <select id="searchLocation" class="block w-full border-gray-100 rounded py-3 text-sm bg-gray-50 font-bold focus:ring-brand-orange">
                                     <option value="">Seleccionar ubicación</option>
                                     <option value="Panajachel, Sololá">Panajachel, Sololá</option>
                                     <option value="Aeropuerto La Aurora, GT">Aeropuerto La Aurora, GT</option>
@@ -122,7 +118,7 @@
                             </div>
                             <div class="relative">
                                 <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Fechas de Viaje</label>
-                                <input id="dateInput" type="text" class="block w-full border-gray-100 rounded py-3 text-sm cursor-pointer bg-gray-50 font-bold" value="Seleccionar fechas" readonly onclick="toggleCalendar(event, 'homeCalendarModal')">
+                                <input id="dateInput" type="text" class="block w-full border-gray-100 rounded py-3 text-sm cursor-pointer bg-gray-50 font-bold focus:ring-brand-orange" value="Seleccionar fechas" readonly onclick="toggleCalendar(event, 'homeCalendarModal')">
                                 
                                 <div id="homeCalendarModal" class="calendar-modal bg-white rounded-xl border p-5 fade-in">
                                     <div class="flex gap-2 mb-4 text-center">
@@ -141,10 +137,41 @@
                                     </div>
                                 </div>
                             </div>
-                            <button type="submit" class="md:col-span-2 w-full bg-brand-orange text-white font-bold py-4 rounded shadow-lg uppercase tracking-wider text-sm">Buscar Vehículo</button>
+                            <button type="submit" class="md:col-span-2 w-full bg-brand-orange text-white font-bold py-4 rounded shadow-lg uppercase tracking-wider text-sm hover:bg-yellow-500 transition-colors">Buscar Vehículo</button>
                         </form>
                     </div>
                 </main>
+            </section>
+
+            <!-- BANNERS: POR QUÉ ELEGIRNOS -->
+            <section id="section-banners" class="py-20 bg-white px-8 md:px-16 lg:px-24">
+                <div class="text-center mb-16">
+                    <h2 class="oswald text-4xl uppercase font-bold tracking-tight text-gray-900 mb-4">Por qué elegir Turbo</h2>
+                    <p class="text-gray-500 max-w-2xl mx-auto">Te ofrecemos la mejor experiencia de renta de vehículos con beneficios exclusivos para que disfrutes tu viaje al máximo.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-10 text-center">
+                    <div class="p-6 rounded-xl border border-gray-100 bg-gray-50 shadow-sm hover:shadow-md transition-shadow">
+                        <div class="w-16 h-16 bg-brand-orange text-white rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
+                            <i class="fa-solid fa-shield-halved text-2xl"></i>
+                        </div>
+                        <h3 class="font-bold text-xl mb-3 oswald uppercase">Seguro Incluido</h3>
+                        <p class="text-gray-500 text-sm">Viaja con total tranquilidad. Todos nuestros vehículos cuentan con cobertura completa incluida en la tarifa.</p>
+                    </div>
+                    <div class="p-6 rounded-xl border border-gray-100 bg-gray-50 shadow-sm hover:shadow-md transition-shadow">
+                        <div class="w-16 h-16 bg-brand-orange text-white rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
+                            <i class="fa-solid fa-headset text-2xl"></i>
+                        </div>
+                        <h3 class="font-bold text-xl mb-3 oswald uppercase">Soporte 24/7</h3>
+                        <p class="text-gray-500 text-sm">Estamos para ti en cualquier momento. Asistencia en carretera y atención al cliente las 24 horas del día.</p>
+                    </div>
+                    <div class="p-6 rounded-xl border border-gray-100 bg-gray-50 shadow-sm hover:shadow-md transition-shadow">
+                        <div class="w-16 h-16 bg-brand-orange text-white rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
+                            <i class="fa-solid fa-tags text-2xl"></i>
+                        </div>
+                        <h3 class="font-bold text-xl mb-3 oswald uppercase">Mejores Precios</h3>
+                        <p class="text-gray-500 text-sm">Garantizamos tarifas altamente competitivas sin cargos ocultos. Lo que ves al reservar es exactamente lo que pagas.</p>
+                    </div>
+                </div>
             </section>
 
             <section id="section-fleet" class="py-20 bg-gray-100 px-8 md:px-16 lg:px-24 border-t border-gray-200">
@@ -153,6 +180,17 @@
                     <p id="fleet-count" class="text-gray-500 text-sm font-medium">Cargando...</p>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8" id="car-grid"></div>
+            </section>
+
+            <!-- FAQ SECTION -->
+            <section id="section-faq" class="py-20 bg-white px-8 md:px-16 lg:px-24 border-t border-gray-200">
+                <div class="text-center mb-12">
+                    <h2 class="oswald text-4xl uppercase font-bold tracking-tight text-gray-900 mb-4">Preguntas Frecuentes</h2>
+                    <p class="text-gray-500 max-w-2xl mx-auto">Resolvemos tus dudas principales para que rentes sin preocupaciones.</p>
+                </div>
+                <div id="faq-public-container" class="max-w-3xl mx-auto space-y-4">
+                    <!-- Dinámico -->
+                </div>
             </section>
         </div>
 
@@ -169,31 +207,47 @@
             <button onclick="goHome()" class="mb-8 flex items-center gap-2 text-gray-500 hover:text-gray-900 font-bold text-xs uppercase">
                 <i class="fa-solid fa-arrow-left"></i> Salir de Admin
             </button>
-            <div class="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
                 
-                <!-- COLUMNA IZQUIERDA: Formulario principal -->
+                <!-- COLUMNA IZQUIERDA: Formulario principal e inventario -->
                 <div class="lg:col-span-2 space-y-8">
                     <h2 class="oswald text-4xl font-bold uppercase">Gestión de Flota</h2>
                     
                     <div class="bg-white p-8 rounded-xl border shadow-sm">
                         <h3 class="font-bold uppercase text-xs tracking-widest mb-4 border-b pb-2 text-brand-orange">1. Agregar Carro Nuevo</h3>
                         <form id="adminForm" onsubmit="addCar(event)" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <input id="adminCarName" type="text" required class="border-gray-200 rounded py-3 text-sm bg-gray-50 focus:border-brand-orange focus:ring-brand-orange" placeholder="Nombre (Ej. Toyota Hilux)">
+                            <input id="adminCarName" type="text" required class="border-gray-200 rounded py-3 text-sm bg-gray-50 focus:border-brand-orange focus:ring-brand-orange" placeholder="Nombre (Ej. BYD Seagull)">
                             <input id="adminCarPrice" type="number" required class="border-gray-200 rounded py-3 text-sm bg-gray-50 focus:border-brand-orange focus:ring-brand-orange" placeholder="Precio x Día (Q)">
                             
                             <div>
                                 <select id="adminCarType" required class="w-full border-gray-200 rounded py-3 text-sm bg-gray-50 focus:border-brand-orange focus:ring-brand-orange">
                                     <option value="">Seleccionar Categoría...</option>
-                                    <!-- Se llena dinámicamente -->
                                 </select>
                             </div>
+
+                            <select id="adminCarTrans" required class="w-full border-gray-200 rounded py-3 text-sm bg-gray-50 focus:border-brand-orange focus:ring-brand-orange">
+                                <option value="">Tipo de Transmisión...</option>
+                                <option value="Automático">Automático</option>
+                                <option value="Mecánico">Mecánico</option>
+                            </select>
+
+                            <div class="flex gap-4 md:col-span-2">
+                                <div class="flex-1 relative">
+                                    <span class="absolute left-3 top-3.5 text-gray-400"><i class="fa-solid fa-users"></i></span>
+                                    <input id="adminCarPax" type="number" min="1" max="15" required class="w-full pl-9 border-gray-200 rounded py-3 text-sm bg-gray-50 focus:border-brand-orange focus:ring-brand-orange" placeholder="Pasajeros (Ej. 5)">
+                                </div>
+                                <div class="flex-1 relative">
+                                    <span class="absolute left-3 top-3.5 text-gray-400"><i class="fa-solid fa-suitcase"></i></span>
+                                    <input id="adminCarLuggage" type="number" min="0" max="10" required class="w-full pl-9 border-gray-200 rounded py-3 text-sm bg-gray-50 focus:border-brand-orange focus:ring-brand-orange" placeholder="Maletas (Ej. 2)">
+                                </div>
+                            </div>
                             
-                            <!-- Carga de Imagen Local -->
-                            <div class="border-2 border-dashed border-gray-300 rounded p-3 text-center bg-gray-50 relative hover:bg-gray-100 transition-colors">
-                                <input type="file" id="adminCarImage" accept="image/*" required class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" onchange="previewFileName(this)">
+                            <!-- Carga de Imagen Múltiple Local -->
+                            <div class="md:col-span-2 border-2 border-dashed border-gray-300 rounded p-4 text-center bg-gray-50 relative hover:bg-gray-100 transition-colors">
+                                <input type="file" id="adminCarImage" accept="image/*" multiple required class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" onchange="previewFileName(this)">
                                 <div class="text-sm text-gray-500 font-medium">
-                                    <i class="fa-solid fa-image mb-1 text-lg"></i><br>
-                                    <span id="fileNameDisplay">Subir Foto (Click aquí)</span>
+                                    <i class="fa-solid fa-images mb-2 text-2xl"></i><br>
+                                    <span id="fileNameDisplay">Seleccionar Múltiples Fotos (Click aquí)</span>
                                 </div>
                             </div>
 
@@ -210,14 +264,39 @@
 
                     <div class="bg-white p-8 rounded-xl border shadow-sm">
                         <h3 class="font-bold uppercase text-xs tracking-widest mb-6 border-b pb-2 text-brand-orange">2. Inventario Actual</h3>
-                        <div id="admin-car-list" class="space-y-3"></div>
+                        <div id="admin-car-list" class="space-y-4"></div>
                     </div>
                 </div>
 
-                <!-- COLUMNA DERECHA: Categorías y Equipamiento -->
-                <div class="space-y-8 mt-16 lg:mt-0">
+                <!-- COLUMNA DERECHA: Configuración del Sistema -->
+                <div class="space-y-8">
+                    
+                    <!-- Configuración de Portada -->
                     <div class="bg-white p-6 rounded-xl border shadow-sm">
-                        <h3 class="font-bold uppercase text-xs tracking-widest mb-4 border-b pb-2">Gestión de Categorías</h3>
+                        <h3 class="font-bold uppercase text-xs tracking-widest mb-4 border-b pb-2 text-brand-orange">Diseño de Portada (Hero)</h3>
+                        <div class="space-y-3">
+                            <input type="text" id="adminHeroTitle" placeholder="Título principal" class="w-full border-gray-200 rounded text-sm bg-gray-50">
+                            <textarea id="adminHeroSubtitle" placeholder="Subtítulo corto" rows="2" class="w-full border-gray-200 rounded text-sm bg-gray-50"></textarea>
+                            
+                            <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-2">Imagen de Fondo</label>
+                            <input type="file" id="adminHeroBgInput" accept="image/*" class="w-full text-xs text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-gray-100 file:text-brand-dark hover:file:bg-gray-200 cursor-pointer">
+                            
+                            <button onclick="saveHeroSettings()" class="w-full bg-brand-dark text-white py-2 rounded text-xs font-bold uppercase mt-2 hover:bg-black">Guardar Textos / Fondo</button>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-xl border shadow-sm">
+                        <h3 class="font-bold uppercase text-xs tracking-widest mb-4 border-b pb-2">Preguntas Frecuentes</h3>
+                        <div class="space-y-2 mb-4">
+                            <input type="text" id="newFaqQ" placeholder="Pregunta (Ej. ¿Hay límite de millaje?)" class="w-full border-gray-200 rounded text-sm bg-gray-50">
+                            <textarea id="newFaqA" placeholder="Respuesta..." rows="2" class="w-full border-gray-200 rounded text-sm bg-gray-50"></textarea>
+                            <button onclick="addFaq()" class="w-full bg-gray-200 text-gray-800 py-2 rounded text-xs font-bold uppercase hover:bg-gray-300">Agregar Pregunta</button>
+                        </div>
+                        <ul id="faqAdminList" class="space-y-2 mt-4 pt-4 border-t"></ul>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-xl border shadow-sm">
+                        <h3 class="font-bold uppercase text-xs tracking-widest mb-4 border-b pb-2">Categorías</h3>
                         <div class="flex gap-2 mb-4">
                             <input type="text" id="newCategoryInput" placeholder="Ej. Pickup" class="flex-1 border-gray-200 rounded text-sm bg-gray-50">
                             <button onclick="addCategory()" class="bg-brand-dark text-white px-3 py-2 rounded text-xs font-bold"><i class="fa-solid fa-plus"></i></button>
@@ -226,7 +305,7 @@
                     </div>
 
                     <div class="bg-white p-6 rounded-xl border shadow-sm">
-                        <h3 class="font-bold uppercase text-xs tracking-widest mb-4 border-b pb-2">Gestión de Equipamiento</h3>
+                        <h3 class="font-bold uppercase text-xs tracking-widest mb-4 border-b pb-2">Equipamiento Básico</h3>
                         <div class="flex gap-2 mb-4">
                             <input type="text" id="newEquipmentInput" placeholder="Ej. Apple CarPlay" class="flex-1 border-gray-200 rounded text-sm bg-gray-50">
                             <button onclick="addEquipment()" class="bg-brand-dark text-white px-3 py-2 rounded text-xs font-bold"><i class="fa-solid fa-plus"></i></button>
@@ -237,8 +316,13 @@
             </div>
         </section>
 
+        <!-- FOOTER -->
+        <footer id="mainFooter" class="py-8 bg-gray-900 text-center text-gray-500 text-sm w-full">
+            &copy; 2025 Todos los derechos reservados.
+        </footer>
+
         <!-- MODAL BLOQUEO DE FECHAS -->
-        <div id="blockDatesModal" class="hidden fixed inset-0 bg-black/60 z-[9999] flex items-center justify-center fade-in">
+        <div id="blockDatesModal" class="hidden fixed inset-0 bg-black/60 z-[9999] flex items-center justify-center fade-in backdrop-blur-sm">
             <div class="bg-white p-8 rounded-xl w-full max-w-sm shadow-2xl border">
                 <h3 class="oswald text-xl font-bold mb-2 uppercase">Bloquear Fechas</h3>
                 <p id="blockDatesCarName" class="text-sm text-gray-500 mb-5 font-bold"></p>
@@ -250,13 +334,8 @@
                 <input type="date" id="blockEndDate" class="w-full mb-6 rounded border-gray-200 text-sm bg-gray-50 focus:ring-brand-orange">
                 
                 <div class="flex justify-end gap-3">
-                    <button onclick="closeBlockModal()" class="px-4 py-2 text-xs font-bold text-gray-500 hover:text-gray-900 uppercase">Cancelar</button>
+                    <button onclick="closeBlockModal()" class="px-4 py-2 text-xs font-bold text-gray-500 hover:text-gray-900 uppercase transition-colors">Cancelar</button>
                     <button onclick="saveBlockedDates()" class="px-6 py-2 bg-red-600 hover:bg-red-700 text-white text-xs font-bold uppercase rounded transition-colors">Confirmar Bloqueo</button>
-                </div>
-
-                <div class="mt-6 pt-4 border-t">
-                    <h4 class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Bloqueos Activos</h4>
-                    <ul id="activeBlocksList" class="space-y-2 text-sm"></ul>
                 </div>
             </div>
         </div>
@@ -283,6 +362,11 @@
         <p id="notif-text" class="text-sm font-bold"></p>
     </div>
 
+    <!-- WHATSAPP FLOTANTE (NUEVO NÚMERO) -->
+    <a href="https://wa.me/50258627567" target="_blank" class="whatsapp-float fixed bottom-8 left-8 bg-green-500 text-white w-16 h-16 rounded-full shadow-2xl z-[150] flex items-center justify-center hover:bg-green-600 transition-colors">
+        <i class="fa-brands fa-whatsapp text-3xl"></i>
+    </a>
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
@@ -304,16 +388,29 @@
         const currentAppId = typeof __app_id !== 'undefined' ? __app_id : 'mycar-532b2';
         let currentBlockingCarId = null;
 
-        // --- ESTADO GLOBAL ---
+        // --- ESTADO GLOBAL Y VALORES POR DEFECTO ---
         window.CARS = [];
-        window.SETTINGS = { 
-            categories: ['SUV', 'Sedán', 'Pickup', 'Lujo', 'Familiar'], 
-            equipment: ['Automático', 'Mecánico', 'A/C', 'Bluetooth', 'GPS', 'Silla de Bebé'] 
+        
+        const defaultSettings = { 
+            categories: ['SUV Compacto', 'Sedán', 'Pickup', 'Lujo', 'Familiar'], 
+            equipment: ['A/C', 'Bluetooth', 'GPS', 'Silla de Bebé'],
+            faqs: [
+                { q: "¿Cuáles son los requisitos para rentar?", a: "DPI o Pasaporte vigente y licencia de conducir al día." },
+                { q: "¿Tienen límite de kilometraje?", a: "Nuestras tarifas incluyen kilometraje libre dentro del territorio nacional." }
+            ],
+            hero: {
+                title: "MAKE YOUR RIDE EASY & FAST WITH TURBO",
+                subtitle: "Explora Guatemala con estilo. Tu vehículo ideal te espera para la próxima aventura.",
+                bg: "https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&q=80&w=2070"
+            }
         };
+
+        window.SETTINGS = { ...defaultSettings };
+        
         window.startDay = null;
         window.endDay = null;
         window.selectedCar = null;
-        window.currentMonth = 3; // Abril (0 indexado)
+        window.currentMonth = 3; // Abril
         window.currentYear = 2026;
         window.monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
 
@@ -354,16 +451,19 @@
             document.getElementById('page-detail').classList.add('hidden');
             document.getElementById('admin-view').classList.add('hidden');
             document.getElementById('main-view').classList.remove('hidden');
+            document.getElementById('mainFooter').classList.remove('hidden');
             window.scrollTo(0, 0);
             window.updateHeaderOnScroll();
         };
 
         window.openAdmin = () => {
             document.getElementById('main-view').classList.add('hidden');
+            document.getElementById('page-detail').classList.add('hidden');
+            document.getElementById('mainFooter').classList.add('hidden');
             document.getElementById('admin-view').classList.remove('hidden');
             window.scrollTo(0, 0);
             window.renderAdminCars();
-            window.renderAdminSettings(); // Corrección aquí: Se llama a la función correcta
+            window.renderAdminSettings(); 
         };
         
         window.closeDetail = window.goHome;
@@ -384,17 +484,15 @@
 
         window.previewFileName = (input) => {
             const display = document.getElementById('fileNameDisplay');
-            if (input.files && input.files[0]) {
-                display.innerText = "✓ " + input.files[0].name;
+            if (input.files && input.files.length > 0) {
+                display.innerText = `✓ ${input.files.length} imagen(es) seleccionada(s)`;
                 display.classList.add('text-green-600');
             } else {
-                display.innerText = "Subir Foto (Click aquí)";
+                display.innerText = "Seleccionar Múltiples Fotos (Click aquí)";
                 display.classList.remove('text-green-600');
             }
         };
 
-        // --- COMPRESIÓN DE IMÁGENES A BASE64 ---
-        // Esto permite guardar fotos directamente en Firestore sin necesidad de Firebase Storage
         window.compressImage = (file) => {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
@@ -403,20 +501,38 @@
                     img.onload = () => {
                         const canvas = document.createElement('canvas');
                         let w = img.width, h = img.height;
-                        const max = 800; // Máximo 800px para no pesar mucho
+                        const max = 800; 
                         if(w > h && w > max) { h *= max/w; w = max; }
                         else if(h > max) { w *= max/h; h = max; }
                         
                         canvas.width = w; canvas.height = h;
                         const ctx = canvas.getContext('2d');
                         ctx.drawImage(img, 0, 0, w, h);
-                        // Comprime a JPEG calidad 60%
                         resolve(canvas.toDataURL('image/jpeg', 0.6));
                     };
                     img.src = e.target.result;
                 };
                 reader.readAsDataURL(file);
             });
+        };
+
+        window.updateTotalPrice = () => {
+            const el = document.getElementById('detailTotalPrice');
+            if(!el || !window.selectedCar) return;
+            
+            if(window.startDay && window.endDay) {
+                const start = new Date(window.startDay.y, window.startDay.m, window.startDay.d).getTime();
+                const end = new Date(window.endDay.y, window.endDay.m, window.endDay.d).getTime();
+                
+                // Calculo de días (mismo día = 1 día)
+                let days = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
+                if (days === 0) days = 1;
+
+                const total = days * window.selectedCar.price;
+                el.innerHTML = `Total por ${days} día(s): <span class="text-brand-orange text-2xl font-bold ml-1">Q${total.toLocaleString()}</span>`;
+            } else {
+                el.innerHTML = '';
+            }
         };
 
         // --- LÓGICA DE DATOS PRINCIPAL ---
@@ -427,15 +543,28 @@
             if (countEl) countEl.innerText = `${list.length} disponibles`;
             
             grid.innerHTML = list.map(car => `
-                <div class="bg-white rounded-lg overflow-hidden border shadow-sm cursor-pointer group flex flex-col h-full" onclick="openDetail('${car.id}')">
-                    <div class="h-48 overflow-hidden shrink-0">
-                        <img src="${car.images[0]}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                <div class="bg-white rounded-lg overflow-hidden border shadow-sm cursor-pointer group flex flex-col h-full hover:shadow-lg transition-all" onclick="openDetail('${car.id}')">
+                    <div class="h-56 overflow-hidden shrink-0 relative">
+                        <img src="${car.images[0]}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
                     </div>
                     <div class="p-6 flex flex-col flex-grow">
-                        <span class="text-[9px] font-bold text-gray-400 uppercase tracking-widest">${car.type}</span>
-                        <h3 class="oswald text-xl font-bold uppercase text-gray-900 mb-2">${car.name}</h3>
-                        ${car.equipment && car.equipment.length ? `<p class="text-xs text-gray-500 line-clamp-1 mb-2"><i class="fa-solid fa-list-check mr-1"></i> ${car.equipment.join(' • ')}</p>` : ''}
-                        <p class="text-brand-orange font-bold mt-auto text-lg">Q${car.price.toLocaleString()} <span class="text-[10px] text-gray-400 uppercase">/ Día</span></p>
+                        <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">${car.type}</span>
+                        <h3 class="oswald text-2xl font-bold uppercase text-gray-900 mb-4">${car.name}</h3>
+                        
+                        <div class="flex items-center gap-4 text-xs text-gray-500 font-bold mb-5 bg-gray-50 py-2 px-3 rounded w-fit">
+                            <span title="Pasajeros" class="flex items-center gap-1"><i class="fa-solid fa-users text-gray-400"></i> ${car.passengers || 4}</span>
+                            <span class="text-gray-300">|</span>
+                            <span title="Maletas" class="flex items-center gap-1"><i class="fa-solid fa-suitcase text-gray-400"></i> ${car.luggage || 2}</span>
+                            <span class="text-gray-300">|</span>
+                            <span title="Transmisión" class="flex items-center gap-1"><i class="fa-solid fa-gear text-gray-400"></i> ${car.transmission || 'Automático'}</span>
+                        </div>
+
+                        <div class="mt-auto flex justify-between items-center pt-2">
+                            <p class="text-gray-900 font-bold text-2xl">Q${car.price.toLocaleString()} <span class="text-[10px] text-gray-400 uppercase font-normal">/ Día</span></p>
+                            <span class="w-10 h-10 bg-gray-50 rounded-full flex items-center justify-center text-gray-600 group-hover:bg-brand-orange group-hover:text-white transition-colors">
+                                <i class="fa-solid fa-arrow-right"></i>
+                            </span>
+                        </div>
                     </div>
                 </div>
             `).join('');
@@ -445,52 +574,82 @@
             window.selectedCar = window.CARS.find(c => c.id === id);
             if (!window.selectedCar) return;
 
-            const format = (d) => d ? `${d.d}/${d.m + 1}` : "--/--";
+            const format = (d) => d ? `${String(d.d).padStart(2,'0')}/${String(d.m + 1).padStart(2,'0')}` : "";
             const dateText = window.startDay && window.endDay ? `${format(window.startDay)} - ${format(window.endDay)}` : "Seleccionar fechas";
 
+            // Botones o viñetas de equipamiento
             let eqHtml = '';
             if (window.selectedCar.equipment && window.selectedCar.equipment.length > 0) {
-                eqHtml = `<div class="mb-6 flex flex-wrap gap-2">` + 
-                         window.selectedCar.equipment.map(e => `<span class="bg-gray-100 text-gray-600 px-2 py-1 rounded text-[10px] font-bold uppercase"><i class="fa-solid fa-check text-green-500 mr-1"></i>${e}</span>`).join('') + 
-                         `</div>`;
+                eqHtml = window.selectedCar.equipment.map(e => `<span class="bg-gray-100 text-gray-600 px-3 py-1.5 rounded text-[10px] font-bold uppercase"><i class="fa-solid fa-check text-green-500 mr-1.5"></i>${e}</span>`).join('');
             }
 
-            document.getElementById('detail-content').innerHTML = `
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    <div class="lg:col-span-2">
-                        <img src="${window.selectedCar.images[0]}" class="w-full h-[450px] object-cover rounded-xl border shadow-sm">
-                    </div>
-                    <div class="bg-white p-8 rounded-xl border shadow-xl">
-                        <h1 class="oswald text-3xl font-bold uppercase mb-2">${window.selectedCar.name}</h1>
-                        <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-4 block">${window.selectedCar.type}</span>
-                        
-                        ${eqHtml}
+            // Slider de imágenes horizontal
+            const imagesHtml = window.selectedCar.images.map(img => `<img src="${img}" class="w-full shrink-0 h-[400px] md:h-[500px] object-cover rounded-xl border shadow-sm snap-center">`).join('');
 
-                        <p class="text-3xl font-bold mb-6 text-brand-orange">Q${window.selectedCar.price} <span class="text-sm text-gray-400 uppercase">/ Día</span></p>
+            document.getElementById('detail-content').innerHTML = `
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
+                    <div class="lg:col-span-2">
+                        <div class="flex overflow-x-auto gap-4 snap-x hide-scrollbar pb-4">
+                            ${imagesHtml}
+                        </div>
+                        ${window.selectedCar.images.length > 1 ? '<p class="text-center text-xs text-gray-400 mt-2"><i class="fa-solid fa-arrows-left-right mr-1"></i> Desliza para ver más fotos</p>' : ''}
+                    </div>
+                    
+                    <div class="bg-white p-8 rounded-xl border shadow-xl self-start sticky top-28">
+                        <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-1">${window.selectedCar.type}</span>
+                        <h1 class="oswald text-4xl font-bold uppercase mb-4">${window.selectedCar.name}</h1>
                         
-                        <div id="booking-step-1" class="space-y-4">
-                            <input type="text" id="detailDateInput" class="w-full rounded border-gray-200 py-3 bg-gray-50 font-bold cursor-pointer" value="${dateText}" readonly onclick="toggleCalendar(event, 'detailCalendarModal')">
+                        <div class="flex flex-wrap gap-2 mb-6">
+                            <span class="bg-gray-100 text-gray-600 px-3 py-1.5 rounded text-[10px] font-bold uppercase"><i class="fa-solid fa-users text-gray-400 mr-1.5"></i>${window.selectedCar.passengers || 4} Pasajeros</span>
+                            <span class="bg-gray-100 text-gray-600 px-3 py-1.5 rounded text-[10px] font-bold uppercase"><i class="fa-solid fa-suitcase text-gray-400 mr-1.5"></i>${window.selectedCar.luggage || 2} Maletas</span>
+                            <span class="bg-gray-100 text-gray-600 px-3 py-1.5 rounded text-[10px] font-bold uppercase"><i class="fa-solid fa-gear text-gray-400 mr-1.5"></i>${window.selectedCar.transmission || 'Automático'}</span>
+                            ${eqHtml}
+                        </div>
+
+                        <div class="mb-8 border-b pb-6">
+                            <p class="text-4xl font-bold text-brand-orange">Q${window.selectedCar.price} <span class="text-sm text-gray-400 uppercase font-normal text-gray-400">/ Día</span></p>
+                            <div id="detailTotalPrice" class="mt-2 text-gray-500 font-medium"></div>
+                        </div>
+                        
+                        <div id="booking-step-1" class="space-y-5">
+                            <div>
+                                <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Fechas requeridas</label>
+                                <input type="text" id="detailDateInput" class="w-full rounded border-gray-200 py-3 bg-gray-50 font-bold cursor-pointer focus:ring-brand-orange" value="${dateText}" readonly onclick="toggleCalendar(event, 'detailCalendarModal')">
+                            </div>
+
                             <div id="detailCalendarModal" class="calendar-modal bg-white rounded-xl border p-5">
                                 <div class="grid grid-cols-7 gap-y-1" id="detailCalendarGrid"></div>
-                                <button onclick="applyDates(event, 'detailCalendarModal')" class="w-full mt-4 bg-brand-dark text-white py-2 rounded font-bold uppercase text-xs">Aceptar</button>
+                                <button onclick="applyDates(event, 'detailCalendarModal')" class="w-full mt-4 bg-brand-dark text-white py-2 rounded font-bold uppercase text-xs hover:bg-black">Aceptar Fechas</button>
                             </div>
-                            <button onclick="validateAndProceed()" class="w-full bg-brand-orange text-white font-bold py-4 rounded uppercase transition-transform hover:scale-[1.02]">Continuar Reserva</button>
+
+                            <button onclick="validateAndProceed()" class="w-full bg-brand-orange hover:bg-yellow-500 text-white font-bold py-4 rounded shadow-md uppercase transition-colors">Continuar Reserva</button>
                         </div>
+
                         <div id="booking-step-2" class="hidden space-y-4 fade-in">
                             <input id="clientName" type="text" class="w-full rounded border-gray-200 py-3 text-sm focus:ring-brand-orange" placeholder="Nombre completo">
-                            <input id="clientPhone" type="tel" class="w-full rounded border-gray-200 py-3 text-sm focus:ring-brand-orange" placeholder="WhatsApp">
+                            <input id="clientPhone" type="tel" class="w-full rounded border-gray-200 py-3 text-sm focus:ring-brand-orange" placeholder="Número de WhatsApp">
                             <input id="clientEmail" type="email" class="w-full rounded border-gray-200 py-3 text-sm focus:ring-brand-orange" placeholder="Correo electrónico">
                             <input id="clientAddress" type="text" class="w-full rounded border-gray-200 py-3 text-sm focus:ring-brand-orange" placeholder="Dirección de hospedaje">
-                            <button onclick="submitBooking(event)" class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-4 rounded uppercase transition-colors"><i class="fa-brands fa-whatsapp mr-2 text-lg"></i> Enviar Reserva</button>
+                            
+                            <div class="bg-gray-50 p-4 rounded border border-gray-100">
+                                <label class="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Horario de recogida</label>
+                                <input id="clientTime" type="time" class="w-full rounded border-gray-200 py-2 text-sm focus:ring-brand-orange" required>
+                                <p class="text-[10px] text-gray-500 mt-2 font-medium leading-tight">* Nota importante: El mismo horario de recogida será considerado como el horario máximo de entrega.</p>
+                            </div>
+
+                            <button onclick="submitBooking(event)" class="w-full bg-[#25D366] hover:bg-[#128C7E] text-white font-bold py-4 rounded shadow-md uppercase transition-colors mt-2"><i class="fa-brands fa-whatsapp mr-2 text-xl align-middle"></i> Enviar Reserva</button>
+                            <button onclick="document.getElementById('booking-step-2').classList.add('hidden'); document.getElementById('booking-step-1').classList.remove('hidden');" class="w-full text-xs text-gray-400 font-bold uppercase hover:text-gray-600 py-2">← Cambiar Fechas</button>
                         </div>
                     </div>
                 </div>
             `;
             document.getElementById('main-view').classList.add('hidden');
+            document.getElementById('mainFooter').classList.add('hidden');
             document.getElementById('page-detail').classList.remove('hidden');
             window.scrollTo(0, 0);
             window.updateHeaderOnScroll();
             window.generateCalendar('detailCalendarGrid');
+            window.updateTotalPrice(); // Calcula si ya había fechas globales elegidas
         };
 
         window.handleSearch = (e) => {
@@ -505,8 +664,9 @@
             const p = document.getElementById('clientPhone').value;
             const email = document.getElementById('clientEmail').value;
             const address = document.getElementById('clientAddress').value;
+            const time = document.getElementById('clientTime').value;
             
-            if(!n || !p || !email || !address) return window.showNotif("Llená todos tus datos maje");
+            if(!n || !p || !email || !address || !time) return window.showNotif("Por favor, llena todos los datos para continuar.");
             
             const btn = e.target.closest('button');
             const originalBtnText = btn.innerHTML;
@@ -516,8 +676,15 @@
             const startDate = fmt(window.startDay);
             const endDate = fmt(window.endDay);
 
+            // Calcular total nuevamente para el mensaje
+            const sTime = new Date(window.startDay.y, window.startDay.m, window.startDay.d).getTime();
+            const eTime = new Date(window.endDay.y, window.endDay.m, window.endDay.d).getTime();
+            let days = Math.ceil((eTime - sTime) / (1000 * 60 * 60 * 24));
+            if (days === 0) days = 1;
+            const totalStr = `Q${(days * window.selectedCar.price).toLocaleString()}`;
+
             try {
-                // Guarda la reserva en la base de datos de Firebase para tu control
+                // Guarda la reserva en Firebase
                 const resRef = collection(db, 'artifacts', currentAppId, 'public', 'data', 'reservations');
                 await addDoc(resRef, {
                     carId: window.selectedCar.id,
@@ -526,14 +693,16 @@
                     clientPhone: p,
                     clientEmail: email,
                     clientAddress: address,
+                    pickupTime: time,
                     startDate: startDate,
                     endDate: endDate,
+                    totalPrice: totalStr,
                     timestamp: new Date().toISOString()
                 });
 
-                // Envía el mensaje completo a tu WhatsApp
-                const msg = `🚗 *Nueva Reserva en Turbo*\n\n*Vehículo:* ${window.selectedCar.name}\n*Desde:* ${startDate}\n*Hasta:* ${endDate}\n\n*Cliente:* ${n}\n*WhatsApp:* ${p}\n*Correo:* ${email}\n*Hospedaje:* ${address}`;
-                window.open(`https://wa.me/50200000000?text=${encodeURIComponent(msg)}`, '_blank');
+                // Envía el mensaje al nuevo WhatsApp
+                const msg = `🚗 *Nueva Reserva en Turbo*\n\n*Vehículo:* ${window.selectedCar.name}\n*Total Estimado:* ${totalStr}\n\n*Fechas:* ${startDate} al ${endDate}\n*Horario:* ${time} hrs (Recogida y Entrega)\n\n*Cliente:* ${n}\n*WhatsApp:* ${p}\n*Correo:* ${email}\n*Hospedaje:* ${address}`;
+                window.open(`https://wa.me/50258627567?text=${encodeURIComponent(msg)}`, '_blank');
                 
                 window.goHome();
                 window.showNotif("¡Reserva confirmada!");
@@ -569,7 +738,6 @@
             grid.innerHTML = '';
             const daysInMonth = new Date(window.currentYear, window.currentMonth + 1, 0).getDate();
             
-            // Para vista detalle, validar disponibilidad
             const carToValidate = (gridId === 'detailCalendarGrid') ? window.selectedCar : null;
 
             for (let i = 1; i <= daysInMonth; i++) {
@@ -579,7 +747,6 @@
                 
                 const currentDateObj = { d: i, m: window.currentMonth, y: window.currentYear };
                 
-                // Verificar si está bloqueado
                 if (window.isDateBlocked(currentDateObj, carToValidate)) {
                     day.classList.add('disabled', 'line-through', 'text-gray-300');
                 } else {
@@ -607,6 +774,7 @@
                             else { window.startDay = currentDateObj; window.endDay = null; }
                         }
                         window.updateAllDateDisplays();
+                        window.updateTotalPrice(); 
                         document.querySelectorAll('[id$="Grid"]').forEach(g => window.generateCalendar(g.id));
                     };
                 }
@@ -644,6 +812,7 @@
             window.startDay = null; 
             window.endDay = null; 
             window.updateAllDateDisplays(); 
+            window.updateTotalPrice();
             document.querySelectorAll('[id$="Grid"]').forEach(g => window.generateCalendar(g.id)); 
         };
 
@@ -666,7 +835,6 @@
                 return !booked.some(range => {
                     const blockStart = new Date(range.start).getTime();
                     const blockEnd = new Date(range.end).getTime();
-                    // Traslape de fechas
                     return (searchStart <= blockEnd && searchEnd >= blockStart);
                 });
             });
@@ -680,43 +848,58 @@
                 list.innerHTML = `<p class="text-sm text-gray-400 italic">No hay carros en la flota aún.</p>`;
                 return;
             }
-            list.innerHTML = window.CARS.map(car => `
-                <div class="flex items-center justify-between p-3 border rounded bg-gray-50 hover:bg-white transition-colors">
-                    <div class="flex items-center gap-4">
-                        <img src="${car.images[0]}" class="w-16 h-12 object-cover rounded shadow-sm">
+            list.innerHTML = window.CARS.map(car => {
+                
+                // Mostrar etiquetas de fechas bloqueadas
+                let blockedHtml = '';
+                if (car.bookedRanges && car.bookedRanges.length > 0) {
+                    blockedHtml = `<div class="mt-2 flex flex-wrap gap-1">` + 
+                        car.bookedRanges.map(r => `<span class="bg-red-50 text-red-600 text-[9px] px-2 py-0.5 rounded border border-red-100 font-bold uppercase tracking-wider"><i class="fa-solid fa-lock mr-1"></i>${r.start} / ${r.end}</span>`).join('') 
+                    + `</div>`;
+                }
+
+                return `
+                <div class="flex flex-col md:flex-row md:items-center justify-between p-4 border rounded-lg bg-gray-50 hover:bg-white transition-colors gap-4">
+                    <div class="flex items-start gap-4">
+                        <img src="${car.images[0]}" class="w-20 h-14 object-cover rounded shadow-sm shrink-0">
                         <div>
                             <p class="font-bold text-sm text-gray-900">${car.name}</p>
-                            <p class="text-[10px] text-gray-500 uppercase tracking-widest">${car.type} | Q${car.price}</p>
+                            <p class="text-[10px] text-gray-500 font-medium uppercase tracking-widest mt-0.5">${car.type} • ${car.transmission} • Q${car.price}/día</p>
+                            ${blockedHtml}
                         </div>
                     </div>
-                    <div class="flex gap-2">
-                        <button onclick="openBlockModal('${car.id}')" class="text-gray-500 hover:text-brand-orange bg-white border px-3 py-1 rounded text-[10px] font-bold uppercase transition-colors"><i class="fa-solid fa-calendar-xmark mr-1"></i>Bloquear Días</button>
-                        <button onclick="deleteCar('${car.id}')" class="text-red-500 hover:text-red-700 bg-white border px-3 py-1 rounded text-[10px] font-bold uppercase transition-colors"><i class="fa-solid fa-trash mr-1"></i>Borrar</button>
+                    <div class="flex md:flex-col lg:flex-row gap-2 shrink-0 self-end md:self-auto">
+                        <button onclick="openBlockModal('${car.id}')" class="text-gray-500 hover:text-brand-orange bg-white border border-gray-200 px-3 py-1.5 rounded text-[10px] font-bold uppercase transition-colors"><i class="fa-solid fa-calendar-xmark mr-1"></i>Bloqueos</button>
+                        <button onclick="deleteCar('${car.id}')" class="text-red-500 hover:text-red-700 bg-white border border-gray-200 px-3 py-1.5 rounded text-[10px] font-bold uppercase transition-colors"><i class="fa-solid fa-trash mr-1"></i>Borrar</button>
                     </div>
                 </div>
-            `).join('');
+            `}).join('');
         };
 
         window.addCar = async (e) => {
             if (e) e.preventDefault();
             const btn = document.getElementById('btnGuardarCarro');
-            btn.innerText = "Procesando foto..."; btn.disabled = true;
+            btn.innerText = "Procesando fotos..."; btn.disabled = true;
 
             const n = document.getElementById('adminCarName').value;
             const p = Number(document.getElementById('adminCarPrice').value);
             const t = document.getElementById('adminCarType').value;
+            const trans = document.getElementById('adminCarTrans').value;
+            const pax = Number(document.getElementById('adminCarPax').value);
+            const lug = Number(document.getElementById('adminCarLuggage').value);
             const fileInput = document.getElementById('adminCarImage');
             
-            // Recolectar checkboxes de equipamiento
             const eqCheckboxes = document.querySelectorAll('.eq-checkbox:checked');
             const selectedEq = Array.from(eqCheckboxes).map(cb => cb.value);
 
             try {
-                let base64Img = '';
-                if (fileInput.files && fileInput.files[0]) {
-                    base64Img = await compressImage(fileInput.files[0]);
+                let base64Images = [];
+                if (fileInput.files && fileInput.files.length > 0) {
+                    for(let i=0; i<fileInput.files.length; i++) {
+                        base64Images.push(await compressImage(fileInput.files[i]));
+                    }
                 } else {
-                    throw new Error("Agregá una foto maje.");
+                    throw new Error("Agregá al menos una foto maje.");
                 }
 
                 btn.innerText = "Guardando...";
@@ -724,15 +907,18 @@
                 await addDoc(carsRef, { 
                     name: n, 
                     price: p, 
-                    images: [base64Img], 
                     type: t, 
+                    transmission: trans,
+                    passengers: pax,
+                    luggage: lug,
+                    images: base64Images, 
                     equipment: selectedEq,
                     bookedRanges: [] 
                 });
                 
                 window.showNotif('¡Carro agregado exitosamente!'); 
                 document.getElementById('adminForm').reset();
-                document.getElementById('fileNameDisplay').innerText = "Subir Foto (Click aquí)";
+                document.getElementById('fileNameDisplay').innerText = "Seleccionar Múltiples Fotos (Click aquí)";
                 document.getElementById('fileNameDisplay').classList.remove('text-green-600');
             } catch(err) {
                 console.error(err);
@@ -759,17 +945,16 @@
             document.getElementById('blockStartDate').value = '';
             document.getElementById('blockEndDate').value = '';
             
-            // Mostrar bloqueos actuales
             const ul = document.getElementById('activeBlocksList');
             if (car.bookedRanges && car.bookedRanges.length > 0) {
                 ul.innerHTML = car.bookedRanges.map((range, index) => 
-                    `<li class="flex justify-between items-center bg-gray-50 p-2 rounded">
-                        <span>${range.start} al ${range.end}</span>
-                        <button onclick="removeBlock('${carId}', ${index})" class="text-red-500 hover:text-red-700 text-xs font-bold"><i class="fa-solid fa-times"></i> Quitar</button>
+                    `<li class="flex justify-between items-center bg-gray-50 p-3 rounded border text-sm">
+                        <span class="font-bold text-gray-700">${range.start} <i class="fa-solid fa-arrow-right text-gray-400 mx-2 text-xs"></i> ${range.end}</span>
+                        <button onclick="removeBlock('${carId}', ${index})" class="text-red-500 hover:text-red-700 text-[10px] uppercase font-bold tracking-wider"><i class="fa-solid fa-times mr-1"></i> Quitar</button>
                     </li>`
                 ).join('');
             } else {
-                ul.innerHTML = '<li class="text-gray-400 italic">No hay fechas bloqueadas.</li>';
+                ul.innerHTML = '<li class="text-gray-400 italic text-sm text-center py-2">No hay fechas bloqueadas.</li>';
             }
 
             document.getElementById('blockDatesModal').classList.remove('hidden');
@@ -798,7 +983,7 @@
                     bookedRanges: arrayUnion({ start: start, end: end })
                 });
                 window.showNotif("Fechas bloqueadas con éxito.");
-                window.closeBlockModal();
+                window.openBlockModal(currentBlockingCarId); // Refresh modal
             } catch (err) {
                 console.error(err); window.showNotif("Error al bloquear fechas.");
             }
@@ -817,16 +1002,22 @@
             } catch (err) { console.error(err); }
         };
 
-        // --- ADMIN: CATEGORÍAS Y EQUIPAMIENTO ---
+        // --- ADMIN: CONFIGURACIÓN GLOBAL (TEXTOS Y FAQS) ---
         window.renderAdminSettings = () => {
-            // Llenar select de tipos
+            // Hero Form
+            if(window.SETTINGS.hero) {
+                document.getElementById('adminHeroTitle').value = window.SETTINGS.hero.title || '';
+                document.getElementById('adminHeroSubtitle').value = window.SETTINGS.hero.subtitle || '';
+            }
+
+            // Select Tipos
             const selectType = document.getElementById('adminCarType');
             if(selectType) {
                 selectType.innerHTML = `<option value="">Seleccionar Categoría...</option>` + 
                     window.SETTINGS.categories.map(c => `<option value="${c}">${c}</option>`).join('');
             }
 
-            // Llenar checkboxes de equipamiento
+            // Checkboxes Equipamiento
             const eqContainer = document.getElementById('adminEquipmentCheckboxes');
             if(eqContainer) {
                 eqContainer.innerHTML = window.SETTINGS.equipment.map(e => `
@@ -837,7 +1028,7 @@
                 `).join('');
             }
 
-            // Llenar listas de gestión
+            // Listas Categorias y Equipos
             const catList = document.getElementById('categoriesList');
             if(catList) {
                 catList.innerHTML = window.SETTINGS.categories.map((c, i) => `
@@ -855,6 +1046,18 @@
                     </li>
                 `).join('');
             }
+
+            // Lista FAQs
+            const faqAdminList = document.getElementById('faqAdminList');
+            if(faqAdminList && window.SETTINGS.faqs) {
+                faqAdminList.innerHTML = window.SETTINGS.faqs.map((f, i) => `
+                    <li class="bg-gray-50 p-3 rounded border relative">
+                        <button onclick="deleteSetting('faqs', ${i})" class="absolute top-3 right-3 text-red-500 hover:text-red-700"><i class="fa-solid fa-trash text-xs"></i></button>
+                        <p class="font-bold text-sm text-gray-800 pr-6">${f.q}</p>
+                        <p class="text-xs text-gray-500 mt-1">${f.a}</p>
+                    </li>
+                `).join('');
+            }
         };
 
         window.saveSettingsToFirebase = async () => {
@@ -862,6 +1065,43 @@
                 const settingsRef = doc(db, 'artifacts', currentAppId, 'public', 'data', 'config', 'appSettings');
                 await setDoc(settingsRef, window.SETTINGS, { merge: true });
             } catch (err) { console.error("Error saving settings", err); }
+        };
+
+        window.saveHeroSettings = async () => {
+            const title = document.getElementById('adminHeroTitle').value.trim();
+            const subtitle = document.getElementById('adminHeroSubtitle').value.trim();
+            const bgInput = document.getElementById('adminHeroBgInput');
+
+            if(!window.SETTINGS.hero) window.SETTINGS.hero = {};
+            window.SETTINGS.hero.title = title;
+            window.SETTINGS.hero.subtitle = subtitle;
+
+            window.showNotif("Guardando diseño...");
+            
+            if(bgInput.files && bgInput.files.length > 0) {
+                window.SETTINGS.hero.bg = await compressImage(bgInput.files[0]);
+            }
+
+            await window.saveSettingsToFirebase();
+            window.applyPublicSettings();
+            window.showNotif("¡Portada actualizada!");
+            bgInput.value = ''; // limpiar input
+        };
+
+        window.addFaq = () => {
+            const q = document.getElementById('newFaqQ').value.trim();
+            const a = document.getElementById('newFaqA').value.trim();
+            if (q && a) {
+                if(!window.SETTINGS.faqs) window.SETTINGS.faqs = [];
+                window.SETTINGS.faqs.push({q, a});
+                document.getElementById('newFaqQ').value = '';
+                document.getElementById('newFaqA').value = '';
+                window.renderAdminSettings();
+                window.saveSettingsToFirebase();
+                window.applyPublicSettings();
+            } else {
+                window.showNotif("Llena pregunta y respuesta");
+            }
         };
 
         window.addCategory = () => {
@@ -885,17 +1125,47 @@
         };
 
         window.deleteSetting = (type, index) => {
-            if(confirm('¿Borrar opción?')) {
+            if(confirm('¿Borrar esta opción definitivamente?')) {
                 window.SETTINGS[type].splice(index, 1);
                 window.renderAdminSettings();
                 window.saveSettingsToFirebase();
+                window.applyPublicSettings();
+            }
+        };
+
+        // --- APLICAR SETTINGS A LA VISTA PÚBLICA ---
+        window.applyPublicSettings = () => {
+            // Aplicar Hero
+            if (window.SETTINGS.hero) {
+                const heroEl = document.getElementById('hero');
+                if(window.SETTINGS.hero.bg) {
+                    heroEl.style.backgroundImage = `linear-gradient(to right, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0) 100%), url('${window.SETTINGS.hero.bg}')`;
+                }
+                const titleEl = document.getElementById('heroTitle');
+                if(titleEl && window.SETTINGS.hero.title) titleEl.innerText = window.SETTINGS.hero.title;
+                const subEl = document.getElementById('heroSubtitle');
+                if(subEl && window.SETTINGS.hero.subtitle) subEl.innerText = window.SETTINGS.hero.subtitle;
+            }
+
+            // Aplicar FAQs
+            const faqContainer = document.getElementById('faq-public-container');
+            if (faqContainer) {
+                if(!window.SETTINGS.faqs || window.SETTINGS.faqs.length === 0) {
+                    faqContainer.innerHTML = '<p class="text-center text-gray-500">Aún no hay preguntas frecuentes.</p>';
+                } else {
+                    faqContainer.innerHTML = window.SETTINGS.faqs.map(faq => `
+                        <div class="bg-gray-50 p-6 rounded-xl border border-gray-100 shadow-sm text-left">
+                            <h4 class="font-bold text-lg mb-2 oswald uppercase tracking-wide"><i class="fa-solid fa-circle-question text-brand-orange mr-2"></i>${faq.q}</h4>
+                            <p class="text-gray-600 text-sm leading-relaxed">${faq.a}</p>
+                        </div>
+                    `).join('');
+                }
             }
         };
 
 
         // --- INIT APP ---
         function listenToData() {
-            // Escuchar Carros
             const carsRef = collection(db, 'artifacts', currentAppId, 'public', 'data', 'cars');
             onSnapshot(carsRef, (snap) => {
                 if (!snap.empty) {
@@ -907,17 +1177,15 @@
                 if(!document.getElementById('admin-view').classList.contains('hidden')) window.renderAdminCars();
             });
 
-            // Escuchar Settings (Categorías y Equipamiento)
             const settingsRef = doc(db, 'artifacts', currentAppId, 'public', 'data', 'config', 'appSettings');
             onSnapshot(settingsRef, (docSnap) => {
                 if (docSnap.exists()) {
-                    const data = docSnap.data();
-                    if(data.categories) window.SETTINGS.categories = data.categories;
-                    if(data.equipment) window.SETTINGS.equipment = data.equipment;
+                    // Mezclar default con lo que viene de firebase para que no falten llaves
+                    window.SETTINGS = { ...window.SETTINGS, ...docSnap.data() };
                 } else {
-                    // Si no existe, lo creamos con los valores por defecto la primera vez
                     setDoc(settingsRef, window.SETTINGS);
                 }
+                window.applyPublicSettings();
                 window.renderAdminSettings();
             });
         }
@@ -949,10 +1217,11 @@
         window.onload = () => { 
             window.updateHeaderOnScroll(); 
             window.generateCalendar('homeCalendarGrid'); 
+            window.applyPublicSettings(); // Carga textos base iniciales
             initApp();
         };
         
-        // Cierre de modales al hacer clic fuera
+        // Cierre de modales
         document.addEventListener('click', (e) => {
             if (!e.target.closest('.calendar-wrapper')) {
                 document.querySelectorAll('.calendar-modal').forEach(m => m.style.display = 'none');
