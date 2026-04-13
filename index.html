@@ -95,7 +95,7 @@
         <div id="main-view">
             <section id="hero" class="min-h-screen flex flex-col">
                 <main class="flex-grow flex flex-col justify-center items-start px-8 md:px-16 lg:px-24 pt-36">
-                    <div class="max-w-xl md:max-w-2xl fade-in text-left text-white">
+                    <div class="max-w-xl md:max-w-2xl fade-in text-left text-white min-h-[150px]">
                         <h1 id="heroTitle" class="text-5xl md:text-7xl font-bold uppercase leading-tight mb-4 tracking-wide oswald text-shadow"></h1>
                         <p id="heroSubtitle" class="text-lg md:text-xl text-gray-200 mb-10 max-w-md text-shadow"></p>
                     </div>
@@ -586,7 +586,9 @@
 
         const defaultSettings = { 
             exchangeRate: 7.7,
-            emailjsPublic: '', emailjsService: '', emailjsTemplate: '',
+            emailjsPublic: '4W40WME2FB2Ku9-vZ', 
+            emailjsService: 'service_salcl6o', 
+            emailjsTemplate: 'template_vr6n7ll',
             categories: ['SUV Compacto', 'Sedán', 'Pickup', 'Lujo', 'Familiar'], 
             equipment: ['A/C', 'Bluetooth', 'GPS', 'Cámara de Retroceso'],
             locations: ['Panajachel, Sololá', 'Aeropuerto La Aurora', 'Antigua Guatemala'],
@@ -594,8 +596,8 @@
             highDemandRanges: [],
             faqs: [{ q: "¿Cuáles son los requisitos para rentar?", a: "DPI o Pasaporte vigente y licencia de conducir al día." }],
             hero: {
-                title: "MAKE YOUR RIDE EASY & FAST WITH TURBO",
-                subtitle: "Explora Guatemala con estilo. Tu vehículo ideal te espera para la próxima aventura.",
+                title: "",
+                subtitle: "",
                 bgs: []
             }
         };
@@ -864,6 +866,11 @@
                             </div>
 
                             <div id="detailCalendarModal" class="calendar-modal bg-white rounded-xl border p-5">
+                                <div class="flex justify-between items-center mb-4">
+                                    <button type="button" class="text-gray-800 p-2" onclick="changeMonth(event, -1, 'detailCalendar')"><i class="fa-solid fa-chevron-left"></i></button>
+                                    <h4 id="detailCalendarMonthTitle" class="text-sm font-bold uppercase oswald text-gray-900">${window.monthNames[window.currentMonth]} ${window.currentYear}</h4>
+                                    <button type="button" class="text-gray-800 p-2" onclick="changeMonth(event, 1, 'detailCalendar')"><i class="fa-solid fa-chevron-right"></i></button>
+                                </div>
                                 <div class="grid grid-cols-7 gap-y-1" id="detailCalendarGrid"></div>
                                 <p id="detailDiscountMsg" class="text-[10px] text-brand-orange font-bold text-center mt-3 h-3"></p>
                                 <button onclick="applyDates(event, 'detailCalendarModal')" class="w-full mt-4 bg-brand-dark text-white py-2 rounded font-bold uppercase text-xs hover:bg-black">${window.T('accDates')}</button>
@@ -1049,19 +1056,23 @@
                 // Enviar por EmailJS si está configurado
                 if (window.SETTINGS.emailjsPublic && window.SETTINGS.emailjsService && window.SETTINGS.emailjsTemplate) {
                     try {
-                        emailjs.init(window.SETTINGS.emailjsPublic);
-                        await emailjs.send(window.SETTINGS.emailjsService, window.SETTINGS.emailjsTemplate, {
-                            car_name: window.selectedCar.name,
-                            total_price: totalStr,
-                            dates: `${startDate} al ${endDate}`,
-                            time: time,
-                            location: location,
-                            client_name: n,
-                            client_phone: p,
-                            client_email: email,
-                            client_address: address,
-                            extras: extrasStr || 'Ninguno'
-                        });
+                        await emailjs.send(
+                            window.SETTINGS.emailjsService, 
+                            window.SETTINGS.emailjsTemplate, 
+                            {
+                                car_name: window.selectedCar.name,
+                                total_price: totalStr,
+                                dates: `${startDate} al ${endDate}`,
+                                time: time,
+                                location: location,
+                                client_name: n,
+                                client_phone: p,
+                                client_email: email,
+                                client_address: address,
+                                extras: extrasStr || 'Ninguno'
+                            },
+                            window.SETTINGS.emailjsPublic
+                        );
                     } catch(e) { console.log('Error enviando EmailJS', e); }
                 }
                 
