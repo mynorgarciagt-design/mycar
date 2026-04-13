@@ -911,24 +911,7 @@
                             </div>
 
                             <div class="grid grid-cols-1 gap-2 mt-4">
-                                <button onclick="goToReview()" class="w-full bg-brand-dark hover:bg-black text-white font-bold py-4 rounded shadow-md uppercase transition-colors"><i class="fa-solid fa-clipboard-check mr-2 text-xl align-middle"></i> <span data-en="Confirm">${window.T('btnConfirm')}</span></button>
-                            </div>
-                            <button onclick="document.getElementById('booking-step-2').classList.add('hidden'); document.getElementById('booking-step-1').classList.remove('hidden');" class="w-full text-xs text-gray-400 font-bold uppercase hover:text-gray-600 py-2">${window.T('btnBack')}</button>
-                        </div>
-
-                        <!-- PASO 3: REVISIÓN FINAL -->
-                        <div id="booking-step-3" class="hidden space-y-4 fade-in">
-                            <p class="text-xs font-bold text-brand-orange uppercase tracking-widest border-b pb-2 mb-2"><i class="fa-solid fa-check-double mr-1"></i> ${window.T('reviewData')}</p>
-                            <div class="bg-gray-50 p-4 rounded text-sm space-y-2 border border-gray-200 text-gray-700">
-                                <p><strong class="text-gray-900">${window.T('name')}:</strong> <span id="revName"></span></p>
-                                <p><strong class="text-gray-900">${window.T('phone')}:</strong> <span id="revPhone"></span></p>
-                                <p><strong class="text-gray-900">${window.T('email')}:</strong> <span id="revEmail"></span></p>
-                                <p><strong class="text-gray-900">${window.T('address')}:</strong> <span id="revAddress"></span></p>
-                                <p class="pt-2 mt-2 border-t border-gray-200"><strong class="text-gray-900">${window.T('pickupLoc')}:</strong> <span id="revLoc"></span></p>
-                                <p><strong class="text-gray-900">Fechas:</strong> <span id="revDates"></span></p>
-                            </div>
-                            <div class="grid grid-cols-1 gap-2 mt-4">
-                                <button onclick="submitBooking(event)" class="w-full bg-[#25D366] hover:bg-[#128C7E] text-white font-bold py-4 rounded shadow-md uppercase transition-colors"><i class="fa-brands fa-whatsapp mr-2 text-xl align-middle"></i> <span data-en="Submit Booking">${window.T('submitRes')}</span></button>
+                                <button onclick="submitBooking(event)" class="w-full bg-brand-dark hover:bg-black text-white font-bold py-4 rounded shadow-md uppercase transition-colors"><i class="fa-solid fa-paper-plane mr-2 text-xl align-middle"></i> <span data-en="Submit Booking">${window.T('submitRes')}</span></button>
                             </div>
                             <button onclick="document.getElementById('booking-step-3').classList.add('hidden'); document.getElementById('booking-step-2').classList.remove('hidden');" class="w-full text-xs text-gray-400 font-bold uppercase hover:text-gray-600 py-2">${window.T('btnEdit')}</button>
                         </div>
@@ -1057,9 +1040,6 @@
                         });
                     } catch(e) { console.log('Error enviando EmailJS', e); }
                 }
-
-                const msg = `🚗 *New Booking / Nueva Reserva*\n\n*Vehicle:* ${window.selectedCar.name}\n*Total:* ${totalStr}\n\n*Dates:* ${startDate} - ${endDate}\n*Time:* ${time} hrs\n*Location:* ${location}\n\n*Extras:*\n${extrasStr || 'None'}\n\n*Client:* ${n}\n*Phone:* ${p}\n*Email:* ${email}\n*Address:* ${address}`;
-                window.open(`https://wa.me/50258627567?text=${encodeURIComponent(msg)}`, '_blank');
                 
                 // Reinicio Total Automático
                 window.startDay = null; window.endDay = null; window.searchData = { location: '', time: '' };
