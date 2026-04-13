@@ -7,6 +7,9 @@
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- EmailJS Script -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+
     <style>
         body { font-family: 'Roboto', sans-serif; scroll-behavior: smooth; background-color: #f9fafb; }
         h1, h2, h3, .oswald { font-family: 'Oswald', sans-serif; }
@@ -247,9 +250,10 @@
                                     <th class="px-4 py-3">Cliente</th>
                                     <th class="px-4 py-3">Vehículo</th>
                                     <th class="px-4 py-3">Fechas</th>
+                                    <th class="px-4 py-3">Detalles</th>
                                     <th class="px-4 py-3">Total</th>
                                     <th class="px-4 py-3 text-center">Estado</th>
-                                    <th class="px-4 py-3 text-center">Acción</th>
+                                    <th class="px-4 py-3 text-center">Acciones</th>
                                 </tr>
                             </thead>
                             <tbody id="admin-reservations-list" class="divide-y divide-gray-100">
@@ -400,10 +404,6 @@
                         <input type="text" id="newFaqQ" placeholder="Pregunta (Ej. ¿Aceptan mascotas?)" class="w-full border-gray-200 rounded py-3 text-sm">
                         <textarea id="newFaqA" placeholder="Respuesta detallada..." rows="3" class="w-full border-gray-200 rounded py-3 text-sm"></textarea>
                         <button onclick="addFaq()" class="bg-brand-dark text-white px-6 py-2.5 rounded font-bold uppercase text-xs hover:bg-black">Guardar FAQ</button>
-                    </div>
-                    <ul id="faqAdminList" class="space-y-4"></ul>
-                </div>
-
                 <!-- SEC: REGIONAL -->
                 <div id="sec-regional" class="admin-section hidden fade-in max-w-xl">
                     <h3 class="oswald text-2xl font-bold uppercase mb-6 border-b pb-4"><i class="fa-solid fa-globe text-blue-500 mr-2"></i> Ajustes Regionales</h3>
@@ -417,7 +417,18 @@
                             <label class="block text-[10px] font-bold text-gray-600 uppercase tracking-widest mb-1">Email de Notificaciones</label>
                             <input type="email" id="adminContactEmail" placeholder="ejemplo@turbo.com" class="w-full border-gray-200 rounded py-3 text-sm shadow-sm">
                         </div>
-                        <button onclick="saveRegionalSettings()" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded text-sm font-bold uppercase shadow-md transition-colors">Guardar Configuración</button>
+                        
+                        <div class="pt-4 border-t border-blue-200 mt-4">
+                            <h4 class="text-[10px] font-bold text-gray-600 uppercase tracking-widest mb-3"><i class="fa-solid fa-envelope-open-text mr-1"></i> Integración EmailJS (Notificaciones automáticas)</h4>
+                            <div class="space-y-2">
+                                <input type="text" id="adminEmailJsPublic" placeholder="Public Key" class="w-full border-gray-200 rounded py-2 text-sm shadow-sm">
+                                <input type="text" id="adminEmailJsService" placeholder="Service ID" class="w-full border-gray-200 rounded py-2 text-sm shadow-sm">
+                                <input type="text" id="adminEmailJsTemplate" placeholder="Template ID" class="w-full border-gray-200 rounded py-2 text-sm shadow-sm">
+                            </div>
+                            <p class="text-[10px] text-gray-500 mt-2">Al llenar estos campos, recibirás un correo automático sin que el cliente tenga que hacer nada.</p>
+                        </div>
+
+                        <button onclick="saveRegionalSettings()" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded text-sm font-bold uppercase shadow-md transition-colors mt-4">Guardar Configuración</button>
                     </div>
                 </div>
 
@@ -507,7 +518,7 @@
             es: {
                 dates: "Seleccionar fechas", locPlaceholder: "Seleccionar ubicación", clear: "Limpiar", confirm: "Confirmar",
                 avail: "disponibles", pax: "Pasajeros", lug: "Maletas", day: "Día", 
-                totalBase: "Tarifa base:", highDem: "(Demanda Alta)",
+                totalBase: "Tarifa base:", highDem: "Demanda Alta",
                 volDisc: "¡Descuento especial por volumen aplicado!",
                 promoMsg: "Renta 4 días o más para un descuento especial.",
                 applyMsg: "¡Descuento especial aplicado!",
@@ -519,15 +530,16 @@
                 info1: "El mismo horario y lugar de recogida serán considerados para la entrega del vehículo.",
                 info2: "Importante: Depósito con Tarjeta de Crédito",
                 info3: "Se debe tener disponible un depósito de <strong>{amt}</strong> en su tarjeta de crédito para completar la renta. Debe tener este monto disponible en su tarjeta de crédito al momento de recoger el vehículo. Esta es una retención/autorización, no un cargo.",
-                btnComp: "Finalizar Reserva", btnBack: "← Regresar a detalles",
-                errData: "Llená tus datos de contacto para finalizar.", errDates: "Elegí fechas de viaje.", errLoc: "Seleccioná lugar y horario.",
+                reviewData: "Revisa tus datos", btnConfirm: "Confirmar", btnEdit: "Modificar datos",
+                submitRes: "Enviar Reserva", btnBack: "← Regresar a detalles",
+                errData: "Llená tus datos de contacto para continuar.", errDates: "Elegí fechas de viaje.", errLoc: "Seleccioná lugar y horario.",
                 process: "Procesando...", success: "¡Reserva enviada exitosamente!", errRes: "Error al procesar reserva",
                 noFaq: "Aún no hay preguntas.", successContact: "¡Reserva recibida! Nos pondremos en contacto contigo pronto."
             },
             en: {
                 dates: "Select dates", locPlaceholder: "Select location", clear: "Clear", confirm: "Confirm",
                 avail: "available", pax: "Passengers", lug: "Luggage", day: "Day", 
-                totalBase: "Base rate:", highDem: "(High Demand)",
+                totalBase: "Base rate:", highDem: "High Demand",
                 volDisc: "Special volume discount applied!",
                 promoMsg: "Rent 4 days or more for a special discount.",
                 applyMsg: "Special discount applied!",
@@ -539,8 +551,9 @@
                 info1: "The same time and pickup location will be considered for vehicle return.",
                 info2: "Important: Credit Card Deposit",
                 info3: "A deposit of <strong>{amt}</strong> must be available on your credit card to complete the rental. You must have this amount available on your credit card at the time of vehicle pickup. This is a hold/authorization, not a charge.",
-                btnComp: "Complete Booking", btnBack: "← Back to details",
-                errData: "Fill your contact details to finish.", errDates: "Choose travel dates.", errLoc: "Select location and time.",
+                reviewData: "Review your details", btnConfirm: "Confirm", btnEdit: "Edit details",
+                submitRes: "Submit Booking", btnBack: "← Back to details",
+                errData: "Fill your contact details to continue.", errDates: "Choose travel dates.", errLoc: "Select location and time.",
                 process: "Processing...", success: "Booking successfully sent!", errRes: "Error processing booking",
                 noFaq: "No questions yet.", successContact: "Booking received! We will contact you soon."
             }
@@ -562,7 +575,7 @@
 
         const defaultSettings = { 
             exchangeRate: 7.7,
-            contactEmail: 'reservas@turbo.com',
+            emailjsPublic: '', emailjsService: '', emailjsTemplate: '',
             categories: ['SUV Compacto', 'Sedán', 'Pickup', 'Lujo', 'Familiar'], 
             equipment: ['A/C', 'Bluetooth', 'GPS', 'Cámara de Retroceso'],
             locations: ['Panajachel, Sololá', 'Aeropuerto La Aurora', 'Antigua Guatemala'],
@@ -732,7 +745,9 @@
 
                 let total = (subtotal * (1 - discountPct)) + (extrasDaily * days);
 
-                let html = `<p class="text-xs font-bold text-gray-500 mb-1">${window.T('totalBase')} ${window.formatPrice(baseDaily)}/${window.T('day').toLowerCase()} ${isHD ? `<span class="text-red-500">${window.T('highDemand')}</span>` : ''}</p>`;
+                let html = '';
+                if(isHD) html += `<p class="text-xs font-bold text-red-500 mb-1"><i class="fa-solid fa-fire mr-1"></i> ${window.T('highDem')}</p>`;
+                
                 if(discountPct > 0) {
                     html += `<p class="text-xs text-green-600 font-bold mb-1">${window.T('volDisc')}</p>`;
                     html += `<div class="text-brand-orange text-2xl font-bold">${window.T('totalFor', {d: days})} <span class="line-through text-gray-400 text-sm mr-2 font-normal">${window.formatPrice(subtotal)}</span> ${window.formatPrice(total)}</div>`;
@@ -874,6 +889,7 @@
                             <button onclick="validateAndProceed()" class="w-full bg-brand-orange hover:bg-yellow-500 text-white font-bold py-4 rounded shadow-md uppercase transition-colors mt-2">${window.T('contRes')}</button>
                         </div>
 
+                        <!-- PASO 2: FORMULARIO DATOS -->
                         <div id="booking-step-2" class="hidden space-y-4 fade-in">
                             <p class="text-xs font-bold text-gray-500 uppercase tracking-widest border-b pb-2 mb-2">${window.T('urData')}</p>
                             <input id="clientName" type="text" class="w-full rounded border-gray-200 py-3 text-sm focus:ring-brand-orange" placeholder="${window.T('name')}">
@@ -891,9 +907,26 @@
                             </div>
 
                             <div class="grid grid-cols-1 gap-2 mt-4">
-                                <button onclick="submitBooking(event)" class="w-full bg-brand-dark hover:bg-black text-white font-bold py-4 rounded shadow-md uppercase transition-colors"><i class="fa-solid fa-check-circle mr-2 text-xl align-middle"></i> <span data-en="Complete Booking">${window.T('btnComp')}</span></button>
+                                <button onclick="goToReview()" class="w-full bg-brand-dark hover:bg-black text-white font-bold py-4 rounded shadow-md uppercase transition-colors"><i class="fa-solid fa-clipboard-check mr-2 text-xl align-middle"></i> <span data-en="Confirm">${window.T('btnConfirm')}</span></button>
                             </div>
                             <button onclick="document.getElementById('booking-step-2').classList.add('hidden'); document.getElementById('booking-step-1').classList.remove('hidden');" class="w-full text-xs text-gray-400 font-bold uppercase hover:text-gray-600 py-2">${window.T('btnBack')}</button>
+                        </div>
+
+                        <!-- PASO 3: REVISIÓN FINAL -->
+                        <div id="booking-step-3" class="hidden space-y-4 fade-in">
+                            <p class="text-xs font-bold text-brand-orange uppercase tracking-widest border-b pb-2 mb-2"><i class="fa-solid fa-check-double mr-1"></i> ${window.T('reviewData')}</p>
+                            <div class="bg-gray-50 p-4 rounded text-sm space-y-2 border border-gray-200 text-gray-700">
+                                <p><strong class="text-gray-900">${window.T('name')}:</strong> <span id="revName"></span></p>
+                                <p><strong class="text-gray-900">${window.T('phone')}:</strong> <span id="revPhone"></span></p>
+                                <p><strong class="text-gray-900">${window.T('email')}:</strong> <span id="revEmail"></span></p>
+                                <p><strong class="text-gray-900">${window.T('address')}:</strong> <span id="revAddress"></span></p>
+                                <p class="pt-2 mt-2 border-t border-gray-200"><strong class="text-gray-900">${window.T('pickupLoc')}:</strong> <span id="revLoc"></span></p>
+                                <p><strong class="text-gray-900">Fechas:</strong> <span id="revDates"></span></p>
+                            </div>
+                            <div class="grid grid-cols-1 gap-2 mt-4">
+                                <button onclick="submitBooking(event)" class="w-full bg-[#25D366] hover:bg-[#128C7E] text-white font-bold py-4 rounded shadow-md uppercase transition-colors"><i class="fa-brands fa-whatsapp mr-2 text-xl align-middle"></i> <span data-en="Submit Booking">${window.T('submitRes')}</span></button>
+                            </div>
+                            <button onclick="document.getElementById('booking-step-3').classList.add('hidden'); document.getElementById('booking-step-2').classList.remove('hidden');" class="w-full text-xs text-gray-400 font-bold uppercase hover:text-gray-600 py-2">${window.T('btnEdit')}</button>
                         </div>
                     </div>
                 </div>
@@ -921,6 +954,39 @@
             window.scrollToFleet();
         };
 
+        window.validateAndProceed = () => {
+            if(!window.startDay || !window.endDay) return window.showNotif(window.T('errDates'));
+            const loc = document.getElementById('detailLocation').value;
+            const time = document.getElementById('detailTime').value;
+            if(!loc || !time) return window.showNotif(window.T('errLoc'));
+            document.getElementById('booking-step-1').classList.add('hidden');
+            document.getElementById('booking-step-2').classList.remove('hidden');
+        };
+
+        window.goToReview = () => {
+            const n = document.getElementById('clientName').value;
+            const p = document.getElementById('clientPhone').value;
+            const email = document.getElementById('clientEmail').value;
+            const address = document.getElementById('clientAddress').value;
+            
+            if(!n || !p || !email || !address) return window.showNotif(window.T('errData'));
+
+            document.getElementById('revName').innerText = n;
+            document.getElementById('revPhone').innerText = p;
+            document.getElementById('revEmail').innerText = email;
+            document.getElementById('revAddress').innerText = address;
+            
+            const loc = document.getElementById('detailLocation').value;
+            const time = document.getElementById('detailTime').value;
+            document.getElementById('revLoc').innerText = `${loc} (${time} hrs)`;
+            
+            const fmt = (d) => `${String(d.d).padStart(2,'0')}/${String(d.m + 1).padStart(2,'0')}/${d.y}`;
+            document.getElementById('revDates').innerText = `${fmt(window.startDay)} - ${fmt(window.endDay)}`;
+
+            document.getElementById('booking-step-2').classList.add('hidden');
+            document.getElementById('booking-step-3').classList.remove('hidden');
+        };
+
         window.submitBooking = async (e) => {
             if (e) e.preventDefault();
             const n = document.getElementById('clientName').value;
@@ -929,8 +995,6 @@
             const address = document.getElementById('clientAddress').value;
             const location = document.getElementById('detailLocation').value;
             const time = document.getElementById('detailTime').value;
-            
-            if(!n || !p || !email || !address) return window.showNotif(window.T('errData'));
             
             const btn = e.target.closest('button');
             const originalBtnText = btn.innerHTML;
@@ -967,8 +1031,37 @@
                     clientName: n, clientPhone: p, clientEmail: email, clientAddress: address,
                     pickupLocation: location, pickupTime: time, extras: extrasStr,
                     startDate: startDate, endDate: endDate, totalPrice: totalStr,
+                    status: 'Pendiente', // Estado inicial explícito
                     timestamp: new Date().toISOString()
                 });
+                
+                // Enviar por EmailJS si está configurado
+                if (window.SETTINGS.emailjsPublic && window.SETTINGS.emailjsService && window.SETTINGS.emailjsTemplate) {
+                    try {
+                        emailjs.init(window.SETTINGS.emailjsPublic);
+                        await emailjs.send(window.SETTINGS.emailjsService, window.SETTINGS.emailjsTemplate, {
+                            car_name: window.selectedCar.name,
+                            total_price: totalStr,
+                            dates: `${startDate} al ${endDate}`,
+                            time: time,
+                            location: location,
+                            client_name: n,
+                            client_phone: p,
+                            client_email: email,
+                            client_address: address,
+                            extras: extrasStr || 'Ninguno'
+                        });
+                    } catch(e) { console.log('Error enviando EmailJS', e); }
+                }
+
+                const msg = `🚗 *New Booking / Nueva Reserva*\n\n*Vehicle:* ${window.selectedCar.name}\n*Total:* ${totalStr}\n\n*Dates:* ${startDate} - ${endDate}\n*Time:* ${time} hrs\n*Location:* ${location}\n\n*Extras:*\n${extrasStr || 'None'}\n\n*Client:* ${n}\n*Phone:* ${p}\n*Email:* ${email}\n*Address:* ${address}`;
+                window.open(`https://wa.me/50258627567?text=${encodeURIComponent(msg)}`, '_blank');
+                
+                // Reinicio Total Automático
+                window.startDay = null; window.endDay = null; window.searchData = { location: '', time: '' };
+                document.getElementById('searchLocation').value = ''; document.getElementById('homeTime').value = '';
+                document.getElementById('dateInput').value = window.T('dates');
+                document.querySelectorAll('[id$="Grid"]').forEach(g => window.generateCalendar(g.id));
                 
                 window.goHome(); 
                 window.showNotif(window.T('successContact'));
@@ -977,15 +1070,6 @@
             } finally {
                 if(btn) { btn.innerHTML = originalBtnText; btn.disabled = false; }
             }
-        };
-
-        window.validateAndProceed = () => {
-            if(!window.startDay || !window.endDay) return window.showNotif(window.T('errDates'));
-            const loc = document.getElementById('detailLocation').value;
-            const time = document.getElementById('detailTime').value;
-            if(!loc || !time) return window.showNotif(window.T('errLoc'));
-            document.getElementById('booking-step-1').classList.add('hidden');
-            document.getElementById('booking-step-2').classList.remove('hidden');
         };
 
         // --- CALENDARIO Y BLOQUEOS ---
@@ -1292,8 +1376,21 @@
                 document.getElementById('adminHeroTitle').value = window.SETTINGS.hero.title || '';
                 document.getElementById('adminHeroSubtitle').value = window.SETTINGS.hero.subtitle || '';
             }
-            document.getElementById('adminExchangeRate').value = window.SETTINGS.exchangeRate || 7.7;
-            document.getElementById('adminContactEmail').value = window.SETTINGS.contactEmail || 'reservas@turbo.com';
+            
+            const exRate = document.getElementById('adminExchangeRate');
+            if(exRate) exRate.value = window.SETTINGS.exchangeRate || 7.7;
+            
+            const contactEmail = document.getElementById('adminContactEmail');
+            if(contactEmail) contactEmail.value = window.SETTINGS.contactEmail || 'reservas@turbo.com';
+            
+            const emPub = document.getElementById('adminEmailJsPublic');
+            if(emPub) emPub.value = window.SETTINGS.emailjsPublic || '';
+            
+            const emSrv = document.getElementById('adminEmailJsService');
+            if(emSrv) emSrv.value = window.SETTINGS.emailjsService || '';
+            
+            const emTpl = document.getElementById('adminEmailJsTemplate');
+            if(emTpl) emTpl.value = window.SETTINGS.emailjsTemplate || '';
 
             const fillSelect = (id, list) => {
                 const el = document.getElementById(id);
@@ -1353,8 +1450,18 @@
         };
 
         window.saveRegionalSettings = async () => {
-            window.SETTINGS.exchangeRate = Number(document.getElementById('adminExchangeRate').value) || 7.7;
-            window.SETTINGS.contactEmail = document.getElementById('adminContactEmail').value.trim();
+            const exRate = document.getElementById('adminExchangeRate');
+            const contactEmail = document.getElementById('adminContactEmail');
+            const emPub = document.getElementById('adminEmailJsPublic');
+            const emSrv = document.getElementById('adminEmailJsService');
+            const emTpl = document.getElementById('adminEmailJsTemplate');
+
+            window.SETTINGS.exchangeRate = exRate ? (Number(exRate.value) || 7.7) : 7.7;
+            window.SETTINGS.contactEmail = contactEmail ? contactEmail.value.trim() : 'reservas@turbo.com';
+            window.SETTINGS.emailjsPublic = emPub ? emPub.value.trim() : '';
+            window.SETTINGS.emailjsService = emSrv ? emSrv.value.trim() : '';
+            window.SETTINGS.emailjsTemplate = emTpl ? emTpl.value.trim() : '';
+            
             await window.saveSettingsToFirebase();
             window.showNotif("¡Configuración guardada!");
         };
@@ -1432,48 +1539,63 @@
             const list = document.getElementById('admin-reservations-list');
             if(!list) return;
             if(window.RESERVATIONS.length === 0) {
-                list.innerHTML = `<tr><td colspan="6" class="px-4 py-4 text-center text-gray-400 italic">No hay reservas registradas.</td></tr>`;
+                list.innerHTML = `<tr><td colspan="7" class="px-4 py-4 text-center text-gray-400 italic">No hay reservas registradas.</td></tr>`;
                 return;
             }
 
             const sortedRes = window.RESERVATIONS.sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
 
             list.innerHTML = sortedRes.map(res => {
-                const isAttended = res.status === 'Atendida';
-                const statusClass = isAttended ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700';
+                let statusClass = 'bg-gray-100 text-gray-700';
+                if(res.status === 'Atendida') statusClass = 'bg-blue-100 text-blue-700';
+                else if(res.status === 'En ruta') statusClass = 'bg-orange-100 text-orange-700';
+                else if(res.status === 'Entregado') statusClass = 'bg-green-100 text-green-700';
                 
                 return `
-                <tr class="hover:bg-gray-50 transition-colors">
-                    <td class="px-4 py-3">
+                <tr class="hover:bg-gray-50 transition-colors border-b">
+                    <td class="px-4 py-3 align-top">
                         <p class="font-bold text-gray-900">${res.clientName}</p>
-                        <p class="text-[10px] text-gray-500">${res.clientPhone}</p>
+                        <p class="text-[10px] text-gray-500"><i class="fa-brands fa-whatsapp text-green-500"></i> ${res.clientPhone}</p>
                     </td>
-                    <td class="px-4 py-3 font-medium text-gray-700">${res.carName}</td>
-                    <td class="px-4 py-3">
-                        <p class="text-xs">${res.startDate} al ${res.endDate}</p>
+                    <td class="px-4 py-3 font-medium text-gray-700 align-top">${res.carName}</td>
+                    <td class="px-4 py-3 align-top">
+                        <p class="text-xs font-bold">${res.startDate} al ${res.endDate}</p>
                         <p class="text-[10px] text-gray-500">${res.pickupTime} | ${res.pickupLocation}</p>
                     </td>
-                    <td class="px-4 py-3 font-bold text-brand-orange">${res.totalPrice}</td>
-                    <td class="px-4 py-3 text-center">
+                    <td class="px-4 py-3 align-top">
+                        <p class="text-[10px] text-gray-500 w-48 truncate" title="${res.clientEmail}"><i class="fa-solid fa-envelope"></i> ${res.clientEmail}</p>
+                        <p class="text-[10px] text-gray-500 w-48 truncate" title="${res.clientAddress}"><i class="fa-solid fa-map-pin"></i> ${res.clientAddress}</p>
+                        ${res.extras ? `<p class="text-[10px] text-brand-orange mt-1">Extras: ${res.extras.replace(/\n/g, ', ')}</p>` : ''}
+                    </td>
+                    <td class="px-4 py-3 font-bold text-brand-orange align-top">${res.totalPrice}</td>
+                    <td class="px-4 py-3 text-center align-top">
                         <span class="px-2 py-1 rounded text-[10px] font-bold uppercase ${statusClass}">
                             ${res.status || 'Pendiente'}
                         </span>
                     </td>
-                    <td class="px-4 py-3 text-center flex justify-center gap-2">
-                        <button onclick="toggleReservationStatus('${res.id}', '${res.status || 'Pendiente'}')" class="text-[10px] font-bold uppercase border px-2 py-1 rounded ${isAttended ? 'text-gray-400 hover:text-gray-600' : 'text-green-500 hover:bg-green-50'}">
-                            ${isAttended ? 'Pendiente' : 'Atender'}
-                        </button>
-                        <button onclick="deleteReservation('${res.id}')" class="text-[10px] font-bold uppercase border px-2 py-1 rounded text-red-500 hover:bg-red-50"><i class="fa-solid fa-trash"></i></button>
+                    <td class="px-4 py-3 text-center flex flex-wrap justify-center gap-1 w-48 align-top">
+                        <button onclick="changeResStatus('${res.id}', 'Pendiente')" class="text-[9px] font-bold uppercase border px-2 py-1 rounded text-gray-500 hover:bg-gray-100">Pendiente</button>
+                        <button onclick="changeResStatus('${res.id}', 'Atendida')" class="text-[9px] font-bold uppercase border px-2 py-1 rounded text-blue-500 hover:bg-blue-50">Atender</button>
+                        ${res.status === 'En ruta' ? 
+                            `<button onclick="changeResStatus('${res.id}', 'Entregado')" class="text-[9px] font-bold uppercase border px-2 py-1 rounded text-green-600 hover:bg-green-50">Recibir Carro</button>` : 
+                            `<button onclick="finalizeRes('${res.id}')" class="text-[9px] font-bold uppercase border px-2 py-1 rounded text-orange-500 hover:bg-orange-50">Finalizar</button>`
+                        }
+                        <button onclick="deleteReservation('${res.id}')" class="text-[9px] font-bold uppercase border px-2 py-1 rounded text-red-500 hover:bg-red-50 ml-2" title="Eliminar"><i class="fa-solid fa-trash"></i></button>
                     </td>
                 </tr>
                 `;
             }).join('');
         };
 
-        window.toggleReservationStatus = async (id, currentStatus) => {
-            const newStatus = currentStatus === 'Atendida' ? 'Pendiente' : 'Atendida';
+        window.changeResStatus = async (id, newStatus) => {
             try { await updateDoc(doc(db, 'artifacts', currentAppId, 'public', 'data', 'reservations', id), { status: newStatus }); window.showNotif("Estado actualizado."); } 
             catch(e) { window.showNotif("Error al actualizar."); }
+        };
+
+        window.finalizeRes = (id) => {
+            if(confirm('¿Seguro que deseas FINALIZAR esta reserva? El vehículo pasará a estado "En Ruta".')) {
+                window.changeResStatus(id, 'En ruta');
+            }
         };
 
         window.deleteReservation = async (id) => {
