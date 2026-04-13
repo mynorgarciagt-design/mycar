@@ -16,7 +16,7 @@
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            transition: background-image 0.5s ease-in-out;
+            transition: background-image 0.8s ease-in-out;
         }
 
         header.scrolled {
@@ -100,8 +100,8 @@
             <section id="hero" class="min-h-screen flex flex-col">
                 <main class="flex-grow flex flex-col justify-center items-start px-8 md:px-16 lg:px-24 pt-36">
                     <div class="max-w-xl md:max-w-2xl fade-in text-left text-white">
-                        <h1 id="heroTitle" class="text-5xl md:text-7xl font-bold uppercase leading-tight mb-4 tracking-wide oswald"></h1>
-                        <p id="heroSubtitle" class="text-lg md:text-xl text-gray-200 mb-10 max-w-md"></p>
+                        <h1 id="heroTitle" class="text-5xl md:text-7xl font-bold uppercase leading-tight mb-4 tracking-wide oswald text-shadow"></h1>
+                        <p id="heroSubtitle" class="text-lg md:text-xl text-gray-200 mb-10 max-w-md text-shadow"></p>
                     </div>
 
                     <div class="bg-white rounded-lg p-8 shadow-2xl w-full max-w-3xl fade-in relative mb-10 calendar-wrapper">
@@ -166,10 +166,10 @@
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-10 text-center">
                     <div class="p-6 rounded-xl border border-gray-100 bg-gray-50 shadow-sm hover:shadow-md transition-shadow">
                         <div class="w-16 h-16 bg-brand-orange text-white rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
-                            <i class="fa-solid fa-shield-halved text-2xl"></i>
+                            <i class="fa-solid fa-bolt text-2xl"></i>
                         </div>
-                        <h3 class="font-bold text-xl mb-3 oswald uppercase">Seguro Incluido</h3>
-                        <p class="text-gray-500 text-sm">Viaja con total tranquilidad. Todos nuestros vehículos cuentan con cobertura completa incluida en la tarifa.</p>
+                        <h3 class="font-bold text-xl mb-3 oswald uppercase">Reserva Rápida</h3>
+                        <p class="text-gray-500 text-sm">Proceso de reserva en menos de 2 minutos. Confirmación inmediata vía WhatsApp para que no pierdas tiempo.</p>
                     </div>
                     <div class="p-6 rounded-xl border border-gray-100 bg-gray-50 shadow-sm hover:shadow-md transition-shadow">
                         <div class="w-16 h-16 bg-brand-orange text-white rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
@@ -210,7 +210,7 @@
 
         <!-- DETALLE CARRO -->
         <section id="page-detail" class="hidden pt-32 pb-20 px-8 md:px-16 lg:px-24 fade-in min-h-screen bg-gray-50">
-            <button onclick="closeDetail()" class="mb-8 flex items-center gap-2 text-gray-500 hover:text-gray-900 font-bold text-xs uppercase transition-colors">
+            <button onclick="goHome()" class="mb-8 flex items-center gap-2 text-gray-500 hover:text-gray-900 font-bold text-xs uppercase transition-colors">
                 <i class="fa-solid fa-arrow-left"></i> Regresar a la flota
             </button>
             <div id="detail-content"></div>
@@ -228,7 +228,11 @@
                     <h2 class="oswald text-4xl font-bold uppercase">Gestión de Flota</h2>
                     
                     <div class="bg-white p-8 rounded-xl border shadow-sm">
-                        <h3 class="font-bold uppercase text-xs tracking-widest mb-4 border-b pb-2 text-brand-orange">1. Agregar Carro Nuevo</h3>
+                        <div class="flex justify-between items-center mb-4 border-b pb-2">
+                            <h3 id="adminFormTitle" class="font-bold uppercase text-xs tracking-widest text-brand-orange">1. Agregar Carro Nuevo</h3>
+                            <button type="button" id="btnCancelEdit" onclick="cancelEditCar()" class="hidden text-[10px] bg-gray-200 hover:bg-gray-300 text-gray-700 px-3 py-1 rounded font-bold uppercase transition-colors"><i class="fa-solid fa-times mr-1"></i> Cancelar Edición</button>
+                        </div>
+                        
                         <form id="adminForm" onsubmit="addCar(event)" class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <input id="adminCarName" type="text" required class="md:col-span-2 border-gray-200 rounded py-3 text-sm bg-gray-50 focus:border-brand-orange" placeholder="Nombre del Vehículo">
                             
@@ -261,11 +265,17 @@
                                 </div>
                             </div>
                             
-                            <div class="md:col-span-2 border-2 border-dashed border-gray-300 rounded p-4 text-center bg-gray-50 relative hover:bg-gray-100 transition-colors">
-                                <input type="file" id="adminCarImage" accept="image/*" multiple required class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" onchange="previewFileName(this)">
-                                <div class="text-sm text-gray-500 font-medium">
-                                    <i class="fa-solid fa-images mb-2 text-2xl"></i><br>
-                                    <span id="fileNameDisplay">Seleccionar Múltiples Fotos (Click aquí)</span>
+                            <!-- Gestión de Fotos Progresiva -->
+                            <div class="md:col-span-2 border border-gray-200 rounded p-4 bg-gray-50">
+                                <label class="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-3">Galería de Fotos del Vehículo</label>
+                                <div id="pendingImagesPreview" class="flex flex-wrap gap-2 mb-3"></div>
+                                
+                                <div class="relative w-full border-2 border-dashed border-gray-300 rounded p-3 text-center hover:bg-gray-100 transition-colors cursor-pointer bg-white">
+                                    <input type="file" id="adminCarImage" accept="image/*" multiple class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" onchange="handleCarImages(this)">
+                                    <div class="text-xs text-gray-500 font-bold">
+                                        <i class="fa-solid fa-plus-circle mb-1 text-lg text-brand-orange"></i><br>
+                                        Agregar Fotos (La primera será la principal)
+                                    </div>
                                 </div>
                             </div>
 
@@ -292,7 +302,7 @@
                         <div class="space-y-3">
                             <input type="text" id="adminHeroTitle" placeholder="Título principal" class="w-full border-gray-200 rounded text-sm bg-gray-50">
                             <textarea id="adminHeroSubtitle" placeholder="Subtítulo corto" rows="2" class="w-full border-gray-200 rounded text-sm bg-gray-50"></textarea>
-                            <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-2">Imágenes de Fondo (Carrusel)</label>
+                            <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-2">Imágenes de Fondo (Alta Calidad)</label>
                             <input type="file" id="adminHeroBgInput" accept="image/*" multiple class="w-full text-xs text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:bg-gray-100 file:text-brand-dark cursor-pointer">
                             <button onclick="saveHeroSettings()" class="w-full bg-brand-dark text-white py-2 rounded text-xs font-bold uppercase mt-2 hover:bg-black">Actualizar Portada</button>
                         </div>
@@ -321,7 +331,8 @@
                         <h3 class="font-bold uppercase text-xs tracking-widest mb-4 border-b pb-2">Accesorios Extra (Cliente elige)</h3>
                         <div class="flex gap-2 mb-4">
                             <input type="text" id="newExtraInput" placeholder="Ej. Silla de bebé" class="flex-1 border-gray-200 rounded text-sm bg-gray-50">
-                            <button onclick="addSettingString('extras', 'newExtraInput')" class="bg-brand-dark text-white px-3 py-2 rounded text-xs font-bold"><i class="fa-solid fa-plus"></i></button>
+                            <input type="number" id="newExtraPrice" placeholder="Q (0 = Gratis)" class="w-24 border-gray-200 rounded text-sm bg-gray-50">
+                            <button onclick="addExtra()" class="bg-brand-dark text-white px-3 py-2 rounded text-xs font-bold"><i class="fa-solid fa-plus"></i></button>
                         </div>
                         <ul id="extraListAdmin" class="space-y-2"></ul>
                     </div>
@@ -451,17 +462,19 @@
         let db, auth;
         const currentAppId = typeof __app_id !== 'undefined' ? __app_id : 'mycar-532b2';
         let currentBlockingCarId = null;
+        window.editingCarId = null;
+        window.pendingCarImagesBase64 = [];
 
         // --- ESTADO GLOBAL ---
         window.CARS = [];
         window.RESERVATIONS = [];
-        window.searchData = { location: '', time: '' }; // Guarda datos del home
+        window.searchData = { location: '', time: '' }; 
         
         const defaultSettings = { 
             categories: ['SUV Compacto', 'Sedán', 'Pickup', 'Lujo', 'Familiar'], 
             equipment: ['A/C', 'Bluetooth', 'GPS', 'Cámara de Retroceso'],
             locations: ['Panajachel, Sololá', 'Aeropuerto La Aurora', 'Antigua Guatemala'],
-            extras: ['Silla de bebé', 'Seguro Premium', 'Conductor Adicional'],
+            extras: [{name: 'Silla de bebé', price: 50}, {name: 'Seguro Premium', price: 0}],
             highDemandRanges: [],
             faqs: [
                 { q: "¿Cuáles son los requisitos para rentar?", a: "DPI o Pasaporte vigente y licencia de conducir al día." }
@@ -510,13 +523,15 @@
             }
         };
 
-        window.goHome = () => {
+        // --- MANEJO DE HISTORIAL (BOTON ATRAS NATIVO) ---
+        window.goHome = (fromPopState = false) => {
             document.getElementById('page-detail').classList.add('hidden');
             document.getElementById('admin-view').classList.add('hidden');
             document.getElementById('main-view').classList.remove('hidden');
             document.getElementById('mainFooter').classList.remove('hidden');
             window.scrollTo(0, 0);
             window.updateHeaderOnScroll();
+            if (!fromPopState) history.pushState({ view: 'home' }, '', '#home');
         };
 
         window.openAdmin = () => {
@@ -530,7 +545,7 @@
             window.renderAdminSettings(); 
         };
         
-        window.closeDetail = window.goHome;
+        window.closeDetail = () => window.goHome(false);
         window.scrollToFleet = () => { const el = document.getElementById('section-fleet'); if (el) el.scrollIntoView({ behavior: 'smooth' }); };
 
         window.updateHeaderOnScroll = () => {
@@ -542,18 +557,7 @@
             else h.classList.remove('scrolled');
         };
 
-        window.previewFileName = (input) => {
-            const display = document.getElementById('fileNameDisplay');
-            if (input.files && input.files.length > 0) {
-                display.innerText = `✓ ${input.files.length} foto(s) lista(s)`;
-                display.classList.add('text-green-600');
-            } else {
-                display.innerText = "Seleccionar Múltiples Fotos (Click aquí)";
-                display.classList.remove('text-green-600');
-            }
-        };
-
-        window.compressImage = (file) => {
+        window.compressImage = (file, isHero = false) => {
             return new Promise((resolve) => {
                 const reader = new FileReader();
                 reader.onload = (e) => {
@@ -561,18 +565,52 @@
                     img.onload = () => {
                         const canvas = document.createElement('canvas');
                         let w = img.width, h = img.height;
-                        const max = 800; 
+                        const max = isHero ? 2500 : 800; 
                         if(w > h && w > max) { h *= max/w; w = max; }
                         else if(h > max) { w *= max/h; h = max; }
                         canvas.width = w; canvas.height = h;
                         const ctx = canvas.getContext('2d');
                         ctx.drawImage(img, 0, 0, w, h);
-                        resolve(canvas.toDataURL('image/jpeg', 0.6));
+                        resolve(canvas.toDataURL('image/jpeg', isHero ? 0.8 : 0.6));
                     };
                     img.src = e.target.result;
                 };
                 reader.readAsDataURL(file);
             });
+        };
+
+        // --- GESTION DE FOTOS DEL CARRO EN ADMIN ---
+        window.handleCarImages = async (input) => {
+            if(!input.files || input.files.length === 0) return;
+            const btn = document.getElementById('btnGuardarCarro');
+            btn.disabled = true; btn.innerText = "Procesando fotos...";
+            
+            for(let file of input.files) {
+                window.pendingCarImagesBase64.push(await compressImage(file, false));
+            }
+            input.value = ''; 
+            window.renderPendingImages();
+            btn.disabled = false; btn.innerText = window.editingCarId ? "Actualizar Vehículo" : "Guardar Carro";
+        };
+
+        window.renderPendingImages = () => {
+            const container = document.getElementById('pendingImagesPreview');
+            if(window.pendingCarImagesBase64.length === 0) {
+                container.innerHTML = '<p class="text-xs text-gray-400 italic">No hay fotos seleccionadas.</p>';
+                return;
+            }
+            container.innerHTML = window.pendingCarImagesBase64.map((b64, i) => `
+                <div class="relative w-16 h-16 rounded overflow-hidden border shadow-sm ${i===0 ? 'border-brand-orange ring-2 ring-brand-orange/30' : 'border-gray-200'}">
+                    ${i===0 ? '<span class="absolute bottom-0 left-0 right-0 bg-brand-orange text-white text-[8px] font-bold text-center py-0.5 z-10">PRINCIPAL</span>' : ''}
+                    <img src="${b64}" class="w-full h-full object-cover">
+                    <button type="button" onclick="window.removePendingImage(${i})" class="absolute top-0 right-0 bg-red-500 text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-bl shadow hover:bg-red-700 z-20 transition-colors"><i class="fa-solid fa-times"></i></button>
+                </div>
+            `).join('');
+        };
+
+        window.removePendingImage = (index) => {
+            window.pendingCarImagesBase64.splice(index, 1);
+            window.renderPendingImages();
         };
 
         // --- LÓGICA DE PRECIOS Y DEMANDA ALTA ---
@@ -597,22 +635,26 @@
                 let days = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
                 if (days === 0) days = 1;
 
-                // Chequear Demanda Alta en fecha inicio
                 let isHD = window.isHighDemand(window.startDay);
                 let baseDaily = isHD && window.selectedCar.highDemandPrice ? window.selectedCar.highDemandPrice : window.selectedCar.price;
 
                 let subtotal = baseDaily * days;
                 let discountPct = 0;
                 
-                // Descuentos escalonados
                 if(days >= 4 && days <= 8) discountPct = 0.06;
                 else if(days >= 9) discountPct = 0.08;
 
-                let total = subtotal * (1 - discountPct);
+                // Extras calc
+                let extrasDaily = 0;
+                document.querySelectorAll('.client-extra-checkbox:checked').forEach(cb => {
+                    extrasDaily += parseFloat(cb.getAttribute('data-price') || 0);
+                });
+
+                let total = (subtotal * (1 - discountPct)) + (extrasDaily * days);
 
                 let html = `<p class="text-xs font-bold text-gray-500 mb-1">Tarifa base: Q${baseDaily.toLocaleString()}/día ${isHD ? '<span class="text-red-500">(Demanda Alta)</span>' : ''}</p>`;
                 if(discountPct > 0) {
-                    html += `<p class="text-xs text-green-600 font-bold mb-1">¡Descuento por volumen aplicado (${discountPct*100}%)!</p>`;
+                    html += `<p class="text-xs text-green-600 font-bold mb-1">¡Descuento especial por volumen aplicado!</p>`;
                     html += `<div class="text-brand-orange text-2xl font-bold">Total por ${days} día(s): <span class="line-through text-gray-400 text-sm mr-2 font-normal">Q${subtotal.toLocaleString()}</span> Q${total.toLocaleString()}</div>`;
                 } else {
                     html += `<div class="text-brand-orange text-2xl font-bold">Total por ${days} día(s): Q${total.toLocaleString()}</div>`;
@@ -638,7 +680,7 @@
             grid.innerHTML = list.map(car => `
                 <div class="bg-white rounded-lg overflow-hidden border shadow-sm cursor-pointer group flex flex-col h-full hover:shadow-lg transition-all" onclick="openDetail('${car.id}')">
                     <div class="h-56 overflow-hidden shrink-0 relative">
-                        <img src="${car.images[0]}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                        <img src="${car.images && car.images[0] ? car.images[0] : ''}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
                     </div>
                     <div class="p-6 flex flex-col flex-grow">
                         <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">${car.type}</span>
@@ -663,44 +705,42 @@
             `).join('');
         };
 
-        window.openDetail = (id) => {
+        window.openDetail = (id, fromPopState = false) => {
             window.selectedCar = window.CARS.find(c => c.id === id);
             if (!window.selectedCar) return;
+
+            if (!fromPopState) history.pushState({ view: 'detail', id: id }, '', '#car-' + id);
 
             const format = (d) => d ? `${String(d.d).padStart(2,'0')}/${String(d.m + 1).padStart(2,'0')}` : "";
             const dateText = window.startDay && window.endDay ? `${format(window.startDay)} - ${format(window.endDay)}` : "Seleccionar fechas";
 
-            // Equipamiento incluido
             let eqHtml = '';
             if (window.selectedCar.equipment && window.selectedCar.equipment.length > 0) {
                 const filteredEq = window.selectedCar.equipment.filter(e => e.toLowerCase() !== (window.selectedCar.transmission || '').toLowerCase());
                 eqHtml = filteredEq.map(e => `<span class="bg-gray-100 text-gray-600 px-3 py-1.5 rounded text-[10px] font-bold uppercase"><i class="fa-solid fa-check text-green-500 mr-1.5"></i>${e}</span>`).join('');
             }
 
-            // Accesorios Extras (Checkboxes)
             let extrasCheckboxes = '';
             if(window.SETTINGS.extras && window.SETTINGS.extras.length > 0) {
                 extrasCheckboxes = `<div class="mb-4"><label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Añadir Extras a tu reserva</label><div class="flex flex-col gap-2">` + 
                 window.SETTINGS.extras.map(ex => `
                     <label class="inline-flex items-center cursor-pointer bg-white border border-gray-200 rounded px-3 py-2 hover:bg-gray-50">
-                        <input type="checkbox" class="client-extra-checkbox rounded text-brand-orange focus:ring-brand-orange w-4 h-4" value="${ex}">
-                        <span class="ml-2 text-xs font-bold text-gray-700">${ex}</span>
+                        <input type="checkbox" onchange="window.updateTotalPrice()" class="client-extra-checkbox rounded text-brand-orange focus:ring-brand-orange w-4 h-4" value="${ex.name}" data-price="${ex.price}">
+                        <span class="ml-2 text-xs font-bold text-gray-700">${ex.name} <span class="text-brand-orange ml-1">${ex.price > 0 ? '+Q' + ex.price + '/día' : '(Gratis)'}</span></span>
                     </label>
                 `).join('') + `</div></div>`;
             }
 
-            // Ubicaciones Select
             const locOptions = (window.SETTINGS.locations || []).map(l => `<option value="${l}">${l}</option>`).join('');
 
-            // Galería
-            const mainImg = window.selectedCar.images[0];
-            const thumbsHtml = window.selectedCar.images.map(img => `<img src="${img}" onclick="changeMainImage('${img}')" class="w-20 h-16 object-cover rounded cursor-pointer border-2 border-transparent hover:border-brand-orange transition-colors">`).join('');
+            const mainImg = window.selectedCar.images && window.selectedCar.images[0] ? window.selectedCar.images[0] : '';
+            const thumbsHtml = (window.selectedCar.images || []).map(img => `<img src="${img}" onclick="changeMainImage('${img}')" class="w-20 h-16 object-cover rounded cursor-pointer border-2 border-transparent hover:border-brand-orange transition-colors">`).join('');
 
             document.getElementById('detail-content').innerHTML = `
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
                     <div class="lg:col-span-2">
                         <img id="mainGalleryImage" src="${mainImg}" class="w-full h-[350px] md:h-[500px] object-cover rounded-xl border shadow-sm mb-4 transition-all">
-                        ${window.selectedCar.images.length > 1 ? `<div class="flex gap-2 overflow-x-auto hide-scrollbar pb-2">${thumbsHtml}</div>` : ''}
+                        ${(window.selectedCar.images || []).length > 1 ? `<div class="flex gap-2 overflow-x-auto hide-scrollbar pb-2">${thumbsHtml}</div>` : ''}
                     </div>
                     
                     <div class="bg-white p-8 rounded-xl border shadow-xl self-start sticky top-28">
@@ -774,6 +814,11 @@
                                 <p class="text-[10px] text-gray-500 font-medium leading-tight"><i class="fa-solid fa-circle-info mr-1 text-brand-orange"></i> El mismo horario y lugar de recogida serán considerados para la entrega del vehículo.</p>
                             </div>
 
+                            <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4 rounded text-xs text-yellow-800">
+                                <p class="font-bold uppercase tracking-widest mb-1"><i class="fa-solid fa-triangle-exclamation mr-1"></i> Importante: Depósito con Tarjeta de Crédito</p>
+                                <p class="leading-relaxed">Se debe tener disponible un depósito de <strong>Q 10,000</strong> en su tarjeta de crédito para completar la renta. Debe tener este monto disponible en su tarjeta de crédito al momento de recoger el vehículo. Esta es una retención/autorización, no un cargo.</p>
+                            </div>
+
                             <button onclick="submitBooking(event)" class="w-full bg-[#25D366] hover:bg-[#128C7E] text-white font-bold py-4 rounded shadow-md uppercase transition-colors mt-2"><i class="fa-brands fa-whatsapp mr-2 text-xl align-middle"></i> Confirmar y Enviar</button>
                             <button onclick="document.getElementById('booking-step-2').classList.add('hidden'); document.getElementById('booking-step-1').classList.remove('hidden');" class="w-full text-xs text-gray-400 font-bold uppercase hover:text-gray-600 py-2">← Regresar a detalles</button>
                         </div>
@@ -787,7 +832,6 @@
             window.updateHeaderOnScroll();
             window.generateCalendar('detailCalendarGrid');
             
-            // Jalar datos del buscador de inicio
             if(window.searchData.location) document.getElementById('detailLocation').value = window.searchData.location;
             if(window.searchData.time) document.getElementById('detailTime').value = window.searchData.time;
 
@@ -825,7 +869,7 @@
             const startDate = fmt(window.startDay);
             const endDate = fmt(window.endDay);
 
-            // Re-calcular para obtener total limpio
+            // Re-calcular total
             const sTime = new Date(window.startDay.y, window.startDay.m, window.startDay.d).getTime();
             const eTime = new Date(window.endDay.y, window.endDay.m, window.endDay.d).getTime();
             let days = Math.ceil((eTime - sTime) / (1000 * 60 * 60 * 24));
@@ -835,12 +879,16 @@
             let baseDaily = isHD && window.selectedCar.highDemandPrice ? window.selectedCar.highDemandPrice : window.selectedCar.price;
             let subtotal = baseDaily * days;
             let discountPct = (days >= 4 && days <= 8) ? 0.06 : (days >= 9 ? 0.08 : 0);
-            let finalTotal = subtotal * (1 - discountPct);
-            const totalStr = `Q${finalTotal.toLocaleString()}`;
-
-            // Accesorios seleccionados
+            
+            let extrasDaily = 0;
             let extrasStr = '';
-            document.querySelectorAll('.client-extra-checkbox:checked').forEach(cb => extrasStr += `- ${cb.value}\n`);
+            document.querySelectorAll('.client-extra-checkbox:checked').forEach(cb => {
+                extrasStr += `- ${cb.value}\n`;
+                extrasDaily += parseFloat(cb.getAttribute('data-price') || 0);
+            });
+
+            let finalTotal = (subtotal * (1 - discountPct)) + (extrasDaily * days);
+            const totalStr = `Q${finalTotal.toLocaleString()}`;
 
             try {
                 const resRef = collection(db, 'artifacts', currentAppId, 'public', 'data', 'reservations');
@@ -879,7 +927,6 @@
             const loc = document.getElementById('detailLocation').value;
             const time = document.getElementById('detailTime').value;
             if(!loc || !time) return window.showNotif("Seleccioná lugar y horario.");
-            if(time < "07:00" || time > "17:00") return window.showNotif("Horario fuera de servicio (7am-5pm).");
             
             document.getElementById('booking-step-1').classList.add('hidden');
             document.getElementById('booking-step-2').classList.remove('hidden');
@@ -896,7 +943,6 @@
             });
         };
 
-        // --- CALENDARIO ---
         window.generateCalendar = (gridId) => {
             const grid = document.getElementById(gridId);
             if(!grid) return;
@@ -1000,8 +1046,7 @@
                 if (days === 0) days = 1;
                 
                 if (days >= 1 && days <= 3) msg = "Renta 4 días o más para un descuento especial.";
-                else if (days >= 4 && days <= 8) msg = "¡Descuento del 6% aplicado!";
-                else if (days >= 9) msg = "¡Descuento del 8% aplicado!";
+                else if (days >= 4) msg = "¡Descuento especial aplicado!";
             }
 
             const hmMsg = document.getElementById('homeDiscountMsg');
@@ -1025,7 +1070,7 @@
             });
         };
 
-        // --- ADMIN: INVENTARIO ---
+        // --- ADMIN: INVENTARIO Y EDICIÓN ---
         window.renderAdminCars = () => {
             const list = document.getElementById('admin-car-list');
             if (!list) return;
@@ -1044,25 +1089,63 @@
                 return `
                 <div class="flex flex-col md:flex-row md:items-center justify-between p-4 border rounded-lg bg-gray-50 hover:bg-white transition-colors gap-4">
                     <div class="flex items-start gap-4">
-                        <img src="${car.images[0]}" class="w-20 h-14 object-cover rounded shadow-sm shrink-0">
+                        <img src="${car.images && car.images[0] ? car.images[0] : ''}" class="w-20 h-14 object-cover rounded shadow-sm shrink-0">
                         <div>
                             <p class="font-bold text-sm text-gray-900">${car.name}</p>
                             <p class="text-[10px] text-gray-500 font-medium uppercase tracking-widest mt-0.5">${car.type} • ${car.transmission || 'Automático'} • Q${car.price}/día</p>
                             ${blockedHtml}
                         </div>
                     </div>
-                    <div class="flex md:flex-col lg:flex-row gap-2 shrink-0 self-end md:self-auto">
+                    <div class="flex flex-wrap gap-2 shrink-0 self-end md:self-auto">
+                        <button onclick="editCar('${car.id}')" class="text-gray-500 hover:text-brand-orange bg-white border border-gray-200 px-3 py-1.5 rounded text-[10px] font-bold uppercase transition-colors"><i class="fa-solid fa-pen mr-1"></i>Editar</button>
                         <button onclick="openBlockModal('${car.id}')" class="text-gray-500 hover:text-brand-orange bg-white border border-gray-200 px-3 py-1.5 rounded text-[10px] font-bold uppercase transition-colors"><i class="fa-solid fa-calendar-xmark mr-1"></i>Bloqueos</button>
-                        <button onclick="deleteCar('${car.id}')" class="text-red-500 hover:text-red-700 bg-white border border-gray-200 px-3 py-1.5 rounded text-[10px] font-bold uppercase transition-colors"><i class="fa-solid fa-trash mr-1"></i>Borrar</button>
+                        <button onclick="deleteCar('${car.id}')" class="text-red-500 hover:text-red-700 bg-white border border-gray-200 px-3 py-1.5 rounded text-[10px] font-bold uppercase transition-colors"><i class="fa-solid fa-trash mr-1"></i></button>
                     </div>
                 </div>
             `}).join('');
         };
 
+        window.editCar = (id) => {
+            const car = window.CARS.find(c => c.id === id);
+            if(!car) return;
+            window.editingCarId = id;
+            
+            document.getElementById('adminFormTitle').innerText = "1. Editar Vehículo";
+            document.getElementById('btnCancelEdit').classList.remove('hidden');
+            
+            document.getElementById('adminCarName').value = car.name;
+            document.getElementById('adminCarPrice').value = car.price;
+            document.getElementById('adminCarPriceHigh').value = car.highDemandPrice || car.price;
+            document.getElementById('adminCarType').value = car.type;
+            document.getElementById('adminCarTrans').value = car.transmission || '';
+            document.getElementById('adminCarPax').value = car.passengers || 4;
+            document.getElementById('adminCarLuggage').value = car.luggage || 2;
+            
+            document.querySelectorAll('.eq-checkbox').forEach(cb => {
+                cb.checked = car.equipment && car.equipment.includes(cb.value);
+            });
+
+            window.pendingCarImagesBase64 = [...(car.images || [])];
+            window.renderPendingImages();
+
+            document.getElementById('btnGuardarCarro').innerText = "Actualizar Vehículo";
+            window.scrollTo({ top: document.getElementById('adminForm').offsetTop - 100, behavior: 'smooth' });
+        };
+
+        window.cancelEditCar = () => {
+            window.editingCarId = null;
+            document.getElementById('adminFormTitle').innerText = "1. Agregar Carro Nuevo";
+            document.getElementById('btnCancelEdit').classList.add('hidden');
+            document.getElementById('adminForm').reset();
+            window.pendingCarImagesBase64 = [];
+            window.renderPendingImages();
+            document.getElementById('btnGuardarCarro').innerText = "Guardar Carro";
+        };
+
         window.addCar = async (e) => {
             if (e) e.preventDefault();
             const btn = document.getElementById('btnGuardarCarro');
-            btn.innerText = "Procesando fotos..."; btn.disabled = true;
+            btn.innerText = "Procesando..."; btn.disabled = true;
 
             const n = document.getElementById('adminCarName').value;
             const p = Number(document.getElementById('adminCarPrice').value);
@@ -1071,37 +1154,36 @@
             const trans = document.getElementById('adminCarTrans').value;
             const pax = Number(document.getElementById('adminCarPax').value);
             const lug = Number(document.getElementById('adminCarLuggage').value);
-            const fileInput = document.getElementById('adminCarImage');
             
             const eqCheckboxes = document.querySelectorAll('.eq-checkbox:checked');
             const selectedEq = Array.from(eqCheckboxes).map(cb => cb.value);
 
             try {
-                let base64Images = [];
-                if (fileInput.files && fileInput.files.length > 0) {
-                    for(let i=0; i<fileInput.files.length; i++) {
-                        base64Images.push(await compressImage(fileInput.files[i]));
-                    }
-                } else {
-                    throw new Error("Faltan fotos");
+                if (window.pendingCarImagesBase64.length === 0) {
+                    throw new Error("Debe existir al menos una foto principal.");
                 }
 
-                btn.innerText = "Guardando...";
-                const carsRef = collection(db, 'artifacts', currentAppId, 'public', 'data', 'cars');
-                await addDoc(carsRef, { 
+                const carData = { 
                     name: n, price: p, highDemandPrice: ph || p,
                     type: t, transmission: trans, passengers: pax, luggage: lug,
-                    images: base64Images, equipment: selectedEq, bookedRanges: [] 
-                });
+                    images: window.pendingCarImagesBase64, equipment: selectedEq
+                };
+
+                if(window.editingCarId) {
+                    await updateDoc(doc(db, 'artifacts', currentAppId, 'public', 'data', 'cars', window.editingCarId), carData);
+                    window.showNotif('¡Carro actualizado!');
+                } else {
+                    carData.bookedRanges = [];
+                    await addDoc(collection(db, 'artifacts', currentAppId, 'public', 'data', 'cars'), carData);
+                    window.showNotif('¡Carro guardado!'); 
+                }
                 
-                window.showNotif('¡Carro guardado!'); 
-                document.getElementById('adminForm').reset();
-                document.getElementById('fileNameDisplay').innerText = "Seleccionar Múltiples Fotos (Click aquí)";
-                document.getElementById('fileNameDisplay').classList.remove('text-green-600');
+                window.cancelEditCar();
             } catch(err) {
-                console.error(err); window.showNotif("Error al guardar");
+                console.error(err); window.showNotif(err.message || "Error al guardar");
             } finally {
-                btn.innerText = "Guardar Carro"; btn.disabled = false;
+                btn.disabled = false;
+                btn.innerText = window.editingCarId ? "Actualizar Vehículo" : "Guardar Carro";
             }
         };
 
@@ -1194,7 +1276,15 @@
             fillList('categoriesListAdmin', 'categories');
             fillList('equipmentListAdmin', 'equipment');
             fillList('locListAdmin', 'locations');
-            fillList('extraListAdmin', 'extras');
+
+            const extraListAdmin = document.getElementById('extraListAdmin');
+            if(extraListAdmin) {
+                extraListAdmin.innerHTML = (window.SETTINGS.extras || []).map((ex, i) => `
+                    <li class="flex justify-between items-center bg-gray-50 p-2 rounded border text-sm">
+                        <span>${ex.name} <strong class="text-brand-orange ml-1">${ex.price > 0 ? 'Q'+ex.price : '(Gratis)'}</strong></span>
+                        <button onclick="deleteSetting('extras', ${i})" class="text-red-500 hover:text-red-700"><i class="fa-solid fa-trash text-xs"></i></button>
+                    </li>`).join('');
+            }
 
             const hdList = document.getElementById('hdListAdmin');
             if(hdList) {
@@ -1232,7 +1322,7 @@
             if(bgInput.files && bgInput.files.length > 0) {
                 window.SETTINGS.hero.bgs = [];
                 for(let i=0; i<bgInput.files.length; i++) {
-                    window.SETTINGS.hero.bgs.push(await compressImage(bgInput.files[i]));
+                    window.SETTINGS.hero.bgs.push(await compressImage(bgInput.files[i], true)); // True para alta calidad
                 }
             }
             await window.saveSettingsToFirebase(); window.applyPublicSettings(); window.showNotif("¡Portada actualizada!"); bgInput.value = ''; 
@@ -1253,6 +1343,18 @@
             if (val && !(window.SETTINGS[key]||[]).includes(val)) {
                 if(!window.SETTINGS[key]) window.SETTINGS[key] = [];
                 window.SETTINGS[key].push(val); document.getElementById(inputId).value = '';
+                window.renderAdminSettings(); window.saveSettingsToFirebase(); window.applyPublicSettings();
+            }
+        };
+
+        window.addExtra = () => {
+            const name = document.getElementById('newExtraInput').value.trim();
+            const price = Number(document.getElementById('newExtraPrice').value || 0);
+            if (name) {
+                if(!window.SETTINGS.extras) window.SETTINGS.extras = [];
+                window.SETTINGS.extras.push({name, price}); 
+                document.getElementById('newExtraInput').value = '';
+                document.getElementById('newExtraPrice').value = '';
                 window.renderAdminSettings(); window.saveSettingsToFirebase(); window.applyPublicSettings();
             }
         };
@@ -1306,10 +1408,11 @@
                             ${res.status || 'Pendiente'}
                         </span>
                     </td>
-                    <td class="px-4 py-3 text-center">
-                        <button onclick="toggleReservationStatus('${res.id}', '${res.status || 'Pendiente'}')" class="text-xs font-bold uppercase ${isAttended ? 'text-gray-400 hover:text-gray-600' : 'text-green-500 hover:text-green-700'}">
-                            ${isAttended ? 'Marcar Pendiente' : 'Marcar Atendida'}
+                    <td class="px-4 py-3 text-center flex justify-center gap-2">
+                        <button onclick="toggleReservationStatus('${res.id}', '${res.status || 'Pendiente'}')" class="text-[10px] font-bold uppercase border px-2 py-1 rounded ${isAttended ? 'text-gray-400 hover:text-gray-600' : 'text-green-500 hover:bg-green-50'}">
+                            ${isAttended ? 'Pendiente' : 'Atender'}
                         </button>
+                        <button onclick="deleteReservation('${res.id}')" class="text-[10px] font-bold uppercase border px-2 py-1 rounded text-red-500 hover:bg-red-50"><i class="fa-solid fa-trash"></i></button>
                     </td>
                 </tr>
                 `;
@@ -1322,6 +1425,15 @@
                 await updateDoc(doc(db, 'artifacts', currentAppId, 'public', 'data', 'reservations', id), { status: newStatus });
                 window.showNotif("Estado actualizado.");
             } catch(e) { window.showNotif("Error al actualizar."); }
+        };
+
+        window.deleteReservation = async (id) => {
+            if(confirm('¿Seguro que querés borrar este registro de reserva? No se puede deshacer.')) {
+                try {
+                    await deleteDoc(doc(db, 'artifacts', currentAppId, 'public', 'data', 'reservations', id));
+                    window.showNotif('Reserva eliminada de la base de datos.');
+                } catch(e) { window.showNotif("Error al eliminar."); }
+            }
         };
 
         window.applyPublicSettings = () => {
@@ -1374,7 +1486,14 @@
             });
 
             onSnapshot(doc(db, 'artifacts', currentAppId, 'public', 'data', 'config', 'appSettings'), (docSnap) => {
-                if (docSnap.exists()) window.SETTINGS = { ...window.SETTINGS, ...docSnap.data() };
+                if (docSnap.exists()) {
+                    let data = docSnap.data();
+                    // Fix extras string compatibility for older versions
+                    if(data.extras && typeof data.extras[0] === 'string') {
+                        data.extras = data.extras.map(e => ({name: e, price: 0}));
+                    }
+                    window.SETTINGS = { ...window.SETTINGS, ...data };
+                }
                 else setDoc(docSnap.ref, window.SETTINGS);
                 window.applyPublicSettings(); window.renderAdminSettings();
             });
@@ -1392,7 +1511,18 @@
         }
 
         window.addEventListener('scroll', window.updateHeaderOnScroll);
+        
+        // Manejador del botón "Atrás" del navegador
+        window.addEventListener('popstate', (e) => {
+            if (e.state && e.state.view === 'detail') {
+                window.openDetail(e.state.id, true);
+            } else {
+                window.goHome(true);
+            }
+        });
+
         window.onload = () => { 
+            history.replaceState({ view: 'home' }, '', '#home');
             window.updateHeaderOnScroll(); window.generateCalendar('homeCalendarGrid'); 
             window.applyPublicSettings(); initApp();
         };
