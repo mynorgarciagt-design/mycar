@@ -57,13 +57,6 @@
         .fade-in { animation: fadeIn 0.4s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        .whatsapp-float { animation: pulse 2s infinite; }
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4); }
-            70% { box-shadow: 0 0 0 15px rgba(34, 197, 94, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
-        }
-
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
@@ -85,13 +78,13 @@
         <!-- HEADER -->
         <header class="fixed w-full z-[100] py-6 px-8 flex items-center justify-between text-white transition-all duration-500" id="mainHeader">
             <a class="text-3xl font-bold tracking-wider flex items-center gap-1 oswald cursor-pointer select-none" onclick="goHome()">
-                TURB<span class="bg-brand-orange text-white px-2 py-0.5 rounded cursor-pointer" ondblclick="openLoginModal(); event.stopPropagation();" title="Doble clic para Admin">O</span>
+                TURB<span class="bg-brand-orange text-white px-2 py-0.5 rounded cursor-pointer" ondblclick="openLoginModal(); event.stopPropagation();" title="Admin">O</span>
             </a>
             <nav class="hidden md:flex space-x-8 uppercase text-sm tracking-wide font-medium">
-                <a class="hover:text-brand-orange transition-colors text-white cursor-pointer" onclick="goHome()">Inicio</a>
-                <a class="hover:text-brand-orange transition-colors text-white cursor-pointer" onclick="scrollToFleet()">Flota</a>
-                <a class="hover:text-brand-orange transition-colors text-white cursor-pointer" href="#section-banners">Por qué elegirnos</a>
-                <a class="hover:text-brand-orange transition-colors text-white cursor-pointer" href="#section-faq">FAQ</a>
+                <a class="hover:text-brand-orange transition-colors text-white cursor-pointer" onclick="goHome()" data-en="Home">Inicio</a>
+                <a class="hover:text-brand-orange transition-colors text-white cursor-pointer" onclick="scrollToFleet()" data-en="Fleet">Flota</a>
+                <a class="hover:text-brand-orange transition-colors text-white cursor-pointer" href="#section-banners" data-en="Why Us">Por qué elegirnos</a>
+                <a class="hover:text-brand-orange transition-colors text-white cursor-pointer" href="#section-faq" data-en="FAQ">FAQ</a>
             </nav>
         </header>
 
@@ -107,19 +100,19 @@
                     <div class="bg-white rounded-lg p-8 shadow-2xl w-full max-w-3xl fade-in relative mb-10 calendar-wrapper">
                         <form class="grid grid-cols-1 md:grid-cols-3 gap-6" onsubmit="handleSearch(event)">
                             <div>
-                                <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Punto de Recogida</label>
+                                <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2" data-en="Pickup Point">Punto de Recogida</label>
                                 <select id="searchLocation" class="block w-full border-gray-100 rounded py-3 text-sm bg-gray-50 font-bold focus:ring-brand-orange">
                                     <!-- Dinamico -->
                                 </select>
                             </div>
                             <div class="relative">
-                                <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Fechas de Viaje</label>
+                                <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2" data-en="Travel Dates">Fechas de Viaje</label>
                                 <input id="dateInput" type="text" class="block w-full border-gray-100 rounded py-3 text-sm cursor-pointer bg-gray-50 font-bold focus:ring-brand-orange" value="Seleccionar fechas" readonly onclick="toggleCalendar(event, 'homeCalendarModal')">
                                 
                                 <div id="homeCalendarModal" class="calendar-modal bg-white rounded-xl border p-5 fade-in">
                                     <div class="flex gap-2 mb-4 text-center">
-                                        <div class="flex-1 bg-gray-50 p-2 rounded border"><p class="text-[9px] font-bold text-gray-400">Entrega</p><p id="startDateDisplay" class="text-xs font-bold text-gray-900">--/--/--</p></div>
-                                        <div class="flex-1 bg-gray-50 p-2 rounded border"><p class="text-[9px] font-bold text-gray-400">Devolución</p><p id="endDateDisplay" class="text-xs font-bold text-gray-900">--/--/--</p></div>
+                                        <div class="flex-1 bg-gray-50 p-2 rounded border"><p class="text-[9px] font-bold text-gray-400" data-en="Pickup">Entrega</p><p id="startDateDisplay" class="text-xs font-bold text-gray-900">--/--/--</p></div>
+                                        <div class="flex-1 bg-gray-50 p-2 rounded border"><p class="text-[9px] font-bold text-gray-400" data-en="Return">Devolución</p><p id="endDateDisplay" class="text-xs font-bold text-gray-900">--/--/--</p></div>
                                     </div>
                                     <div class="flex justify-between items-center mb-4">
                                         <button type="button" class="text-gray-800 p-2" onclick="changeMonth(event, -1, 'homeCalendar')"><i class="fa-solid fa-chevron-left"></i></button>
@@ -129,15 +122,15 @@
                                     <div class="grid grid-cols-7 gap-y-1" id="homeCalendarGrid"></div>
                                     <p id="homeDiscountMsg" class="text-[10px] text-brand-orange font-bold text-center mt-3 h-3"></p>
                                     <div class="mt-4 flex justify-end gap-2 border-t pt-4">
-                                        <button type="button" onclick="clearDates(event)" class="text-[10px] font-bold text-gray-400 uppercase">Limpiar</button>
-                                        <button type="button" onclick="applyDates(event, 'homeCalendarModal')" class="bg-brand-dark text-white text-[10px] font-bold px-4 py-2 rounded">Confirmar</button>
+                                        <button type="button" onclick="clearDates(event)" class="text-[10px] font-bold text-gray-400 uppercase" data-en="Clear">Limpiar</button>
+                                        <button type="button" onclick="applyDates(event, 'homeCalendarModal')" class="bg-brand-dark text-white text-[10px] font-bold px-4 py-2 rounded" data-en="Confirm">Confirmar</button>
                                     </div>
                                 </div>
                             </div>
                             <div>
-                                <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Horario (07:00 - 17:00)</label>
+                                <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2" data-en="Time (7am - 5pm)">Horario (07:00 - 17:00)</label>
                                 <select id="homeTime" class="block w-full border-gray-100 rounded py-3 text-sm bg-gray-50 font-bold focus:ring-brand-orange">
-                                    <option value="">Hora...</option>
+                                    <option value="" data-en="Time...">Hora...</option>
                                     <option value="07:00">07:00</option>
                                     <option value="08:00">08:00</option>
                                     <option value="09:00">09:00</option>
@@ -151,7 +144,7 @@
                                     <option value="17:00">17:00</option>
                                 </select>
                             </div>
-                            <button type="submit" class="md:col-span-3 w-full bg-brand-orange text-white font-bold py-4 rounded shadow-lg uppercase tracking-wider text-sm hover:bg-yellow-500 transition-colors">Buscar Vehículo</button>
+                            <button type="submit" class="md:col-span-3 w-full bg-brand-orange text-white font-bold py-4 rounded shadow-lg uppercase tracking-wider text-sm hover:bg-yellow-500 transition-colors" data-en="Search Vehicle">Buscar Vehículo</button>
                         </form>
                     </div>
                 </main>
@@ -160,38 +153,38 @@
             <!-- BANNERS: POR QUÉ ELEGIRNOS -->
             <section id="section-banners" class="py-20 bg-white px-8 md:px-16 lg:px-24">
                 <div class="text-center mb-16">
-                    <h2 class="oswald text-4xl uppercase font-bold tracking-tight text-gray-900 mb-4">Por qué elegir Turbo</h2>
-                    <p class="text-gray-500 max-w-2xl mx-auto">Te ofrecemos la mejor experiencia de renta de vehículos con beneficios exclusivos para que disfrutes tu viaje al máximo.</p>
+                    <h2 class="oswald text-4xl uppercase font-bold tracking-tight text-gray-900 mb-4" data-en="Why choose Turbo">Por qué elegir Turbo</h2>
+                    <p class="text-gray-500 max-w-2xl mx-auto" data-en="We offer the best car rental experience with exclusive benefits.">Te ofrecemos la mejor experiencia de renta de vehículos con beneficios exclusivos para que disfrutes tu viaje al máximo.</p>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-10 text-center">
                     <div class="p-6 rounded-xl border border-gray-100 bg-gray-50 shadow-sm hover:shadow-md transition-shadow">
                         <div class="w-16 h-16 bg-brand-orange text-white rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
                             <i class="fa-solid fa-bolt text-2xl"></i>
                         </div>
-                        <h3 class="font-bold text-xl mb-3 oswald uppercase">Reserva Rápida</h3>
-                        <p class="text-gray-500 text-sm">Proceso de reserva en menos de 2 minutos. Confirmación inmediata vía WhatsApp para que no pierdas tiempo.</p>
+                        <h3 class="font-bold text-xl mb-3 oswald uppercase" data-en="Fast Booking">Reserva Rápida</h3>
+                        <p class="text-gray-500 text-sm" data-en="Booking process in less than 2 minutes. Immediate confirmation.">Proceso de reserva en menos de 2 minutos. Confirmación inmediata vía WhatsApp para que no pierdas tiempo.</p>
                     </div>
                     <div class="p-6 rounded-xl border border-gray-100 bg-gray-50 shadow-sm hover:shadow-md transition-shadow">
                         <div class="w-16 h-16 bg-brand-orange text-white rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
                             <i class="fa-solid fa-headset text-2xl"></i>
                         </div>
-                        <h3 class="font-bold text-xl mb-3 oswald uppercase">Soporte 24/7</h3>
-                        <p class="text-gray-500 text-sm">Estamos para ti en cualquier momento. Asistencia en carretera y atención al cliente las 24 horas del día.</p>
+                        <h3 class="font-bold text-xl mb-3 oswald uppercase" data-en="24/7 Support">Soporte 24/7</h3>
+                        <p class="text-gray-500 text-sm" data-en="We are here for you anytime. Roadside assistance 24 hours a day.">Estamos para ti en cualquier momento. Asistencia en carretera y atención al cliente las 24 horas del día.</p>
                     </div>
                     <div class="p-6 rounded-xl border border-gray-100 bg-gray-50 shadow-sm hover:shadow-md transition-shadow">
                         <div class="w-16 h-16 bg-brand-orange text-white rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
                             <i class="fa-solid fa-tags text-2xl"></i>
                         </div>
-                        <h3 class="font-bold text-xl mb-3 oswald uppercase">Mejores Precios</h3>
-                        <p class="text-gray-500 text-sm">Garantizamos tarifas altamente competitivas sin cargos ocultos. Lo que ves al reservar es exactamente lo que pagas.</p>
+                        <h3 class="font-bold text-xl mb-3 oswald uppercase" data-en="Best Prices">Mejores Precios</h3>
+                        <p class="text-gray-500 text-sm" data-en="Highly competitive rates with no hidden fees. What you see is what you pay.">Garantizamos tarifas altamente competitivas sin cargos ocultos. Lo que ves al reservar es exactamente lo que pagas.</p>
                     </div>
                 </div>
             </section>
 
             <section id="section-fleet" class="py-20 bg-gray-100 px-8 md:px-16 lg:px-24 border-t border-gray-200">
                 <div class="flex justify-between items-end mb-10">
-                    <h2 class="oswald text-4xl uppercase font-bold tracking-tight text-gray-900">Nuestra Flota</h2>
-                    <p id="fleet-count" class="text-gray-500 text-sm font-medium">Cargando...</p>
+                    <h2 class="oswald text-4xl uppercase font-bold tracking-tight text-gray-900" data-en="Our Fleet">Nuestra Flota</h2>
+                    <p id="fleet-count" class="text-gray-500 text-sm font-medium"></p>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8" id="car-grid"></div>
             </section>
@@ -199,8 +192,8 @@
             <!-- FAQ SECTION -->
             <section id="section-faq" class="py-20 bg-white px-8 md:px-16 lg:px-24 border-t border-gray-200">
                 <div class="text-center mb-12">
-                    <h2 class="oswald text-4xl uppercase font-bold tracking-tight text-gray-900 mb-4">Preguntas Frecuentes</h2>
-                    <p class="text-gray-500 max-w-2xl mx-auto">Resolvemos tus dudas principales para que rentes sin preocupaciones.</p>
+                    <h2 class="oswald text-4xl uppercase font-bold tracking-tight text-gray-900 mb-4" data-en="Frequently Asked Questions">Preguntas Frecuentes</h2>
+                    <p class="text-gray-500 max-w-2xl mx-auto" data-en="We solve your main doubts so you can rent without worries.">Resolvemos tus dudas principales para que rentes sin preocupaciones.</p>
                 </div>
                 <div id="faq-public-container" class="max-w-3xl mx-auto space-y-4">
                     <!-- Dinámico -->
@@ -210,188 +203,229 @@
 
         <!-- DETALLE CARRO -->
         <section id="page-detail" class="hidden pt-32 pb-20 px-8 md:px-16 lg:px-24 fade-in min-h-screen bg-gray-50">
-            <button onclick="goHome()" class="mb-8 flex items-center gap-2 text-gray-500 hover:text-gray-900 font-bold text-xs uppercase transition-colors">
+            <button onclick="goHome()" class="mb-8 flex items-center gap-2 text-gray-500 hover:text-gray-900 font-bold text-xs uppercase transition-colors" data-en="← Back to Fleet">
                 <i class="fa-solid fa-arrow-left"></i> Regresar a la flota
             </button>
             <div id="detail-content"></div>
         </section>
 
-        <!-- ADMIN PANEL -->
-        <section id="admin-view" class="hidden pt-32 pb-20 px-8 md:px-16 lg:px-24 fade-in min-h-screen bg-gray-50">
-            <button onclick="goHome()" class="mb-8 flex items-center gap-2 text-gray-500 hover:text-gray-900 font-bold text-xs uppercase">
-                <i class="fa-solid fa-arrow-left"></i> Salir de Admin
-            </button>
-            <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- ADMIN PANEL REDISEÑADO -->
+        <section id="admin-view" class="hidden pt-28 pb-20 px-8 md:px-12 fade-in min-h-screen bg-gray-50 flex flex-col md:flex-row gap-6">
+            
+            <!-- Admin Sidebar Menu -->
+            <div class="w-full md:w-64 shrink-0 flex flex-col gap-2">
+                <button onclick="goHome()" class="mb-4 flex items-center gap-2 text-gray-500 hover:text-gray-900 font-bold text-xs uppercase pl-2">
+                    <i class="fa-solid fa-arrow-left"></i> Salir de Admin
+                </button>
                 
-                <!-- COLUMNA IZQUIERDA: Formulario principal e inventario -->
-                <div class="lg:col-span-2 space-y-8">
-                    <h2 class="oswald text-4xl font-bold uppercase">Gestión de Flota</h2>
-                    
-                    <div class="bg-white p-8 rounded-xl border shadow-sm">
-                        <div class="flex justify-between items-center mb-4 border-b pb-2">
-                            <h3 id="adminFormTitle" class="font-bold uppercase text-xs tracking-widest text-brand-orange">1. Agregar Carro Nuevo</h3>
-                            <button type="button" id="btnCancelEdit" onclick="cancelEditCar()" class="hidden text-[10px] bg-gray-200 hover:bg-gray-300 text-gray-700 px-3 py-1 rounded font-bold uppercase transition-colors"><i class="fa-solid fa-times mr-1"></i> Cancelar Edición</button>
-                        </div>
-                        
-                        <form id="adminForm" onsubmit="addCar(event)" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <input id="adminCarName" type="text" required class="md:col-span-2 border-gray-200 rounded py-3 text-sm bg-gray-50 focus:border-brand-orange" placeholder="Nombre del Vehículo">
-                            
-                            <div>
-                                <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Precio Normal (Q)</label>
-                                <input id="adminCarPrice" type="number" required class="w-full border-gray-200 rounded py-3 text-sm bg-gray-50 focus:border-brand-orange" placeholder="Ej. 450" oninput="document.getElementById('adminCarPriceHigh').value = Math.round(this.value * 1.1)">
-                            </div>
-                            <div>
-                                <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Precio Demanda Alta (Q) (+10%)</label>
-                                <input id="adminCarPriceHigh" type="number" required class="w-full border-gray-200 rounded py-3 text-sm bg-gray-50 focus:border-brand-orange" placeholder="Ej. 495">
-                            </div>
-
-                            <select id="adminCarType" required class="w-full border-gray-200 rounded py-3 text-sm bg-gray-50 focus:border-brand-orange">
-                                <option value="">Categoría...</option>
-                            </select>
-                            <select id="adminCarTrans" required class="w-full border-gray-200 rounded py-3 text-sm bg-gray-50 focus:border-brand-orange">
-                                <option value="">Transmisión...</option>
-                                <option value="Automático">Automático</option>
-                                <option value="Mecánico">Mecánico</option>
-                            </select>
-
-                            <div class="flex gap-4 md:col-span-2">
-                                <div class="flex-1 relative">
-                                    <span class="absolute left-3 top-3.5 text-gray-400"><i class="fa-solid fa-users"></i></span>
-                                    <input id="adminCarPax" type="number" min="1" required class="w-full pl-9 border-gray-200 rounded py-3 text-sm bg-gray-50 focus:border-brand-orange" placeholder="Pasajeros">
-                                </div>
-                                <div class="flex-1 relative">
-                                    <span class="absolute left-3 top-3.5 text-gray-400"><i class="fa-solid fa-suitcase"></i></span>
-                                    <input id="adminCarLuggage" type="number" min="0" required class="w-full pl-9 border-gray-200 rounded py-3 text-sm bg-gray-50 focus:border-brand-orange" placeholder="Maletas">
-                                </div>
-                            </div>
-                            
-                            <!-- Gestión de Fotos Progresiva -->
-                            <div class="md:col-span-2 border border-gray-200 rounded p-4 bg-gray-50">
-                                <label class="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-3">Galería de Fotos del Vehículo</label>
-                                <div id="pendingImagesPreview" class="flex flex-wrap gap-2 mb-3"></div>
-                                
-                                <div class="relative w-full border-2 border-dashed border-gray-300 rounded p-3 text-center hover:bg-gray-100 transition-colors cursor-pointer bg-white">
-                                    <input type="file" id="adminCarImage" accept="image/*" multiple class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" onchange="handleCarImages(this)">
-                                    <div class="text-xs text-gray-500 font-bold">
-                                        <i class="fa-solid fa-plus-circle mb-1 text-lg text-brand-orange"></i><br>
-                                        Agregar Fotos (La primera será la principal)
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="md:col-span-2 border-t pt-4 mt-2">
-                                <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">Equipamiento Incluido (Opcional)</label>
-                                <div id="adminEquipmentCheckboxes" class="flex flex-wrap gap-3"></div>
-                            </div>
-
-                            <button type="submit" id="btnGuardarCarro" class="md:col-span-2 mt-4 bg-brand-dark text-white font-bold py-3 rounded uppercase text-xs hover:bg-black transition-colors">Guardar Carro</button>
-                        </form>
-                    </div>
-
-                    <div class="bg-white p-8 rounded-xl border shadow-sm">
-                        <h3 class="font-bold uppercase text-xs tracking-widest mb-6 border-b pb-2 text-brand-orange">2. Inventario Actual</h3>
-                        <div id="admin-car-list" class="space-y-4"></div>
-                    </div>
-                </div>
-
-                <!-- COLUMNA DERECHA: Configuración del Sistema -->
-                <div class="space-y-8">
-                    
-                    <div class="bg-white p-6 rounded-xl border shadow-sm">
-                        <h3 class="font-bold uppercase text-xs tracking-widest mb-4 border-b pb-2 text-brand-orange">Diseño de Portada (Hero)</h3>
-                        <div class="space-y-3">
-                            <input type="text" id="adminHeroTitle" placeholder="Título principal" class="w-full border-gray-200 rounded text-sm bg-gray-50">
-                            <textarea id="adminHeroSubtitle" placeholder="Subtítulo corto" rows="2" class="w-full border-gray-200 rounded text-sm bg-gray-50"></textarea>
-                            <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-2">Imágenes de Fondo (Alta Calidad)</label>
-                            <input type="file" id="adminHeroBgInput" accept="image/*" multiple class="w-full text-xs text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:bg-gray-100 file:text-brand-dark cursor-pointer">
-                            <button onclick="saveHeroSettings()" class="w-full bg-brand-dark text-white py-2 rounded text-xs font-bold uppercase mt-2 hover:bg-black">Actualizar Portada</button>
-                        </div>
-                    </div>
-
-                    <div class="bg-white p-6 rounded-xl border shadow-sm border-red-100">
-                        <h3 class="font-bold uppercase text-xs tracking-widest mb-4 border-b pb-2 text-red-500"><i class="fa-solid fa-fire mr-1"></i> Fechas de Demanda Alta</h3>
-                        <div class="flex gap-2 mb-4">
-                            <input type="date" id="hdStartDate" class="flex-1 border-gray-200 rounded text-sm bg-gray-50 text-xs">
-                            <input type="date" id="hdEndDate" class="flex-1 border-gray-200 rounded text-sm bg-gray-50 text-xs">
-                            <button onclick="addHighDemand()" class="bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded text-xs font-bold"><i class="fa-solid fa-plus"></i></button>
-                        </div>
-                        <ul id="hdListAdmin" class="space-y-2"></ul>
-                    </div>
-
-                    <div class="bg-white p-6 rounded-xl border shadow-sm">
-                        <h3 class="font-bold uppercase text-xs tracking-widest mb-4 border-b pb-2">Lugares de Recogida</h3>
-                        <div class="flex gap-2 mb-4">
-                            <input type="text" id="newLocInput" placeholder="Ej. Aeropuerto" class="flex-1 border-gray-200 rounded text-sm bg-gray-50">
-                            <button onclick="addSettingString('locations', 'newLocInput')" class="bg-brand-dark text-white px-3 py-2 rounded text-xs font-bold"><i class="fa-solid fa-plus"></i></button>
-                        </div>
-                        <ul id="locListAdmin" class="space-y-2"></ul>
-                    </div>
-
-                    <div class="bg-white p-6 rounded-xl border shadow-sm">
-                        <h3 class="font-bold uppercase text-xs tracking-widest mb-4 border-b pb-2">Accesorios Extra (Cliente elige)</h3>
-                        <div class="flex gap-2 mb-4">
-                            <input type="text" id="newExtraInput" placeholder="Ej. Silla de bebé" class="flex-1 border-gray-200 rounded text-sm bg-gray-50">
-                            <input type="number" id="newExtraPrice" placeholder="Q (0 = Gratis)" class="w-24 border-gray-200 rounded text-sm bg-gray-50">
-                            <button onclick="addExtra()" class="bg-brand-dark text-white px-3 py-2 rounded text-xs font-bold"><i class="fa-solid fa-plus"></i></button>
-                        </div>
-                        <ul id="extraListAdmin" class="space-y-2"></ul>
-                    </div>
-
-                    <div class="bg-white p-6 rounded-xl border shadow-sm">
-                        <h3 class="font-bold uppercase text-xs tracking-widest mb-4 border-b pb-2">Categorías de Vehículos</h3>
-                        <div class="flex gap-2 mb-4">
-                            <input type="text" id="newCategoryInput" placeholder="Ej. Pickup" class="flex-1 border-gray-200 rounded text-sm bg-gray-50">
-                            <button onclick="addSettingString('categories', 'newCategoryInput')" class="bg-brand-dark text-white px-3 py-2 rounded text-xs font-bold"><i class="fa-solid fa-plus"></i></button>
-                        </div>
-                        <ul id="categoriesListAdmin" class="space-y-2"></ul>
-                    </div>
-
-                    <div class="bg-white p-6 rounded-xl border shadow-sm">
-                        <h3 class="font-bold uppercase text-xs tracking-widest mb-4 border-b pb-2">Equipamiento Básico</h3>
-                        <div class="flex gap-2 mb-4">
-                            <input type="text" id="newEquipmentInput" placeholder="Ej. Apple CarPlay" class="flex-1 border-gray-200 rounded text-sm bg-gray-50">
-                            <button onclick="addSettingString('equipment', 'newEquipmentInput')" class="bg-brand-dark text-white px-3 py-2 rounded text-xs font-bold"><i class="fa-solid fa-plus"></i></button>
-                        </div>
-                        <ul id="equipmentListAdmin" class="space-y-2"></ul>
-                    </div>
-
-                    <div class="bg-white p-6 rounded-xl border shadow-sm">
-                        <h3 class="font-bold uppercase text-xs tracking-widest mb-4 border-b pb-2">Preguntas Frecuentes</h3>
-                        <div class="space-y-2 mb-4">
-                            <input type="text" id="newFaqQ" placeholder="Pregunta" class="w-full border-gray-200 rounded text-sm bg-gray-50">
-                            <textarea id="newFaqA" placeholder="Respuesta" rows="2" class="w-full border-gray-200 rounded text-sm bg-gray-50"></textarea>
-                            <button onclick="addFaq()" class="w-full bg-gray-200 text-gray-800 py-2 rounded text-xs font-bold uppercase hover:bg-gray-300">Agregar FAQ</button>
-                        </div>
-                        <ul id="faqAdminList" class="space-y-2 mt-4 pt-4 border-t"></ul>
-                    </div>
-                </div>
+                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest pl-2 mb-1">Opciones Principales</p>
+                <button onclick="switchAdminSection('sec-reservations')" class="admin-tab-btn w-full text-left px-4 py-2.5 rounded-lg font-bold text-sm bg-brand-dark text-white shadow-md transition-all"><i class="fa-solid fa-calendar-check w-6"></i> Reservas</button>
+                <button onclick="switchAdminSection('sec-addcar')" class="admin-tab-btn w-full text-left px-4 py-2.5 rounded-lg font-bold text-sm text-gray-600 hover:bg-gray-200 transition-all bg-transparent"><i class="fa-solid fa-car-side w-6"></i> Agregar Vehículo</button>
+                <button onclick="switchAdminSection('sec-inventory')" class="admin-tab-btn w-full text-left px-4 py-2.5 rounded-lg font-bold text-sm text-gray-600 hover:bg-gray-200 transition-all bg-transparent"><i class="fa-solid fa-list w-6"></i> Inventario Actual</button>
+                
+                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest pl-2 mt-4 mb-1">Configuración Web</p>
+                <button onclick="switchAdminSection('sec-hero')" class="admin-tab-btn w-full text-left px-4 py-2.5 rounded-lg font-bold text-sm text-gray-600 hover:bg-gray-200 transition-all bg-transparent"><i class="fa-solid fa-image w-6"></i> Diseño de Portada</button>
+                <button onclick="switchAdminSection('sec-demand')" class="admin-tab-btn w-full text-left px-4 py-2.5 rounded-lg font-bold text-sm text-gray-600 hover:bg-gray-200 transition-all bg-transparent"><i class="fa-solid fa-fire w-6 text-red-400"></i> Demanda Alta</button>
+                <button onclick="switchAdminSection('sec-locations')" class="admin-tab-btn w-full text-left px-4 py-2.5 rounded-lg font-bold text-sm text-gray-600 hover:bg-gray-200 transition-all bg-transparent"><i class="fa-solid fa-map-marker-alt w-6"></i> Lugares de Recogida</button>
+                <button onclick="switchAdminSection('sec-extras')" class="admin-tab-btn w-full text-left px-4 py-2.5 rounded-lg font-bold text-sm text-gray-600 hover:bg-gray-200 transition-all bg-transparent"><i class="fa-solid fa-plus-circle w-6"></i> Accesorios Extra</button>
+                <button onclick="switchAdminSection('sec-categories')" class="admin-tab-btn w-full text-left px-4 py-2.5 rounded-lg font-bold text-sm text-gray-600 hover:bg-gray-200 transition-all bg-transparent"><i class="fa-solid fa-layer-group w-6"></i> Categorías</button>
+                <button onclick="switchAdminSection('sec-equipment')" class="admin-tab-btn w-full text-left px-4 py-2.5 rounded-lg font-bold text-sm text-gray-600 hover:bg-gray-200 transition-all bg-transparent"><i class="fa-solid fa-cogs w-6"></i> Equipamiento</button>
+                <button onclick="switchAdminSection('sec-faqs')" class="admin-tab-btn w-full text-left px-4 py-2.5 rounded-lg font-bold text-sm text-gray-600 hover:bg-gray-200 transition-all bg-transparent"><i class="fa-solid fa-question-circle w-6"></i> Preguntas (FAQ)</button>
+                <button onclick="switchAdminSection('sec-regional')" class="admin-tab-btn w-full text-left px-4 py-2.5 rounded-lg font-bold text-sm text-gray-600 hover:bg-gray-200 transition-all bg-transparent"><i class="fa-solid fa-globe w-6 text-blue-400"></i> Ajustes Regionales</button>
             </div>
 
-            <!-- NUEVA SECCIÓN DE RESERVAS EN ADMIN -->
-            <div class="max-w-6xl mx-auto mt-8 bg-white p-8 rounded-xl border shadow-sm">
-                <h3 class="font-bold uppercase text-xs tracking-widest mb-6 border-b pb-2 text-brand-orange">3. Gestión de Reservas</h3>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left text-sm whitespace-nowrap">
-                        <thead class="uppercase tracking-wider border-b-2 text-gray-500 bg-gray-50 text-[10px]">
-                            <tr>
-                                <th class="px-4 py-3">Cliente</th>
-                                <th class="px-4 py-3">Vehículo</th>
-                                <th class="px-4 py-3">Fechas</th>
-                                <th class="px-4 py-3">Total</th>
-                                <th class="px-4 py-3 text-center">Estado</th>
-                                <th class="px-4 py-3 text-center">Acción</th>
-                            </tr>
-                        </thead>
-                        <tbody id="admin-reservations-list" class="divide-y divide-gray-100">
-                            <!-- Dinámico -->
-                        </tbody>
-                    </table>
+            <!-- Admin Content Area -->
+            <div class="flex-1 bg-white p-8 rounded-xl border shadow-sm min-h-[500px]">
+                
+                <!-- SEC: RESERVAS -->
+                <div id="sec-reservations" class="admin-section block fade-in">
+                    <h3 class="oswald text-2xl font-bold uppercase mb-6 border-b pb-4"><i class="fa-solid fa-calendar-check text-brand-orange mr-2"></i> Gestión de Reservas</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm whitespace-nowrap">
+                            <thead class="uppercase tracking-wider border-b-2 text-gray-500 bg-gray-50 text-[10px]">
+                                <tr>
+                                    <th class="px-4 py-3">Cliente</th>
+                                    <th class="px-4 py-3">Vehículo</th>
+                                    <th class="px-4 py-3">Fechas</th>
+                                    <th class="px-4 py-3">Total</th>
+                                    <th class="px-4 py-3 text-center">Estado</th>
+                                    <th class="px-4 py-3 text-center">Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-reservations-list" class="divide-y divide-gray-100">
+                                <!-- Dinámico -->
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
+
+                <!-- SEC: AGREGAR/EDITAR CARRO -->
+                <div id="sec-addcar" class="admin-section hidden fade-in max-w-3xl">
+                    <div class="flex justify-between items-center mb-6 border-b pb-4">
+                        <h3 id="adminFormTitle" class="oswald text-2xl font-bold uppercase"><i class="fa-solid fa-car-side text-brand-orange mr-2"></i> Agregar Vehículo Nuevo</h3>
+                        <button type="button" id="btnCancelEdit" onclick="cancelEditCar()" class="hidden text-[10px] bg-gray-200 hover:bg-gray-300 text-gray-700 px-3 py-1.5 rounded font-bold uppercase transition-colors"><i class="fa-solid fa-times mr-1"></i> Cancelar Edición</button>
+                    </div>
+                    <form id="adminForm" onsubmit="addCar(event)" class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <input id="adminCarName" type="text" required class="md:col-span-2 border-gray-200 rounded py-3 text-sm bg-gray-50 focus:border-brand-orange" placeholder="Nombre del Vehículo">
+                        
+                        <div>
+                            <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Precio Normal (Q)</label>
+                            <input id="adminCarPrice" type="number" required class="w-full border-gray-200 rounded py-3 text-sm bg-gray-50 focus:border-brand-orange" placeholder="Ej. 450" oninput="document.getElementById('adminCarPriceHigh').value = Math.round(this.value * 1.1)">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Precio Demanda Alta (Q) (+10%)</label>
+                            <input id="adminCarPriceHigh" type="number" required class="w-full border-gray-200 rounded py-3 text-sm bg-gray-50 focus:border-brand-orange" placeholder="Ej. 495">
+                        </div>
+
+                        <select id="adminCarType" required class="w-full border-gray-200 rounded py-3 text-sm bg-gray-50 focus:border-brand-orange"></select>
+                        <select id="adminCarTrans" required class="w-full border-gray-200 rounded py-3 text-sm bg-gray-50 focus:border-brand-orange">
+                            <option value="">Transmisión...</option>
+                            <option value="Automático">Automático</option>
+                            <option value="Mecánico">Mecánico</option>
+                        </select>
+
+                        <div class="flex gap-4 md:col-span-2">
+                            <div class="flex-1 relative">
+                                <span class="absolute left-3 top-3.5 text-gray-400"><i class="fa-solid fa-users"></i></span>
+                                <input id="adminCarPax" type="number" min="1" required class="w-full pl-9 border-gray-200 rounded py-3 text-sm bg-gray-50 focus:border-brand-orange" placeholder="Pasajeros">
+                            </div>
+                            <div class="flex-1 relative">
+                                <span class="absolute left-3 top-3.5 text-gray-400"><i class="fa-solid fa-suitcase"></i></span>
+                                <input id="adminCarLuggage" type="number" min="0" required class="w-full pl-9 border-gray-200 rounded py-3 text-sm bg-gray-50 focus:border-brand-orange" placeholder="Maletas">
+                            </div>
+                        </div>
+                        
+                        <!-- Gestión de Fotos Progresiva -->
+                        <div class="md:col-span-2 border border-gray-200 rounded p-4 bg-gray-50">
+                            <label class="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-3">Galería de Fotos del Vehículo</label>
+                            <div id="pendingImagesPreview" class="flex flex-wrap gap-2 mb-3"></div>
+                            <div class="relative w-full border-2 border-dashed border-gray-300 rounded p-4 text-center hover:bg-gray-100 transition-colors cursor-pointer bg-white">
+                                <input type="file" id="adminCarImage" accept="image/*" multiple class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" onchange="handleCarImages(this)">
+                                <div class="text-xs text-gray-500 font-bold">
+                                    <i class="fa-solid fa-plus-circle mb-1 text-2xl text-brand-orange"></i><br>
+                                    Agregar Fotos (La primera será la principal)
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="md:col-span-2 border-t pt-4 mt-2">
+                            <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">Equipamiento Incluido (Opcional)</label>
+                            <div id="adminEquipmentCheckboxes" class="flex flex-wrap gap-3"></div>
+                        </div>
+
+                        <button type="submit" id="btnGuardarCarro" class="md:col-span-2 mt-4 bg-brand-dark text-white font-bold py-4 rounded uppercase text-sm hover:bg-black transition-colors">Guardar Vehículo</button>
+                    </form>
+                </div>
+
+                <!-- SEC: INVENTARIO -->
+                <div id="sec-inventory" class="admin-section hidden fade-in">
+                    <h3 class="oswald text-2xl font-bold uppercase mb-6 border-b pb-4"><i class="fa-solid fa-list text-brand-orange mr-2"></i> Inventario Actual</h3>
+                    <div id="admin-car-list" class="space-y-4"></div>
+                </div>
+
+                <!-- SEC: HERO (PORTADA) -->
+                <div id="sec-hero" class="admin-section hidden fade-in max-w-2xl">
+                    <h3 class="oswald text-2xl font-bold uppercase mb-6 border-b pb-4"><i class="fa-solid fa-image text-brand-orange mr-2"></i> Diseño de Portada</h3>
+                    <div class="space-y-4">
+                        <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest">Título Principal</label>
+                        <input type="text" id="adminHeroTitle" class="w-full border-gray-200 rounded py-3 text-sm bg-gray-50">
+                        <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-4">Subtítulo Corto</label>
+                        <textarea id="adminHeroSubtitle" rows="3" class="w-full border-gray-200 rounded py-3 text-sm bg-gray-50"></textarea>
+                        <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-4">Imágenes de Fondo (Alta Calidad)</label>
+                        <div class="border border-dashed border-gray-300 rounded p-4 bg-gray-50">
+                            <input type="file" id="adminHeroBgInput" accept="image/*" multiple class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:bg-white file:font-bold file:text-brand-dark cursor-pointer shadow-sm">
+                        </div>
+                        <button onclick="saveHeroSettings()" class="w-full bg-brand-dark text-white py-3 rounded text-xs font-bold uppercase mt-4 hover:bg-black">Actualizar Portada</button>
+                    </div>
+                </div>
+
+                <!-- SEC: DEMANDA ALTA -->
+                <div id="sec-demand" class="admin-section hidden fade-in max-w-2xl">
+                    <h3 class="oswald text-2xl font-bold uppercase mb-6 border-b pb-4"><i class="fa-solid fa-fire text-red-500 mr-2"></i> Fechas de Demanda Alta</h3>
+                    <div class="flex gap-2 mb-6">
+                        <input type="date" id="hdStartDate" class="flex-1 border-gray-200 rounded py-3 bg-gray-50 text-sm">
+                        <input type="date" id="hdEndDate" class="flex-1 border-gray-200 rounded py-3 bg-gray-50 text-sm">
+                        <button onclick="addHighDemand()" class="bg-red-500 hover:bg-red-600 text-white px-5 rounded font-bold transition-colors"><i class="fa-solid fa-plus"></i> Añadir Rango</button>
+                    </div>
+                    <ul id="hdListAdmin" class="space-y-3"></ul>
+                </div>
+
+                <!-- SEC: LUGARES DE RECOGIDA -->
+                <div id="sec-locations" class="admin-section hidden fade-in max-w-xl">
+                    <h3 class="oswald text-2xl font-bold uppercase mb-6 border-b pb-4"><i class="fa-solid fa-map-marker-alt text-brand-orange mr-2"></i> Lugares de Recogida</h3>
+                    <div class="flex gap-2 mb-6">
+                        <input type="text" id="newLocInput" placeholder="Ej. Aeropuerto" class="flex-1 border-gray-200 rounded py-3 bg-gray-50 text-sm">
+                        <button onclick="addSettingString('locations', 'newLocInput')" class="bg-brand-dark hover:bg-black text-white px-5 rounded font-bold"><i class="fa-solid fa-plus"></i></button>
+                    </div>
+                    <ul id="locListAdmin" class="space-y-3"></ul>
+                </div>
+
+                <!-- SEC: EXTRAS -->
+                <div id="sec-extras" class="admin-section hidden fade-in max-w-2xl">
+                    <h3 class="oswald text-2xl font-bold uppercase mb-6 border-b pb-4"><i class="fa-solid fa-plus-circle text-brand-orange mr-2"></i> Accesorios Extra</h3>
+                    <p class="text-xs text-gray-500 mb-4">Estos accesorios los elegirá el cliente al momento de reservar. Deja el precio en 0 si es gratis.</p>
+                    <div class="flex gap-2 mb-6">
+                        <input type="text" id="newExtraInput" placeholder="Nombre (Ej. Silla de bebé)" class="flex-1 border-gray-200 rounded py-3 bg-gray-50 text-sm">
+                        <input type="number" id="newExtraPrice" placeholder="Precio Q (0 = Gratis)" class="w-36 border-gray-200 rounded py-3 bg-gray-50 text-sm">
+                        <button onclick="addExtra()" class="bg-brand-dark hover:bg-black text-white px-5 rounded font-bold"><i class="fa-solid fa-plus"></i></button>
+                    </div>
+                    <ul id="extraListAdmin" class="space-y-3"></ul>
+                </div>
+
+                <!-- SEC: CATEGORÍAS -->
+                <div id="sec-categories" class="admin-section hidden fade-in max-w-xl">
+                    <h3 class="oswald text-2xl font-bold uppercase mb-6 border-b pb-4"><i class="fa-solid fa-layer-group text-brand-orange mr-2"></i> Categorías de Vehículos</h3>
+                    <div class="flex gap-2 mb-6">
+                        <input type="text" id="newCategoryInput" placeholder="Ej. SUV, Pickup, Lujo" class="flex-1 border-gray-200 rounded py-3 bg-gray-50 text-sm">
+                        <button onclick="addSettingString('categories', 'newCategoryInput')" class="bg-brand-dark hover:bg-black text-white px-5 rounded font-bold"><i class="fa-solid fa-plus"></i></button>
+                    </div>
+                    <ul id="categoriesListAdmin" class="space-y-3"></ul>
+                </div>
+
+                <!-- SEC: EQUIPAMIENTO BÁSICO -->
+                <div id="sec-equipment" class="admin-section hidden fade-in max-w-xl">
+                    <h3 class="oswald text-2xl font-bold uppercase mb-6 border-b pb-4"><i class="fa-solid fa-cogs text-brand-orange mr-2"></i> Equipamiento Básico</h3>
+                    <p class="text-xs text-gray-500 mb-4">Estas opciones te aparecerán como casillas cuando estés agregando un carro nuevo.</p>
+                    <div class="flex gap-2 mb-6">
+                        <input type="text" id="newEquipmentInput" placeholder="Ej. Apple CarPlay" class="flex-1 border-gray-200 rounded py-3 bg-gray-50 text-sm">
+                        <button onclick="addSettingString('equipment', 'newEquipmentInput')" class="bg-brand-dark hover:bg-black text-white px-5 rounded font-bold"><i class="fa-solid fa-plus"></i></button>
+                    </div>
+                    <ul id="equipmentListAdmin" class="space-y-3"></ul>
+                </div>
+
+                <!-- SEC: FAQS -->
+                <div id="sec-faqs" class="admin-section hidden fade-in max-w-3xl">
+                    <h3 class="oswald text-2xl font-bold uppercase mb-6 border-b pb-4"><i class="fa-solid fa-question-circle text-brand-orange mr-2"></i> Preguntas Frecuentes</h3>
+                    <div class="space-y-3 mb-6 bg-gray-50 p-6 rounded-lg border border-gray-200">
+                        <input type="text" id="newFaqQ" placeholder="Pregunta (Ej. ¿Aceptan mascotas?)" class="w-full border-gray-200 rounded py-3 text-sm">
+                        <textarea id="newFaqA" placeholder="Respuesta detallada..." rows="3" class="w-full border-gray-200 rounded py-3 text-sm"></textarea>
+                        <button onclick="addFaq()" class="bg-brand-dark text-white px-6 py-2.5 rounded font-bold uppercase text-xs hover:bg-black">Guardar FAQ</button>
+                    </div>
+                    <ul id="faqAdminList" class="space-y-4"></ul>
+                </div>
+
+                <!-- SEC: REGIONAL -->
+                <div id="sec-regional" class="admin-section hidden fade-in max-w-xl">
+                    <h3 class="oswald text-2xl font-bold uppercase mb-6 border-b pb-4"><i class="fa-solid fa-globe text-blue-500 mr-2"></i> Ajustes Regionales</h3>
+                    <div class="space-y-5 bg-blue-50 p-6 rounded-lg border border-blue-100">
+                        <div>
+                            <label class="block text-[10px] font-bold text-gray-600 uppercase tracking-widest mb-1">Tasa de Cambio (1 USD = ? GTQ)</label>
+                            <input type="number" step="0.01" id="adminExchangeRate" placeholder="Ej. 7.7" class="w-full border-gray-200 rounded py-3 text-sm shadow-sm">
+                            <p class="text-[10px] text-gray-500 mt-1">Usada para calcular automáticamente precios en el extranjero.</p>
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-bold text-gray-600 uppercase tracking-widest mb-1">Email de Notificaciones</label>
+                            <input type="email" id="adminContactEmail" placeholder="ejemplo@turbo.com" class="w-full border-gray-200 rounded py-3 text-sm shadow-sm">
+                        </div>
+                        <button onclick="saveRegionalSettings()" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded text-sm font-bold uppercase shadow-md transition-colors">Guardar Configuración</button>
+                    </div>
+                </div>
+
             </div>
         </section>
 
         <!-- FOOTER -->
-        <footer id="mainFooter" class="py-8 bg-gray-900 text-center text-gray-500 text-sm w-full">
+        <footer id="mainFooter" class="py-8 bg-gray-900 text-center text-gray-500 text-sm w-full" data-en="&copy; 2025 All rights reserved.">
             &copy; 2025 Todos los derechos reservados.
         </footer>
 
@@ -447,9 +481,6 @@
         import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, collection, doc, addDoc, updateDoc, deleteDoc, onSnapshot, setDoc, arrayUnion, arrayRemove } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // ==========================================
-        // CONFIGURACIÓN DE FIREBASE
-        // ==========================================
         const myFirebaseConfig = {
             apiKey: "AIzaSyDN5m6y0D06qmjxC5aJgTIJgFqWTrkWM3g",
             authDomain: "mycar-532b2.firebaseapp.com",
@@ -465,20 +496,79 @@
         window.editingCarId = null;
         window.pendingCarImagesBase64 = [];
 
-        // --- ESTADO GLOBAL ---
+        // --- I18N Y VARIABLES GLOBALES ---
         window.CARS = [];
         window.RESERVATIONS = [];
         window.searchData = { location: '', time: '' }; 
-        
+        window.CURRENCY = 'GTQ';
+        window.LANG = 'es';
+
+        const i18n = {
+            es: {
+                dates: "Seleccionar fechas", locPlaceholder: "Seleccionar ubicación", clear: "Limpiar", confirm: "Confirmar",
+                avail: "disponibles", pax: "Pasajeros", lug: "Maletas", day: "Día", 
+                totalBase: "Tarifa base:", highDem: "(Demanda Alta)",
+                volDisc: "¡Descuento especial por volumen aplicado!",
+                promoMsg: "Renta 4 días o más para un descuento especial.",
+                applyMsg: "¡Descuento especial aplicado!",
+                totalFor: "Total por {d} día(s):",
+                addExt: "Añadir Extras a tu reserva", free: "(Gratis)",
+                reqDates: "Fechas requeridas", accDates: "Aceptar Fechas",
+                pickupLoc: "Recogida", timeLoc: "Hora (7am-5pm)", contRes: "Continuar Reserva",
+                urData: "Tus Datos", name: "Nombre completo", phone: "Número de WhatsApp", email: "Correo electrónico", address: "Dirección de hospedaje",
+                info1: "El mismo horario y lugar de recogida serán considerados para la entrega del vehículo.",
+                info2: "Importante: Depósito con Tarjeta de Crédito",
+                info3: "Se debe tener disponible un depósito de <strong>{amt}</strong> en su tarjeta de crédito para completar la renta. Debe tener este monto disponible en su tarjeta de crédito al momento de recoger el vehículo. Esta es una retención/autorización, no un cargo.",
+                btnComp: "Finalizar Reserva", btnBack: "← Regresar a detalles",
+                errData: "Llená tus datos de contacto para finalizar.", errDates: "Elegí fechas de viaje.", errLoc: "Seleccioná lugar y horario.",
+                process: "Procesando...", success: "¡Reserva enviada exitosamente!", errRes: "Error al procesar reserva",
+                noFaq: "Aún no hay preguntas.", successContact: "¡Reserva recibida! Nos pondremos en contacto contigo pronto."
+            },
+            en: {
+                dates: "Select dates", locPlaceholder: "Select location", clear: "Clear", confirm: "Confirm",
+                avail: "available", pax: "Passengers", lug: "Luggage", day: "Day", 
+                totalBase: "Base rate:", highDem: "(High Demand)",
+                volDisc: "Special volume discount applied!",
+                promoMsg: "Rent 4 days or more for a special discount.",
+                applyMsg: "Special discount applied!",
+                totalFor: "Total for {d} day(s):",
+                addExt: "Add Extras to your booking", free: "(Free)",
+                reqDates: "Required dates", accDates: "Accept Dates",
+                pickupLoc: "Pickup", timeLoc: "Time (7am-5pm)", contRes: "Continue Booking",
+                urData: "Your Details", name: "Full Name", phone: "WhatsApp Number", email: "Email address", address: "Accommodation address",
+                info1: "The same time and pickup location will be considered for vehicle return.",
+                info2: "Important: Credit Card Deposit",
+                info3: "A deposit of <strong>{amt}</strong> must be available on your credit card to complete the rental. You must have this amount available on your credit card at the time of vehicle pickup. This is a hold/authorization, not a charge.",
+                btnComp: "Complete Booking", btnBack: "← Back to details",
+                errData: "Fill your contact details to finish.", errDates: "Choose travel dates.", errLoc: "Select location and time.",
+                process: "Processing...", success: "Booking successfully sent!", errRes: "Error processing booking",
+                noFaq: "No questions yet.", successContact: "Booking received! We will contact you soon."
+            }
+        };
+
+        window.T = (key, params={}) => {
+            let text = i18n[window.LANG][key] || key;
+            for(let k in params) text = text.replace(`{${k}}`, params[k]);
+            return text;
+        };
+
+        window.formatPrice = (priceInGTQ) => {
+            if (window.CURRENCY === 'USD') {
+                const rate = window.SETTINGS.exchangeRate || 7.7;
+                return `$${Math.round(priceInGTQ / rate).toLocaleString()}`;
+            }
+            return `Q${priceInGTQ.toLocaleString()}`;
+        };
+
         const defaultSettings = { 
+            exchangeRate: 7.7,
+            contactEmail: 'reservas@turbo.com',
             categories: ['SUV Compacto', 'Sedán', 'Pickup', 'Lujo', 'Familiar'], 
             equipment: ['A/C', 'Bluetooth', 'GPS', 'Cámara de Retroceso'],
             locations: ['Panajachel, Sololá', 'Aeropuerto La Aurora', 'Antigua Guatemala'],
             extras: [{name: 'Silla de bebé', price: 50}, {name: 'Seguro Premium', price: 0}],
             highDemandRanges: [],
-            faqs: [
-                { q: "¿Cuáles son los requisitos para rentar?", a: "DPI o Pasaporte vigente y licencia de conducir al día." }
-            ],
+            faqs: [{ q: "¿Cuáles son los requisitos para rentar?", a: "DPI o Pasaporte vigente y licencia de conducir al día." }],
             hero: {
                 title: "MAKE YOUR RIDE EASY & FAST WITH TURBO",
                 subtitle: "Explora Guatemala con estilo. Tu vehículo ideal te espera para la próxima aventura.",
@@ -499,31 +589,19 @@
 
         const ADMIN_PIN = "turbo2026";
 
-        window.openLoginModal = () => {
-            document.getElementById('loginModal').classList.remove('hidden');
-            document.getElementById('adminPassword').value = '';
-            document.getElementById('adminPassword').focus();
-        };
-
+        window.openLoginModal = () => { document.getElementById('loginModal').classList.remove('hidden'); document.getElementById('adminPassword').value = ''; document.getElementById('adminPassword').focus(); };
         window.closeLoginModal = () => document.getElementById('loginModal').classList.add('hidden');
-
         window.verifyAdmin = () => {
-            if(document.getElementById('adminPassword').value === ADMIN_PIN) {
-                window.closeLoginModal();
-                window.openAdmin();
-            } else window.showNotif("Contraseña incorrecta");
+            if(document.getElementById('adminPassword').value === ADMIN_PIN) { window.closeLoginModal(); window.openAdmin(); } 
+            else window.showNotif("Contraseña incorrecta");
         };
 
         window.showNotif = (msg) => {
             const n = document.getElementById('notif');
-            if (n) {
-                n.querySelector('p').innerText = msg;
-                n.classList.remove('translate-y-40');
-                setTimeout(() => n.classList.add('translate-y-40'), 4000);
-            }
+            if (n) { n.querySelector('p').innerText = msg; n.classList.remove('translate-y-40'); setTimeout(() => n.classList.add('translate-y-40'), 4000); }
         };
 
-        // --- MANEJO DE HISTORIAL (BOTON ATRAS NATIVO) ---
+        // --- MANEJO DE HISTORIAL ---
         window.goHome = (fromPopState = false) => {
             document.getElementById('page-detail').classList.add('hidden');
             document.getElementById('admin-view').classList.add('hidden');
@@ -534,15 +612,30 @@
             if (!fromPopState) history.pushState({ view: 'home' }, '', '#home');
         };
 
+        // --- SISTEMA ADMIN TABS ---
+        window.switchAdminSection = (sectionId) => {
+            document.querySelectorAll('.admin-section').forEach(el => el.classList.add('hidden'));
+            document.getElementById(sectionId).classList.remove('hidden');
+            
+            document.querySelectorAll('.admin-tab-btn').forEach(btn => {
+                if (btn.getAttribute('onclick').includes(sectionId)) {
+                    btn.classList.remove('text-gray-600', 'hover:bg-gray-200', 'bg-transparent');
+                    btn.classList.add('bg-brand-dark', 'text-white', 'shadow-md');
+                } else {
+                    btn.classList.add('text-gray-600', 'hover:bg-gray-200', 'bg-transparent');
+                    btn.classList.remove('bg-brand-dark', 'text-white', 'shadow-md');
+                }
+            });
+        };
+
         window.openAdmin = () => {
             document.getElementById('main-view').classList.add('hidden');
             document.getElementById('page-detail').classList.add('hidden');
             document.getElementById('mainFooter').classList.add('hidden');
             document.getElementById('admin-view').classList.remove('hidden');
             window.scrollTo(0, 0);
-            window.renderAdminCars();
-            window.renderAdminReservations();
-            window.renderAdminSettings(); 
+            window.renderAdminCars(); window.renderAdminReservations(); window.renderAdminSettings(); 
+            window.switchAdminSection('sec-reservations'); // Tab default
         };
         
         window.closeDetail = () => window.goHome(false);
@@ -579,18 +672,13 @@
             });
         };
 
-        // --- GESTION DE FOTOS DEL CARRO EN ADMIN ---
         window.handleCarImages = async (input) => {
             if(!input.files || input.files.length === 0) return;
             const btn = document.getElementById('btnGuardarCarro');
             btn.disabled = true; btn.innerText = "Procesando fotos...";
-            
-            for(let file of input.files) {
-                window.pendingCarImagesBase64.push(await compressImage(file, false));
-            }
-            input.value = ''; 
-            window.renderPendingImages();
-            btn.disabled = false; btn.innerText = window.editingCarId ? "Actualizar Vehículo" : "Guardar Carro";
+            for(let file of input.files) window.pendingCarImagesBase64.push(await compressImage(file, false));
+            input.value = ''; window.renderPendingImages();
+            btn.disabled = false; btn.innerText = window.editingCarId ? "Actualizar Vehículo" : "Guardar Vehículo";
         };
 
         window.renderPendingImages = () => {
@@ -608,18 +696,13 @@
             `).join('');
         };
 
-        window.removePendingImage = (index) => {
-            window.pendingCarImagesBase64.splice(index, 1);
-            window.renderPendingImages();
-        };
+        window.removePendingImage = (index) => { window.pendingCarImagesBase64.splice(index, 1); window.renderPendingImages(); };
 
-        // --- LÓGICA DE PRECIOS Y DEMANDA ALTA ---
         window.isHighDemand = (dateObj) => {
             if(!window.SETTINGS.highDemandRanges || !dateObj) return false;
             const checkTime = new Date(dateObj.y, dateObj.m, dateObj.d).getTime();
             return window.SETTINGS.highDemandRanges.some(r => {
-                const s = new Date(r.start).getTime();
-                const e = new Date(r.end).getTime();
+                const s = new Date(r.start).getTime(); const e = new Date(r.end).getTime();
                 return checkTime >= s && checkTime <= e;
             });
         };
@@ -644,38 +727,29 @@
                 if(days >= 4 && days <= 8) discountPct = 0.06;
                 else if(days >= 9) discountPct = 0.08;
 
-                // Extras calc
                 let extrasDaily = 0;
-                document.querySelectorAll('.client-extra-checkbox:checked').forEach(cb => {
-                    extrasDaily += parseFloat(cb.getAttribute('data-price') || 0);
-                });
+                document.querySelectorAll('.client-extra-checkbox:checked').forEach(cb => { extrasDaily += parseFloat(cb.getAttribute('data-price') || 0); });
 
                 let total = (subtotal * (1 - discountPct)) + (extrasDaily * days);
 
-                let html = `<p class="text-xs font-bold text-gray-500 mb-1">Tarifa base: Q${baseDaily.toLocaleString()}/día ${isHD ? '<span class="text-red-500">(Demanda Alta)</span>' : ''}</p>`;
+                let html = `<p class="text-xs font-bold text-gray-500 mb-1">${window.T('totalBase')} ${window.formatPrice(baseDaily)}/${window.T('day').toLowerCase()} ${isHD ? `<span class="text-red-500">${window.T('highDemand')}</span>` : ''}</p>`;
                 if(discountPct > 0) {
-                    html += `<p class="text-xs text-green-600 font-bold mb-1">¡Descuento especial por volumen aplicado!</p>`;
-                    html += `<div class="text-brand-orange text-2xl font-bold">Total por ${days} día(s): <span class="line-through text-gray-400 text-sm mr-2 font-normal">Q${subtotal.toLocaleString()}</span> Q${total.toLocaleString()}</div>`;
+                    html += `<p class="text-xs text-green-600 font-bold mb-1">${window.T('volDisc')}</p>`;
+                    html += `<div class="text-brand-orange text-2xl font-bold">${window.T('totalFor', {d: days})} <span class="line-through text-gray-400 text-sm mr-2 font-normal">${window.formatPrice(subtotal)}</span> ${window.formatPrice(total)}</div>`;
                 } else {
-                    html += `<div class="text-brand-orange text-2xl font-bold">Total por ${days} día(s): Q${total.toLocaleString()}</div>`;
+                    html += `<div class="text-brand-orange text-2xl font-bold">${window.T('totalFor', {d: days})} ${window.formatPrice(total)}</div>`;
                 }
                 el.innerHTML = html;
-            } else {
-                el.innerHTML = '';
-            }
+            } else el.innerHTML = '';
         };
 
-        window.changeMainImage = (src) => {
-            const img = document.getElementById('mainGalleryImage');
-            if(img) img.src = src;
-        };
+        window.changeMainImage = (src) => { const img = document.getElementById('mainGalleryImage'); if(img) img.src = src; };
 
-        // --- RENDER DE CARROS ---
         window.renderCars = (list = window.CARS) => {
             const grid = document.getElementById('car-grid');
             if(!grid) return;
             const countEl = document.getElementById('fleet-count');
-            if (countEl) countEl.innerText = `${list.length} disponibles`;
+            if (countEl) countEl.innerText = `${list.length} ${window.T('avail')}`;
             
             grid.innerHTML = list.map(car => `
                 <div class="bg-white rounded-lg overflow-hidden border shadow-sm cursor-pointer group flex flex-col h-full hover:shadow-lg transition-all" onclick="openDetail('${car.id}')">
@@ -687,15 +761,15 @@
                         <h3 class="oswald text-2xl font-bold uppercase text-gray-900 mb-4">${car.name}</h3>
                         
                         <div class="flex flex-wrap items-center gap-3 text-[11px] text-gray-500 font-bold mb-5 bg-gray-50 py-2 px-3 rounded w-fit">
-                            <span title="Pasajeros" class="flex items-center gap-1"><i class="fa-solid fa-users text-gray-400"></i> ${car.passengers || 4}</span>
+                            <span class="flex items-center gap-1"><i class="fa-solid fa-users text-gray-400"></i> ${car.passengers || 4}</span>
                             <span class="text-gray-300">|</span>
-                            <span title="Maletas" class="flex items-center gap-1"><i class="fa-solid fa-suitcase text-gray-400"></i> ${car.luggage || 2}</span>
+                            <span class="flex items-center gap-1"><i class="fa-solid fa-suitcase text-gray-400"></i> ${car.luggage || 2}</span>
                             <span class="text-gray-300">|</span>
-                            <span title="Transmisión" class="flex items-center gap-1"><i class="fa-solid fa-gear text-gray-400"></i> ${car.transmission || 'Automático'}</span>
+                            <span class="flex items-center gap-1"><i class="fa-solid fa-gear text-gray-400"></i> ${car.transmission || 'Auto'}</span>
                         </div>
 
                         <div class="mt-auto flex justify-between items-center pt-2">
-                            <p class="text-gray-900 font-bold text-2xl">Q${car.price.toLocaleString()} <span class="text-[10px] text-gray-400 uppercase font-normal">/ Día</span></p>
+                            <p class="text-gray-900 font-bold text-2xl">${window.formatPrice(car.price)} <span class="text-[10px] text-gray-400 uppercase font-normal">${window.T('perDay') || '/ Día'}</span></p>
                             <span class="w-10 h-10 bg-gray-50 rounded-full flex items-center justify-center text-gray-600 group-hover:bg-brand-orange group-hover:text-white transition-colors">
                                 <i class="fa-solid fa-arrow-right"></i>
                             </span>
@@ -708,11 +782,10 @@
         window.openDetail = (id, fromPopState = false) => {
             window.selectedCar = window.CARS.find(c => c.id === id);
             if (!window.selectedCar) return;
-
             if (!fromPopState) history.pushState({ view: 'detail', id: id }, '', '#car-' + id);
 
             const format = (d) => d ? `${String(d.d).padStart(2,'0')}/${String(d.m + 1).padStart(2,'0')}` : "";
-            const dateText = window.startDay && window.endDay ? `${format(window.startDay)} - ${format(window.endDay)}` : "Seleccionar fechas";
+            const dateText = window.startDay && window.endDay ? `${format(window.startDay)} - ${format(window.endDay)}` : window.T('dates');
 
             let eqHtml = '';
             if (window.selectedCar.equipment && window.selectedCar.equipment.length > 0) {
@@ -722,17 +795,16 @@
 
             let extrasCheckboxes = '';
             if(window.SETTINGS.extras && window.SETTINGS.extras.length > 0) {
-                extrasCheckboxes = `<div class="mb-4"><label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Añadir Extras a tu reserva</label><div class="flex flex-col gap-2">` + 
+                extrasCheckboxes = `<div class="mb-4"><label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">${window.T('addExt')}</label><div class="flex flex-col gap-2">` + 
                 window.SETTINGS.extras.map(ex => `
                     <label class="inline-flex items-center cursor-pointer bg-white border border-gray-200 rounded px-3 py-2 hover:bg-gray-50">
                         <input type="checkbox" onchange="window.updateTotalPrice()" class="client-extra-checkbox rounded text-brand-orange focus:ring-brand-orange w-4 h-4" value="${ex.name}" data-price="${ex.price}">
-                        <span class="ml-2 text-xs font-bold text-gray-700">${ex.name} <span class="text-brand-orange ml-1">${ex.price > 0 ? '+Q' + ex.price + '/día' : '(Gratis)'}</span></span>
+                        <span class="ml-2 text-xs font-bold text-gray-700">${ex.name} <span class="text-brand-orange ml-1">${ex.price > 0 ? '+'+window.formatPrice(ex.price)+'/'+window.T('day').toLowerCase() : window.T('free')}</span></span>
                     </label>
                 `).join('') + `</div></div>`;
             }
 
             const locOptions = (window.SETTINGS.locations || []).map(l => `<option value="${l}">${l}</option>`).join('');
-
             const mainImg = window.selectedCar.images && window.selectedCar.images[0] ? window.selectedCar.images[0] : '';
             const thumbsHtml = (window.selectedCar.images || []).map(img => `<img src="${img}" onclick="changeMainImage('${img}')" class="w-20 h-16 object-cover rounded cursor-pointer border-2 border-transparent hover:border-brand-orange transition-colors">`).join('');
 
@@ -748,41 +820,41 @@
                         <h1 class="oswald text-4xl font-bold uppercase mb-4">${window.selectedCar.name}</h1>
                         
                         <div class="flex flex-wrap gap-2 mb-6">
-                            <span class="bg-gray-100 text-gray-600 px-3 py-1.5 rounded text-[10px] font-bold uppercase"><i class="fa-solid fa-users text-gray-400 mr-1.5"></i>${window.selectedCar.passengers || 4} Pasajeros</span>
-                            <span class="bg-gray-100 text-gray-600 px-3 py-1.5 rounded text-[10px] font-bold uppercase"><i class="fa-solid fa-suitcase text-gray-400 mr-1.5"></i>${window.selectedCar.luggage || 2} Maletas</span>
-                            <span class="bg-gray-100 text-gray-600 px-3 py-1.5 rounded text-[10px] font-bold uppercase"><i class="fa-solid fa-gear text-gray-400 mr-1.5"></i>${window.selectedCar.transmission || 'Automático'}</span>
+                            <span class="bg-gray-100 text-gray-600 px-3 py-1.5 rounded text-[10px] font-bold uppercase"><i class="fa-solid fa-users text-gray-400 mr-1.5"></i>${window.selectedCar.passengers || 4} ${window.T('pax')}</span>
+                            <span class="bg-gray-100 text-gray-600 px-3 py-1.5 rounded text-[10px] font-bold uppercase"><i class="fa-solid fa-suitcase text-gray-400 mr-1.5"></i>${window.selectedCar.luggage || 2} ${window.T('lug')}</span>
+                            <span class="bg-gray-100 text-gray-600 px-3 py-1.5 rounded text-[10px] font-bold uppercase"><i class="fa-solid fa-gear text-gray-400 mr-1.5"></i>${window.selectedCar.transmission || 'Auto'}</span>
                             ${eqHtml}
                         </div>
 
                         <div class="mb-6 border-b pb-6">
-                            <p class="text-4xl font-bold text-brand-orange">Q${window.selectedCar.price} <span class="text-sm text-gray-400 uppercase font-normal">/ Día</span></p>
+                            <p class="text-4xl font-bold text-brand-orange">${window.formatPrice(window.selectedCar.price)} <span class="text-sm text-gray-400 uppercase font-normal">${window.T('perDay') || '/ Día'}</span></p>
                             <div id="detailTotalPrice" class="mt-3"></div>
                         </div>
                         
                         <div id="booking-step-1" class="space-y-4">
                             <div>
-                                <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Fechas requeridas</label>
+                                <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">${window.T('reqDates')}</label>
                                 <input type="text" id="detailDateInput" class="w-full rounded border-gray-200 py-3 bg-gray-50 font-bold cursor-pointer focus:ring-brand-orange" value="${dateText}" readonly onclick="toggleCalendar(event, 'detailCalendarModal')">
                             </div>
 
                             <div id="detailCalendarModal" class="calendar-modal bg-white rounded-xl border p-5">
                                 <div class="grid grid-cols-7 gap-y-1" id="detailCalendarGrid"></div>
                                 <p id="detailDiscountMsg" class="text-[10px] text-brand-orange font-bold text-center mt-3 h-3"></p>
-                                <button onclick="applyDates(event, 'detailCalendarModal')" class="w-full mt-4 bg-brand-dark text-white py-2 rounded font-bold uppercase text-xs hover:bg-black">Aceptar Fechas</button>
+                                <button onclick="applyDates(event, 'detailCalendarModal')" class="w-full mt-4 bg-brand-dark text-white py-2 rounded font-bold uppercase text-xs hover:bg-black">${window.T('accDates')}</button>
                             </div>
                             
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Recogida</label>
+                                    <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">${window.T('pickupLoc')}</label>
                                     <select id="detailLocation" class="w-full rounded border-gray-200 py-2 text-sm bg-gray-50 focus:ring-brand-orange">
-                                        <option value="">Lugar...</option>
+                                        <option value="">...</option>
                                         ${locOptions}
                                     </select>
                                 </div>
                                 <div>
-                                    <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Hora (7am-5pm)</label>
+                                    <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">${window.T('timeLoc')}</label>
                                     <select id="detailTime" class="w-full rounded border-gray-200 py-2 text-sm bg-gray-50 focus:ring-brand-orange">
-                                        <option value="">Hora...</option>
+                                        <option value="">...</option>
                                         <option value="07:00">07:00</option>
                                         <option value="08:00">08:00</option>
                                         <option value="09:00">09:00</option>
@@ -799,28 +871,29 @@
                             </div>
 
                             ${extrasCheckboxes}
-
-                            <button onclick="validateAndProceed()" class="w-full bg-brand-orange hover:bg-yellow-500 text-white font-bold py-4 rounded shadow-md uppercase transition-colors mt-2">Continuar Reserva</button>
+                            <button onclick="validateAndProceed()" class="w-full bg-brand-orange hover:bg-yellow-500 text-white font-bold py-4 rounded shadow-md uppercase transition-colors mt-2">${window.T('contRes')}</button>
                         </div>
 
                         <div id="booking-step-2" class="hidden space-y-4 fade-in">
-                            <p class="text-xs font-bold text-gray-500 uppercase tracking-widest border-b pb-2 mb-2">Tus Datos</p>
-                            <input id="clientName" type="text" class="w-full rounded border-gray-200 py-3 text-sm focus:ring-brand-orange" placeholder="Nombre completo">
-                            <input id="clientPhone" type="tel" class="w-full rounded border-gray-200 py-3 text-sm focus:ring-brand-orange" placeholder="Número de WhatsApp">
-                            <input id="clientEmail" type="email" class="w-full rounded border-gray-200 py-3 text-sm focus:ring-brand-orange" placeholder="Correo electrónico">
-                            <input id="clientAddress" type="text" class="w-full rounded border-gray-200 py-3 text-sm focus:ring-brand-orange" placeholder="Dirección de hospedaje">
+                            <p class="text-xs font-bold text-gray-500 uppercase tracking-widest border-b pb-2 mb-2">${window.T('urData')}</p>
+                            <input id="clientName" type="text" class="w-full rounded border-gray-200 py-3 text-sm focus:ring-brand-orange" placeholder="${window.T('name')}">
+                            <input id="clientPhone" type="tel" class="w-full rounded border-gray-200 py-3 text-sm focus:ring-brand-orange" placeholder="${window.T('phone')}">
+                            <input id="clientEmail" type="email" class="w-full rounded border-gray-200 py-3 text-sm focus:ring-brand-orange" placeholder="${window.T('email')}">
+                            <input id="clientAddress" type="text" class="w-full rounded border-gray-200 py-3 text-sm focus:ring-brand-orange" placeholder="${window.T('address')}">
                             
                             <div class="bg-gray-50 p-3 rounded border border-gray-100 mt-2">
-                                <p class="text-[10px] text-gray-500 font-medium leading-tight"><i class="fa-solid fa-circle-info mr-1 text-brand-orange"></i> El mismo horario y lugar de recogida serán considerados para la entrega del vehículo.</p>
+                                <p class="text-[10px] text-gray-500 font-medium leading-tight"><i class="fa-solid fa-circle-info mr-1 text-brand-orange"></i> ${window.T('info1')}</p>
                             </div>
 
                             <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4 rounded text-xs text-yellow-800">
-                                <p class="font-bold uppercase tracking-widest mb-1"><i class="fa-solid fa-triangle-exclamation mr-1"></i> Importante: Depósito con Tarjeta de Crédito</p>
-                                <p class="leading-relaxed">Se debe tener disponible un depósito de <strong>Q 10,000</strong> en su tarjeta de crédito para completar la renta. Debe tener este monto disponible en su tarjeta de crédito al momento de recoger el vehículo. Esta es una retención/autorización, no un cargo.</p>
+                                <p class="font-bold uppercase tracking-widest mb-1"><i class="fa-solid fa-triangle-exclamation mr-1"></i> ${window.T('info2')}</p>
+                                <p class="leading-relaxed">${window.T('info3', {amt: window.formatPrice(10000)})}</p>
                             </div>
 
-                            <button onclick="submitBooking(event)" class="w-full bg-[#25D366] hover:bg-[#128C7E] text-white font-bold py-4 rounded shadow-md uppercase transition-colors mt-2"><i class="fa-brands fa-whatsapp mr-2 text-xl align-middle"></i> Confirmar y Enviar</button>
-                            <button onclick="document.getElementById('booking-step-2').classList.add('hidden'); document.getElementById('booking-step-1').classList.remove('hidden');" class="w-full text-xs text-gray-400 font-bold uppercase hover:text-gray-600 py-2">← Regresar a detalles</button>
+                            <div class="grid grid-cols-1 gap-2 mt-4">
+                                <button onclick="submitBooking(event)" class="w-full bg-brand-dark hover:bg-black text-white font-bold py-4 rounded shadow-md uppercase transition-colors"><i class="fa-solid fa-check-circle mr-2 text-xl align-middle"></i> <span data-en="Complete Booking">${window.T('btnComp')}</span></button>
+                            </div>
+                            <button onclick="document.getElementById('booking-step-2').classList.add('hidden'); document.getElementById('booking-step-1').classList.remove('hidden');" class="w-full text-xs text-gray-400 font-bold uppercase hover:text-gray-600 py-2">${window.T('btnBack')}</button>
                         </div>
                     </div>
                 </div>
@@ -842,10 +915,8 @@
             if (e) e.preventDefault();
             const loc = document.getElementById('searchLocation');
             const time = document.getElementById('homeTime');
-
             if(loc) window.searchData.location = loc.value;
             if(time) window.searchData.time = time.value;
-            
             window.renderCars(window.getAvailableCars());
             window.scrollToFleet();
         };
@@ -859,17 +930,16 @@
             const location = document.getElementById('detailLocation').value;
             const time = document.getElementById('detailTime').value;
             
-            if(!n || !p || !email || !address) return window.showNotif("Llená tus datos de contacto para finalizar.");
+            if(!n || !p || !email || !address) return window.showNotif(window.T('errData'));
             
             const btn = e.target.closest('button');
             const originalBtnText = btn.innerHTML;
-            btn.innerText = "Procesando..."; btn.disabled = true;
+            btn.innerText = window.T('process'); btn.disabled = true;
 
             const fmt = (d) => `${String(d.d).padStart(2,'0')}/${String(d.m + 1).padStart(2,'0')}/${d.y}`;
             const startDate = fmt(window.startDay);
             const endDate = fmt(window.endDay);
 
-            // Re-calcular total
             const sTime = new Date(window.startDay.y, window.startDay.m, window.startDay.d).getTime();
             const eTime = new Date(window.endDay.y, window.endDay.m, window.endDay.d).getTime();
             let days = Math.ceil((eTime - sTime) / (1000 * 60 * 60 * 24));
@@ -888,46 +958,32 @@
             });
 
             let finalTotal = (subtotal * (1 - discountPct)) + (extrasDaily * days);
-            const totalStr = `Q${finalTotal.toLocaleString()}`;
+            const totalStr = window.formatPrice(finalTotal);
 
             try {
                 const resRef = collection(db, 'artifacts', currentAppId, 'public', 'data', 'reservations');
                 await addDoc(resRef, {
-                    carId: window.selectedCar.id,
-                    carName: window.selectedCar.name,
-                    clientName: n,
-                    clientPhone: p,
-                    clientEmail: email,
-                    clientAddress: address,
-                    pickupLocation: location,
-                    pickupTime: time,
-                    extras: extrasStr,
-                    startDate: startDate,
-                    endDate: endDate,
-                    totalPrice: totalStr,
+                    carId: window.selectedCar.id, carName: window.selectedCar.name,
+                    clientName: n, clientPhone: p, clientEmail: email, clientAddress: address,
+                    pickupLocation: location, pickupTime: time, extras: extrasStr,
+                    startDate: startDate, endDate: endDate, totalPrice: totalStr,
                     timestamp: new Date().toISOString()
                 });
-
-                const msg = `🚗 *Nueva Reserva en Turbo*\n\n*Vehículo:* ${window.selectedCar.name}\n*Total Estimado:* ${totalStr}\n\n*Fechas:* ${startDate} al ${endDate}\n*Horario:* ${time} hrs\n*Lugar:* ${location}\n\n*Extras Solicitados:*\n${extrasStr || 'Ninguno'}\n\n*Cliente:* ${n}\n*WhatsApp:* ${p}\n*Hospedaje:* ${address}`;
-                window.open(`https://wa.me/50258627567?text=${encodeURIComponent(msg)}`, '_blank');
                 
-                window.goHome();
-                window.showNotif("¡Reserva enviada exitosamente!");
+                window.goHome(); 
+                window.showNotif(window.T('successContact'));
             } catch(err) {
-                console.error(err);
-                window.showNotif("Error al procesar reserva");
+                console.error(err); window.showNotif(window.T('errRes'));
             } finally {
-                btn.innerHTML = originalBtnText;
-                btn.disabled = false;
+                if(btn) { btn.innerHTML = originalBtnText; btn.disabled = false; }
             }
         };
 
         window.validateAndProceed = () => {
-            if(!window.startDay || !window.endDay) return window.showNotif("Elegí fechas de viaje.");
+            if(!window.startDay || !window.endDay) return window.showNotif(window.T('errDates'));
             const loc = document.getElementById('detailLocation').value;
             const time = document.getElementById('detailTime').value;
-            if(!loc || !time) return window.showNotif("Seleccioná lugar y horario.");
-            
+            if(!loc || !time) return window.showNotif(window.T('errLoc'));
             document.getElementById('booking-step-1').classList.add('hidden');
             document.getElementById('booking-step-2').classList.remove('hidden');
         };
@@ -1026,7 +1082,7 @@
 
         window.updateAllDateDisplays = () => {
             const fmt = (d) => d ? `${String(d.d).padStart(2,'0')}/${String(d.m + 1).padStart(2,'0')}` : "";
-            const txt = window.startDay && window.endDay ? `${fmt(window.startDay)} - ${fmt(window.endDay)}` : "Seleccionar fechas";
+            const txt = window.startDay && window.endDay ? `${fmt(window.startDay)} - ${fmt(window.endDay)}` : window.T('dates');
             const inputHome = document.getElementById('dateInput');
             const inputDetail = document.getElementById('detailDateInput');
             
@@ -1045,8 +1101,8 @@
                 let days = Math.ceil((e - s) / (1000 * 60 * 60 * 24));
                 if (days === 0) days = 1;
                 
-                if (days >= 1 && days <= 3) msg = "Renta 4 días o más para un descuento especial.";
-                else if (days >= 4) msg = "¡Descuento especial aplicado!";
+                if (days >= 1 && days <= 3) msg = window.T('promoMsg');
+                else if (days >= 4) msg = window.T('applyMsg');
             }
 
             const hmMsg = document.getElementById('homeDiscountMsg');
@@ -1063,8 +1119,8 @@
             return window.CARS.filter(car => {
                 const booked = car.bookedRanges || [];
                 return !booked.some(range => {
-                    const blockStart = new Date(range.start).getTime();
-                    const blockEnd = new Date(range.end).getTime();
+                    const blockStart = new Date(range.start + 'T00:00:00').getTime();
+                    const blockEnd = new Date(range.end + 'T23:59:59').getTime();
                     return (searchStart <= blockEnd && searchEnd >= blockStart);
                 });
             });
@@ -1110,7 +1166,8 @@
             if(!car) return;
             window.editingCarId = id;
             
-            document.getElementById('adminFormTitle').innerText = "1. Editar Vehículo";
+            window.switchAdminSection('sec-addcar');
+            document.getElementById('adminFormTitle').innerHTML = '<i class="fa-solid fa-pen text-brand-orange mr-2"></i> Editar Vehículo';
             document.getElementById('btnCancelEdit').classList.remove('hidden');
             
             document.getElementById('adminCarName').value = car.name;
@@ -1121,10 +1178,7 @@
             document.getElementById('adminCarPax').value = car.passengers || 4;
             document.getElementById('adminCarLuggage').value = car.luggage || 2;
             
-            document.querySelectorAll('.eq-checkbox').forEach(cb => {
-                cb.checked = car.equipment && car.equipment.includes(cb.value);
-            });
-
+            document.querySelectorAll('.eq-checkbox').forEach(cb => { cb.checked = car.equipment && car.equipment.includes(cb.value); });
             window.pendingCarImagesBase64 = [...(car.images || [])];
             window.renderPendingImages();
 
@@ -1134,12 +1188,13 @@
 
         window.cancelEditCar = () => {
             window.editingCarId = null;
-            document.getElementById('adminFormTitle').innerText = "1. Agregar Carro Nuevo";
+            document.getElementById('adminFormTitle').innerHTML = '<i class="fa-solid fa-car-side text-brand-orange mr-2"></i> Agregar Vehículo Nuevo';
             document.getElementById('btnCancelEdit').classList.add('hidden');
             document.getElementById('adminForm').reset();
             window.pendingCarImagesBase64 = [];
             window.renderPendingImages();
-            document.getElementById('btnGuardarCarro').innerText = "Guardar Carro";
+            document.getElementById('btnGuardarCarro').innerText = "Guardar Vehículo";
+            window.switchAdminSection('sec-inventory');
         };
 
         window.addCar = async (e) => {
@@ -1159,9 +1214,7 @@
             const selectedEq = Array.from(eqCheckboxes).map(cb => cb.value);
 
             try {
-                if (window.pendingCarImagesBase64.length === 0) {
-                    throw new Error("Debe existir al menos una foto principal.");
-                }
+                if (window.pendingCarImagesBase64.length === 0) throw new Error("Debe existir al menos una foto principal.");
 
                 const carData = { 
                     name: n, price: p, highDemandPrice: ph || p,
@@ -1177,22 +1230,15 @@
                     await addDoc(collection(db, 'artifacts', currentAppId, 'public', 'data', 'cars'), carData);
                     window.showNotif('¡Carro guardado!'); 
                 }
-                
                 window.cancelEditCar();
-            } catch(err) {
-                console.error(err); window.showNotif(err.message || "Error al guardar");
-            } finally {
-                btn.disabled = false;
-                btn.innerText = window.editingCarId ? "Actualizar Vehículo" : "Guardar Carro";
-            }
+            } catch(err) { console.error(err); window.showNotif(err.message || "Error al guardar");
+            } finally { btn.disabled = false; btn.innerText = window.editingCarId ? "Actualizar Vehículo" : "Guardar Vehículo"; }
         };
 
         window.deleteCar = async (id) => {
             if(confirm('¿Seguro que querés borrar este carro definitivamente?')) {
-                try {
-                    await deleteDoc(doc(db, 'artifacts', currentAppId, 'public', 'data', 'cars', id));
-                    window.showNotif('Carro eliminado');
-                } catch(err) { window.showNotif('Error al borrar'); }
+                try { await deleteDoc(doc(db, 'artifacts', currentAppId, 'public', 'data', 'cars', id)); window.showNotif('Carro eliminado'); } 
+                catch(err) { window.showNotif('Error al borrar'); }
             }
         };
 
@@ -1227,9 +1273,7 @@
             if (!start || !end || start > end) return window.showNotif("Verifica las fechas");
 
             try {
-                await updateDoc(doc(db, 'artifacts', currentAppId, 'public', 'data', 'cars', currentBlockingCarId), {
-                    bookedRanges: arrayUnion({ start: start, end: end })
-                });
+                await updateDoc(doc(db, 'artifacts', currentAppId, 'public', 'data', 'cars', currentBlockingCarId), { bookedRanges: arrayUnion({ start: start, end: end }) });
                 window.showNotif("Fechas bloqueadas."); window.openBlockModal(currentBlockingCarId);
             } catch (err) { window.showNotif("Error."); }
         };
@@ -1237,9 +1281,7 @@
         window.removeBlock = async (carId, index) => {
             const car = window.CARS.find(c => c.id === carId);
             try {
-                await updateDoc(doc(db, 'artifacts', currentAppId, 'public', 'data', 'cars', carId), {
-                    bookedRanges: arrayRemove(car.bookedRanges[index])
-                });
+                await updateDoc(doc(db, 'artifacts', currentAppId, 'public', 'data', 'cars', carId), { bookedRanges: arrayRemove(car.bookedRanges[index]) });
                 window.openBlockModal(carId);
             } catch (err) { console.error(err); }
         };
@@ -1250,6 +1292,8 @@
                 document.getElementById('adminHeroTitle').value = window.SETTINGS.hero.title || '';
                 document.getElementById('adminHeroSubtitle').value = window.SETTINGS.hero.subtitle || '';
             }
+            document.getElementById('adminExchangeRate').value = window.SETTINGS.exchangeRate || 7.7;
+            document.getElementById('adminContactEmail').value = window.SETTINGS.contactEmail || 'reservas@turbo.com';
 
             const fillSelect = (id, list) => {
                 const el = document.getElementById(id);
@@ -1306,6 +1350,13 @@
                     </li>
                 `).join('');
             }
+        };
+
+        window.saveRegionalSettings = async () => {
+            window.SETTINGS.exchangeRate = Number(document.getElementById('adminExchangeRate').value) || 7.7;
+            window.SETTINGS.contactEmail = document.getElementById('adminContactEmail').value.trim();
+            await window.saveSettingsToFirebase();
+            window.showNotif("¡Configuración guardada!");
         };
 
         window.saveSettingsToFirebase = async () => {
@@ -1421,19 +1472,30 @@
 
         window.toggleReservationStatus = async (id, currentStatus) => {
             const newStatus = currentStatus === 'Atendida' ? 'Pendiente' : 'Atendida';
-            try {
-                await updateDoc(doc(db, 'artifacts', currentAppId, 'public', 'data', 'reservations', id), { status: newStatus });
-                window.showNotif("Estado actualizado.");
-            } catch(e) { window.showNotif("Error al actualizar."); }
+            try { await updateDoc(doc(db, 'artifacts', currentAppId, 'public', 'data', 'reservations', id), { status: newStatus }); window.showNotif("Estado actualizado."); } 
+            catch(e) { window.showNotif("Error al actualizar."); }
         };
 
         window.deleteReservation = async (id) => {
             if(confirm('¿Seguro que querés borrar este registro de reserva? No se puede deshacer.')) {
-                try {
-                    await deleteDoc(doc(db, 'artifacts', currentAppId, 'public', 'data', 'reservations', id));
-                    window.showNotif('Reserva eliminada de la base de datos.');
-                } catch(e) { window.showNotif("Error al eliminar."); }
+                try { await deleteDoc(doc(db, 'artifacts', currentAppId, 'public', 'data', 'reservations', id)); window.showNotif('Reserva eliminada de la base de datos.'); } 
+                catch(e) { window.showNotif("Error al eliminar."); }
             }
+        };
+
+        // --- TRADUCCIÓN DEL DOM ---
+        window.translateDOM = () => {
+            if (window.LANG !== 'en') return;
+            document.querySelectorAll('[data-en]').forEach(el => {
+                if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') el.placeholder = el.getAttribute('data-en');
+                else if (el.tagName === 'OPTION') el.innerText = el.getAttribute('data-en');
+                else {
+                    if(el.querySelector('i')) {
+                        const iconHtml = el.querySelector('i').outerHTML;
+                        el.innerHTML = iconHtml + ' ' + el.getAttribute('data-en');
+                    } else el.innerHTML = el.getAttribute('data-en');
+                }
+            });
         };
 
         window.applyPublicSettings = () => {
@@ -1459,11 +1521,11 @@
             }
 
             const locSelect = document.getElementById('searchLocation');
-            if(locSelect) locSelect.innerHTML = `<option value="">Seleccionar ubicación</option>` + (window.SETTINGS.locations||[]).map(l => `<option value="${l}">${l}</option>`).join('');
+            if(locSelect) locSelect.innerHTML = `<option value="" data-en="Select location">${window.LANG === 'en' ? 'Select location' : 'Seleccionar ubicación'}</option>` + (window.SETTINGS.locations||[]).map(l => `<option value="${l}">${l}</option>`).join('');
 
             const faqContainer = document.getElementById('faq-public-container');
             if (faqContainer) {
-                faqContainer.innerHTML = (!window.SETTINGS.faqs || window.SETTINGS.faqs.length === 0) ? '<p class="text-center text-gray-500">Aún no hay preguntas.</p>' : 
+                faqContainer.innerHTML = (!window.SETTINGS.faqs || window.SETTINGS.faqs.length === 0) ? `<p class="text-center text-gray-500">${window.T('noFaq')}</p>` : 
                 window.SETTINGS.faqs.map(faq => `
                     <div class="bg-gray-50 p-6 rounded-xl border border-gray-100 shadow-sm text-left">
                         <h4 class="font-bold text-lg mb-2 oswald uppercase tracking-wide"><i class="fa-solid fa-circle-question text-brand-orange mr-2"></i>${faq.q}</h4>
@@ -1471,6 +1533,27 @@
                     </div>`).join('');
             }
         };
+
+        // --- DETECCION DE UBICACION ---
+        async function detectUserLocation() {
+            try {
+                const res = await fetch('https://ipapi.co/json/');
+                const data = await res.json();
+                const country = data.country_code;
+                const langs = data.languages || ''; 
+                
+                if (country === 'US') {
+                    window.CURRENCY = 'USD'; window.LANG = 'en';
+                } else if (country === 'GT') {
+                    window.CURRENCY = 'GTQ'; window.LANG = 'es';
+                } else {
+                    window.CURRENCY = 'USD'; window.LANG = langs.includes('es') ? 'es' : 'en';
+                }
+            } catch (e) {
+                console.warn('Geolocalización falló. Usando default (GT/ES).');
+            }
+            if (window.LANG === 'en') window.translateDOM();
+        }
 
         // --- INIT APP ---
         function listenToData() {
@@ -1488,18 +1571,15 @@
             onSnapshot(doc(db, 'artifacts', currentAppId, 'public', 'data', 'config', 'appSettings'), (docSnap) => {
                 if (docSnap.exists()) {
                     let data = docSnap.data();
-                    // Fix extras string compatibility for older versions
-                    if(data.extras && typeof data.extras[0] === 'string') {
-                        data.extras = data.extras.map(e => ({name: e, price: 0}));
-                    }
+                    if(data.extras && typeof data.extras[0] === 'string') data.extras = data.extras.map(e => ({name: e, price: 0}));
                     window.SETTINGS = { ...window.SETTINGS, ...data };
-                }
-                else setDoc(docSnap.ref, window.SETTINGS);
-                window.applyPublicSettings(); window.renderAdminSettings();
+                } else setDoc(docSnap.ref, window.SETTINGS);
+                window.applyPublicSettings(); window.renderAdminSettings(); window.updateTotalPrice(); window.renderCars(window.getAvailableCars());
             });
         }
 
         async function initApp() {
+            await detectUserLocation(); // Detecta país ANTES de cargar los carros
             try {
                 const configToUse = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : myFirebaseConfig;
                 const appInstance = initializeApp(configToUse);
@@ -1511,14 +1591,9 @@
         }
 
         window.addEventListener('scroll', window.updateHeaderOnScroll);
-        
-        // Manejador del botón "Atrás" del navegador
         window.addEventListener('popstate', (e) => {
-            if (e.state && e.state.view === 'detail') {
-                window.openDetail(e.state.id, true);
-            } else {
-                window.goHome(true);
-            }
+            if (e.state && e.state.view === 'detail') window.openDetail(e.state.id, true);
+            else window.goHome(true);
         });
 
         window.onload = () => { 
