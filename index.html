@@ -19,7 +19,7 @@
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            transition: background-image 0.8s ease-in-out;
+            transition: background-image 0.5s ease-in-out;
         }
 
         header.scrolled {
@@ -499,6 +499,18 @@
     </div>
 
     <script type="module">
+        // PINTADO RÁPIDO DE PORTADA (CACHE PREVIO A FIREBASE)
+        try {
+            const cachedBg = localStorage.getItem('turboHeroBg');
+            const cachedTitle = localStorage.getItem('turboHeroTitle');
+            const cachedSub = localStorage.getItem('turboHeroSub');
+            if(cachedBg) {
+                document.getElementById('hero').style.backgroundImage = `linear-gradient(to right, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0) 100%), url('${cachedBg}')`;
+            }
+            if(cachedTitle) document.getElementById('heroTitle').innerText = cachedTitle;
+            if(cachedSub) document.getElementById('heroSubtitle').innerText = cachedSub;
+        } catch(e) {}
+
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, collection, doc, addDoc, updateDoc, deleteDoc, onSnapshot, setDoc, arrayUnion, arrayRemove } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
@@ -1056,24 +1068,22 @@
                 // Enviar por EmailJS si está configurado
                 if (window.SETTINGS.emailjsPublic && window.SETTINGS.emailjsService && window.SETTINGS.emailjsTemplate) {
                     try {
-                        await emailjs.send(
-                            window.SETTINGS.emailjsService, 
-                            window.SETTINGS.emailjsTemplate, 
-                            {
-                                car_name: window.selectedCar.name,
-                                total_price: totalStr,
-                                dates: `${startDate} al ${endDate}`,
-                                time: time,
-                                location: location,
-                                client_name: n,
-                                client_phone: p,
-                                client_email: email,
-                                client_address: address,
-                                extras: extrasStr || 'Ninguno'
-                            },
-                            window.SETTINGS.emailjsPublic
-                        );
-                    } catch(e) { console.log('Error enviando EmailJS', e); }
+                        emailjs.init(window.SETTINGS.emailjsPublic);
+                        const emailParams = {
+                            car_name: window.selectedCar.name,
+                            total_price: totalStr,
+                            dates: `${startDate} al ${endDate}`,
+                            time: time,
+                            location: location,
+                            client_name: n,
+                            client_phone: p,
+                            client_email: email,
+                            client_address: address,
+                            extras: extrasStr || 'Ninguno'
+                        };
+                        await emailjs.send(window.SETTINGS.emailjsService, window.SETTINGS.emailjsTemplate, emailParams);
+                        console.log('EmailJS enviado con éxito');
+                    } catch(e) { console.error('Error enviando EmailJS', e); }
                 }
                 
                 // Reinicio Total Automático de variables
@@ -1719,6 +1729,10 @@
                 if (docSnap.exists()) {
                     let data = docSnap.data();
                     if(data.extras && typeof data.extras[0] === 'string') data.extras = data.extras.map(e => ({name: e, price: 0}));
+                    // Proteger claves de EmailJS por si se guardó vacío antes
+                    if (!data.emailjsPublic) data.emailjsPublic = '4W40WME2FB2Ku9-vZ';
+                    if (!data.emailjsService) data.emailjsService = 'service_salcl6o';
+                    if (!data.emailjsTemplate) data.emailjsTemplate = 'template_vr6n7ll';
                     window.SETTINGS = { ...window.SETTINGS, ...data };
                 } else setDoc(docSnap.ref, window.SETTINGS);
                 window.applyPublicSettings(); window.renderAdminSettings(); window.updateTotalPrice(); window.renderCars(window.getAvailableCars());
