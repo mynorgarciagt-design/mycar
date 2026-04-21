@@ -6,13 +6,15 @@
     <title>Turbo - Car Rental</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"/>
-    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Inter Font (Similar a Google Sans) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- EmailJS Script -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 
     <style>
-        body { font-family: 'Roboto', sans-serif; scroll-behavior: smooth; background-color: #f9fafb; }
-        h1, h2, h3, .oswald { font-family: 'Oswald', sans-serif; }
+        body { font-family: 'Inter', sans-serif; scroll-behavior: smooth; background-color: #ffffff; color: #3c4043; }
         
         #hero {
             background-color: #111827;
@@ -23,116 +25,140 @@
         }
 
         header.scrolled {
-            background-color: #111827 !important;
+            background-color: rgba(255, 255, 255, 0.95) !important;
+            backdrop-filter: blur(10px);
+            color: #202124 !important;
             padding-top: 0.75rem;
             padding-bottom: 0.75rem;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 1px 2px 0 rgba(60,64,67,0.1), 0 2px 6px 2px rgba(60,64,67,0.05);
             z-index: 100;
         }
+        header.scrolled a { color: #202124 !important; }
+        header.scrolled .logo-text { color: #202124 !important; }
 
         .calendar-modal {
             display: none;
-            position: fixed !important;
-            top: 50% !important;
-            left: 50% !important;
-            transform: translate(-50%, -50%) !important;
+            position: absolute !important;
+            top: 100% !important;
+            left: 0 !important;
+            transform: none !important;
+            margin-top: 10px;
             z-index: 9999 !important;
-            width: 310px;
-            box-shadow: 0 0 0 100vmax rgba(0,0,0,0.6), 0 25px 50px -12px rgba(0,0,0,0.25) !important;
+            width: 320px;
+            border-radius: 1.5rem;
+            border: none;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 24px 38px 3px rgba(0, 0, 0, 0.14), 0 9px 46px 8px rgba(0, 0, 0, 0.12) !important;
+        }
+        @media (max-width: 768px) {
+            .calendar-modal {
+                position: fixed !important;
+                top: 50% !important;
+                left: 50% !important;
+                transform: translate(-50%, -50%) !important;
+                box-shadow: 0 0 0 100vmax rgba(0,0,0,0.6), 0 24px 38px 3px rgba(0, 0, 0, 0.14) !important;
+            }
         }
         
-        .calendar-day.selected {
-            background-color: #f59e0b !important;
-            color: white !important;
-            border-radius: 50%;
-        }
-        .calendar-day.in-range {
-            background-color: #fef3c7;
-            color: #92400e;
-        }
-        .calendar-day.disabled {
-            color: #d1d5db;
-            cursor: not-allowed;
-            pointer-events: none;
-            background-color: #f3f4f6;
-        }
+        .calendar-day.selected { background-color: #f59e0b !important; color: white !important; border-radius: 50%; }
+        .calendar-day.in-range { background-color: #fef3c7; color: #92400e; }
+        .calendar-day.disabled { color: #d1d5db; cursor: not-allowed; pointer-events: none; background-color: transparent; }
 
-        .fade-in { animation: fadeIn 0.4s ease-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .fade-in { animation: fadeIn 0.6s cubic-bezier(0.2, 0, 0, 1); }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
 
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* Google-like Inputs */
+        .g-input {
+            background-color: #f1f3f4;
+            border: 1px solid transparent;
+            transition: all 0.2s ease;
+        }
+        .g-input:focus {
+            background-color: #ffffff;
+            border-color: #f59e0b;
+            box-shadow: 0 1px 2px 0 rgba(60,64,67,0.1), 0 1px 3px 1px rgba(60,64,67,0.15);
+            outline: none;
+            ring: 0;
+        }
     </style>
     <script>
         tailwind.config = {
           theme: {
             extend: {
               colors: {
-                brand: { orange: '#f59e0b', dark: '#111827', yellow: '#fbbf24' }
+                brand: { orange: '#f59e0b', dark: '#202124', yellow: '#fbbf24', surface: '#f8f9fa', border: '#dadce0' }
               }
             }
           }
         }
     </script>
 </head>
-<body class="antialiased text-gray-800">
+<body class="antialiased">
 
     <div id="app">
         <!-- HEADER -->
-        <header class="fixed w-full z-[100] py-6 px-8 flex items-center justify-between text-white transition-all duration-500" id="mainHeader">
-            <a class="text-3xl font-bold tracking-wider flex items-center gap-1 oswald cursor-pointer select-none" onclick="goHome()">
-                TURB<span class="bg-brand-orange text-white px-2 py-0.5 rounded cursor-pointer" ondblclick="openLoginModal(); event.stopPropagation();" title="Admin">O</span>
+        <header class="fixed w-full z-[100] py-6 px-8 flex items-center justify-between text-white transition-all duration-300" id="mainHeader">
+            <a class="text-2xl font-bold tracking-tight flex items-center gap-1 cursor-pointer select-none logo-text" onclick="goHome()">
+                TURB<span class="bg-brand-orange text-white px-2 py-0.5 rounded-md cursor-pointer" ondblclick="openLoginModal(); event.stopPropagation();" title="Admin">O</span>
             </a>
-            <nav class="hidden md:flex space-x-8 uppercase text-sm tracking-wide font-medium">
-                <a class="hover:text-brand-orange transition-colors text-white cursor-pointer" onclick="goHome()" data-en="Home">Inicio</a>
-                <a class="hover:text-brand-orange transition-colors text-white cursor-pointer" onclick="scrollToFleet()" data-en="Fleet">Flota</a>
-                <a class="hover:text-brand-orange transition-colors text-white cursor-pointer" href="#section-banners" data-en="Why Us">Por qué elegirnos</a>
-                <a class="hover:text-brand-orange transition-colors text-white cursor-pointer" href="#section-faq" data-en="FAQ">FAQ</a>
+            <nav class="hidden md:flex space-x-8 text-sm font-medium">
+                <a class="hover:text-brand-orange transition-colors cursor-pointer" onclick="goHome()" data-en="Home">Inicio</a>
+                <a class="hover:text-brand-orange transition-colors cursor-pointer" onclick="scrollToFleet()" data-en="Fleet">Flota</a>
+                <a class="hover:text-brand-orange transition-colors cursor-pointer" href="#section-banners" data-en="Why Us">Beneficios</a>
+                <a class="hover:text-brand-orange transition-colors cursor-pointer" href="#section-faq" data-en="FAQ">Preguntas</a>
             </nav>
         </header>
 
         <!-- VISTA PRINCIPAL -->
         <div id="main-view">
-            <section id="hero" class="min-h-screen flex flex-col">
-                <main class="flex-grow flex flex-col justify-center items-start px-8 md:px-16 lg:px-24 pt-36">
-                    <div class="max-w-xl md:max-w-2xl fade-in text-left text-white min-h-[150px]">
-                        <h1 id="heroTitle" class="text-5xl md:text-7xl font-bold uppercase leading-tight mb-4 tracking-wide oswald text-shadow"></h1>
-                        <p id="heroSubtitle" class="text-lg md:text-xl text-gray-200 mb-10 max-w-md text-shadow"></p>
+            <section id="hero" class="min-h-[85vh] flex flex-col relative">
+                <main class="flex-grow flex flex-col justify-center items-center px-6 pt-32 pb-20 text-center">
+                    <div class="max-w-4xl fade-in text-white mb-12">
+                        <h1 id="heroTitle" class="text-5xl md:text-7xl font-bold tracking-tight leading-tight mb-6 text-shadow-sm"></h1>
+                        <p id="heroSubtitle" class="text-lg md:text-xl text-gray-100 max-w-2xl mx-auto font-medium text-shadow-sm"></p>
                     </div>
 
-                    <div class="bg-white rounded-lg p-8 shadow-2xl w-full max-w-3xl fade-in relative mb-10 calendar-wrapper">
-                        <form class="grid grid-cols-1 md:grid-cols-3 gap-6" onsubmit="handleSearch(event)">
-                            <div>
-                                <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2" data-en="Pickup Point">Punto de Recogida</label>
-                                <select id="searchLocation" class="block w-full border-gray-100 rounded py-3 text-sm bg-gray-50 font-bold focus:ring-brand-orange">
+                    <!-- Buscador estilo Google (Píldora ancha) -->
+                    <div class="bg-white rounded-[2rem] p-2 md:p-3 shadow-[0_8px_30px_rgb(0,0,0,0.12)] w-full max-w-4xl fade-in relative flex flex-col md:flex-row gap-2 calendar-wrapper">
+                        <form class="flex flex-col md:flex-row w-full gap-2 items-center" onsubmit="handleSearch(event)">
+                            <div class="w-full md:flex-1 relative group">
+                                <label class="absolute left-4 top-2 text-[10px] font-semibold text-gray-500" data-en="Pickup Point">Punto de Recogida</label>
+                                <select id="searchLocation" class="w-full border-none bg-transparent pt-6 pb-2 px-4 text-sm font-medium text-gray-800 focus:ring-0 cursor-pointer appearance-none">
                                     <!-- Dinamico -->
                                 </select>
+                                <div class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 group-hover:text-brand-orange transition-colors"><i class="fa-solid fa-location-dot"></i></div>
                             </div>
-                            <div class="relative">
-                                <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2" data-en="Travel Dates">Fechas de Viaje</label>
-                                <input id="dateInput" type="text" class="block w-full border-gray-100 rounded py-3 text-sm cursor-pointer bg-gray-50 font-bold focus:ring-brand-orange" value="Seleccionar fechas" readonly onclick="toggleCalendar(event, 'homeCalendarModal')">
+                            
+                            <div class="hidden md:block w-px h-10 bg-gray-200"></div>
+
+                            <div class="w-full md:flex-1 relative group">
+                                <label class="absolute left-4 top-2 text-[10px] font-semibold text-gray-500" data-en="Travel Dates">Fechas de Viaje</label>
+                                <input id="dateInput" type="text" class="w-full border-none bg-transparent pt-6 pb-2 px-4 text-sm font-medium text-gray-800 focus:ring-0 cursor-pointer" value="Seleccionar fechas" readonly onclick="toggleCalendar(event, 'homeCalendarModal')">
+                                <div class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 group-hover:text-brand-orange transition-colors"><i class="fa-regular fa-calendar"></i></div>
                                 
-                                <div id="homeCalendarModal" class="calendar-modal bg-white rounded-xl border p-5 fade-in">
-                                    <div class="flex gap-2 mb-4 text-center">
-                                        <div class="flex-1 bg-gray-50 p-2 rounded border"><p class="text-[9px] font-bold text-gray-400" data-en="Pickup">Entrega</p><p id="startDateDisplay" class="text-xs font-bold text-gray-900">--/--/--</p></div>
-                                        <div class="flex-1 bg-gray-50 p-2 rounded border"><p class="text-[9px] font-bold text-gray-400" data-en="Return">Devolución</p><p id="endDateDisplay" class="text-xs font-bold text-gray-900">--/--/--</p></div>
-                                    </div>
+                                <!-- Calendario Flotante -->
+                                <div id="homeCalendarModal" class="calendar-modal bg-white p-5 fade-in">
                                     <div class="flex justify-between items-center mb-4">
-                                        <button type="button" class="text-gray-800 p-2" onclick="changeMonth(event, -1, 'homeCalendar')"><i class="fa-solid fa-chevron-left"></i></button>
-                                        <h4 id="homeCalendarMonthTitle" class="text-sm font-bold uppercase oswald text-gray-900">Abril 2026</h4>
-                                        <button type="button" class="text-gray-800 p-2" onclick="changeMonth(event, 1, 'homeCalendar')"><i class="fa-solid fa-chevron-right"></i></button>
+                                        <button type="button" class="text-gray-500 hover:bg-gray-100 p-2 rounded-full w-8 h-8 flex items-center justify-center transition-colors" onclick="changeMonth(event, -1, 'homeCalendar')"><i class="fa-solid fa-chevron-left"></i></button>
+                                        <h4 id="homeCalendarMonthTitle" class="text-sm font-bold text-gray-900">Abril 2026</h4>
+                                        <button type="button" class="text-gray-500 hover:bg-gray-100 p-2 rounded-full w-8 h-8 flex items-center justify-center transition-colors" onclick="changeMonth(event, 1, 'homeCalendar')"><i class="fa-solid fa-chevron-right"></i></button>
                                     </div>
                                     <div class="grid grid-cols-7 gap-y-1" id="homeCalendarGrid"></div>
-                                    <p id="homeDiscountMsg" class="text-[10px] text-brand-orange font-bold text-center mt-3 h-3"></p>
-                                    <div class="mt-4 flex justify-end gap-2 border-t pt-4">
-                                        <button type="button" onclick="clearDates(event)" class="text-[10px] font-bold text-gray-400 uppercase" data-en="Clear">Limpiar</button>
-                                        <button type="button" onclick="applyDates(event, 'homeCalendarModal')" class="bg-brand-dark text-white text-[10px] font-bold px-4 py-2 rounded" data-en="Confirm">Confirmar</button>
+                                    <p id="homeDiscountMsg" class="text-[10px] text-brand-orange font-medium text-center mt-3 h-3"></p>
+                                    <div class="mt-4 flex justify-between items-center border-t border-gray-100 pt-4">
+                                        <button type="button" onclick="clearDates(event)" class="text-xs font-semibold text-gray-500 hover:text-gray-800 px-3 py-2 rounded-full hover:bg-gray-50 transition-colors" data-en="Clear">Limpiar</button>
+                                        <button type="button" onclick="applyDates(event, 'homeCalendarModal')" class="bg-brand-dark hover:bg-black text-white text-xs font-bold px-5 py-2.5 rounded-full transition-colors" data-en="Confirm">Confirmar</button>
                                     </div>
                                 </div>
                             </div>
-                            <div>
-                                <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2" data-en="Time (7am - 5pm)">Horario (07:00 - 17:00)</label>
-                                <select id="homeTime" class="block w-full border-gray-100 rounded py-3 text-sm bg-gray-50 font-bold focus:ring-brand-orange">
+
+                            <div class="hidden md:block w-px h-10 bg-gray-200"></div>
+
+                            <div class="w-full md:w-48 relative group">
+                                <label class="absolute left-4 top-2 text-[10px] font-semibold text-gray-500" data-en="Time">Horario</label>
+                                <select id="homeTime" class="w-full border-none bg-transparent pt-6 pb-2 px-4 text-sm font-medium text-gray-800 focus:ring-0 cursor-pointer appearance-none">
                                     <option value="" data-en="Time...">Hora...</option>
                                     <option value="07:00">07:00</option>
                                     <option value="08:00">08:00</option>
@@ -146,57 +172,62 @@
                                     <option value="16:00">16:00</option>
                                     <option value="17:00">17:00</option>
                                 </select>
+                                <div class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 group-hover:text-brand-orange transition-colors"><i class="fa-regular fa-clock"></i></div>
                             </div>
-                            <button type="submit" class="md:col-span-3 w-full bg-brand-orange text-white font-bold py-4 rounded shadow-lg uppercase tracking-wider text-sm hover:bg-yellow-500 transition-colors" data-en="Search Vehicle">Buscar Vehículo</button>
+
+                            <button type="submit" class="w-full md:w-auto bg-brand-orange text-white font-bold py-4 md:py-0 md:h-14 px-8 rounded-full shadow-md hover:bg-brand-yellow hover:shadow-lg transition-all duration-300 shrink-0" data-en="Search">Buscar</button>
                         </form>
                     </div>
                 </main>
             </section>
 
             <!-- BANNERS: POR QUÉ ELEGIRNOS -->
-            <section id="section-banners" class="py-20 bg-white px-8 md:px-16 lg:px-24">
-                <div class="text-center mb-16">
-                    <h2 class="oswald text-4xl uppercase font-bold tracking-tight text-gray-900 mb-4" data-en="Why choose Turbo">Por qué elegir Turbo</h2>
-                    <p class="text-gray-500 max-w-2xl mx-auto" data-en="We offer the best car rental experience with exclusive benefits.">Te ofrecemos la mejor experiencia de renta de vehículos con beneficios exclusivos para que disfrutes tu viaje al máximo.</p>
+            <section id="section-banners" class="py-24 bg-brand-surface px-6 md:px-12 lg:px-24">
+                <div class="text-center mb-16 max-w-2xl mx-auto">
+                    <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-brand-dark mb-4" data-en="Why choose Turbo">Por qué elegir Turbo</h2>
+                    <p class="text-gray-500 text-lg" data-en="We offer the best car rental experience with exclusive benefits.">Diseñado para darte la mejor experiencia en carretera, sin complicaciones ni sorpresas.</p>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-10 text-center">
-                    <div class="p-6 rounded-xl border border-gray-100 bg-gray-50 shadow-sm hover:shadow-md transition-shadow">
-                        <div class="w-16 h-16 bg-brand-orange text-white rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
-                            <i class="fa-solid fa-bolt text-2xl"></i>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center max-w-6xl mx-auto">
+                    <div class="p-8 rounded-[2rem] bg-white shadow-[0_4px_20px_rgb(0,0,0,0.03)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-300">
+                        <div class="w-14 h-14 bg-orange-50 text-brand-orange rounded-full flex items-center justify-center mx-auto mb-6">
+                            <i class="fa-solid fa-bolt text-xl"></i>
                         </div>
-                        <h3 class="font-bold text-xl mb-3 oswald uppercase" data-en="Fast Booking">Reserva Rápida</h3>
-                        <p class="text-gray-500 text-sm" data-en="Booking process in less than 2 minutes. Immediate confirmation.">Proceso de reserva en menos de 2 minutos. Confirmación inmediata vía WhatsApp para que no pierdas tiempo.</p>
+                        <h3 class="font-bold text-xl mb-3 text-gray-900" data-en="Fast Booking">Reserva Ágil</h3>
+                        <p class="text-gray-500 text-sm leading-relaxed" data-en="Booking process in less than 2 minutes. Immediate confirmation.">Proceso de reserva en menos de 2 minutos. Confirmación inmediata para que no pierdas tiempo.</p>
                     </div>
-                    <div class="p-6 rounded-xl border border-gray-100 bg-gray-50 shadow-sm hover:shadow-md transition-shadow">
-                        <div class="w-16 h-16 bg-brand-orange text-white rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
-                            <i class="fa-solid fa-headset text-2xl"></i>
+                    <div class="p-8 rounded-[2rem] bg-white shadow-[0_4px_20px_rgb(0,0,0,0.03)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-300">
+                        <div class="w-14 h-14 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <i class="fa-solid fa-headset text-xl"></i>
                         </div>
-                        <h3 class="font-bold text-xl mb-3 oswald uppercase" data-en="24/7 Support">Soporte 24/7</h3>
-                        <p class="text-gray-500 text-sm" data-en="We are here for you anytime. Roadside assistance 24 hours a day.">Estamos para ti en cualquier momento. Asistencia en carretera y atención al cliente las 24 horas del día.</p>
+                        <h3 class="font-bold text-xl mb-3 text-gray-900" data-en="24/7 Support">Soporte 24/7</h3>
+                        <p class="text-gray-500 text-sm leading-relaxed" data-en="We are here for you anytime. Roadside assistance 24 hours a day.">Estamos para ti en cualquier momento. Asistencia en carretera y atención al cliente todo el día.</p>
                     </div>
-                    <div class="p-6 rounded-xl border border-gray-100 bg-gray-50 shadow-sm hover:shadow-md transition-shadow">
-                        <div class="w-16 h-16 bg-brand-orange text-white rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
-                            <i class="fa-solid fa-tags text-2xl"></i>
+                    <div class="p-8 rounded-[2rem] bg-white shadow-[0_4px_20px_rgb(0,0,0,0.03)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-300">
+                        <div class="w-14 h-14 bg-green-50 text-green-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <i class="fa-solid fa-tags text-xl"></i>
                         </div>
-                        <h3 class="font-bold text-xl mb-3 oswald uppercase" data-en="Best Prices">Mejores Precios</h3>
-                        <p class="text-gray-500 text-sm" data-en="Highly competitive rates with no hidden fees. What you see is what you pay.">Garantizamos tarifas altamente competitivas sin cargos ocultos. Lo que ves al reservar es exactamente lo que pagas.</p>
+                        <h3 class="font-bold text-xl mb-3 text-gray-900" data-en="Best Prices">Precios Transparentes</h3>
+                        <p class="text-gray-500 text-sm leading-relaxed" data-en="Highly competitive rates with no hidden fees. What you see is what you pay.">Garantizamos tarifas competitivas sin cargos ocultos. Lo que ves al reservar es lo que pagas.</p>
                     </div>
                 </div>
             </section>
 
-            <section id="section-fleet" class="py-20 bg-gray-100 px-8 md:px-16 lg:px-24 border-t border-gray-200">
-                <div class="flex justify-between items-end mb-10">
-                    <h2 class="oswald text-4xl uppercase font-bold tracking-tight text-gray-900" data-en="Our Fleet">Nuestra Flota</h2>
-                    <p id="fleet-count" class="text-gray-500 text-sm font-medium"></p>
+            <section id="section-fleet" class="py-24 bg-white px-6 md:px-12 lg:px-24 border-t border-brand-border">
+                <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-end mb-12 gap-4">
+                    <div>
+                        <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-brand-dark" data-en="Our Fleet">Nuestra Flota</h2>
+                        <p class="text-gray-500 mt-2">Vehículos listos para cualquier aventura.</p>
+                    </div>
+                    <p id="fleet-count" class="text-brand-orange font-semibold bg-orange-50 px-4 py-2 rounded-full"></p>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8" id="car-grid"></div>
+                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 max-w-7xl mx-auto" id="car-grid"></div>
             </section>
 
             <!-- FAQ SECTION -->
-            <section id="section-faq" class="py-20 bg-white px-8 md:px-16 lg:px-24 border-t border-gray-200">
-                <div class="text-center mb-12">
-                    <h2 class="oswald text-4xl uppercase font-bold tracking-tight text-gray-900 mb-4" data-en="Frequently Asked Questions">Preguntas Frecuentes</h2>
-                    <p class="text-gray-500 max-w-2xl mx-auto" data-en="We solve your main doubts so you can rent without worries.">Resolvemos tus dudas principales para que rentes sin preocupaciones.</p>
+            <section id="section-faq" class="py-24 bg-brand-surface px-6 md:px-12 lg:px-24 border-t border-brand-border">
+                <div class="text-center mb-16 max-w-2xl mx-auto">
+                    <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-brand-dark mb-4" data-en="Frequently Asked Questions">Preguntas Frecuentes</h2>
+                    <p class="text-gray-500 text-lg" data-en="We solve your main doubts so you can rent without worries.">Resolvemos tus dudas principales para que rentes con total tranquilidad.</p>
                 </div>
                 <div id="faq-public-container" class="max-w-3xl mx-auto space-y-4">
                     <!-- Dinámico -->
@@ -205,55 +236,57 @@
         </div>
 
         <!-- DETALLE CARRO -->
-        <section id="page-detail" class="hidden pt-32 pb-20 px-8 md:px-16 lg:px-24 fade-in min-h-screen bg-gray-50">
-            <button onclick="goHome()" class="mb-8 flex items-center gap-2 text-gray-500 hover:text-gray-900 font-bold text-xs uppercase transition-colors" data-en="← Back to Fleet">
-                <i class="fa-solid fa-arrow-left"></i> Regresar a la flota
-            </button>
-            <div id="detail-content"></div>
+        <section id="page-detail" class="hidden pt-28 pb-24 px-6 md:px-12 lg:px-24 fade-in min-h-screen bg-white">
+            <div class="max-w-7xl mx-auto">
+                <button onclick="goHome()" class="mb-8 flex items-center gap-2 text-gray-500 hover:text-brand-dark font-semibold text-sm transition-colors w-fit px-4 py-2 hover:bg-gray-100 rounded-full" data-en="← Back to Fleet">
+                    <i class="fa-solid fa-arrow-left"></i> Regresar a la flota
+                </button>
+                <div id="detail-content"></div>
+            </div>
         </section>
 
-        <!-- ADMIN PANEL REDISEÑADO -->
-        <section id="admin-view" class="hidden pt-28 pb-20 px-8 md:px-12 fade-in min-h-screen bg-gray-50 flex flex-col md:flex-row gap-6">
+        <!-- ADMIN PANEL -->
+        <section id="admin-view" class="hidden pt-28 pb-20 px-4 md:px-8 fade-in min-h-screen bg-brand-surface flex flex-col md:flex-row gap-6 max-w-screen-2xl mx-auto">
             
             <!-- Admin Sidebar Menu -->
-            <div class="w-full md:w-64 shrink-0 flex flex-col gap-2">
-                <button onclick="goHome()" class="mb-4 flex items-center gap-2 text-gray-500 hover:text-gray-900 font-bold text-xs uppercase pl-2">
+            <div class="w-full md:w-64 shrink-0 flex flex-col gap-1">
+                <button onclick="goHome()" class="mb-6 flex items-center gap-2 text-gray-500 hover:text-gray-900 font-bold text-xs uppercase px-4">
                     <i class="fa-solid fa-arrow-left"></i> Salir de Admin
                 </button>
                 
-                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest pl-2 mb-1">Opciones Principales</p>
-                <button onclick="switchAdminSection('sec-reservations')" class="admin-tab-btn w-full text-left px-4 py-2.5 rounded-lg font-bold text-sm bg-brand-dark text-white shadow-md transition-all"><i class="fa-solid fa-calendar-check w-6"></i> Reservas</button>
-                <button onclick="switchAdminSection('sec-addcar')" class="admin-tab-btn w-full text-left px-4 py-2.5 rounded-lg font-bold text-sm text-gray-600 hover:bg-gray-200 transition-all bg-transparent"><i class="fa-solid fa-car-side w-6"></i> Agregar Vehículo</button>
-                <button onclick="switchAdminSection('sec-inventory')" class="admin-tab-btn w-full text-left px-4 py-2.5 rounded-lg font-bold text-sm text-gray-600 hover:bg-gray-200 transition-all bg-transparent"><i class="fa-solid fa-list w-6"></i> Inventario Actual</button>
+                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest px-4 mb-2">Opciones Principales</p>
+                <button onclick="switchAdminSection('sec-reservations')" class="admin-tab-btn w-full text-left px-5 py-3 rounded-full font-medium text-sm bg-orange-100 text-brand-orange transition-all"><i class="fa-solid fa-calendar-check w-6"></i> Reservas</button>
+                <button onclick="switchAdminSection('sec-addcar')" class="admin-tab-btn w-full text-left px-5 py-3 rounded-full font-medium text-sm text-gray-600 hover:bg-gray-100 transition-all bg-transparent"><i class="fa-solid fa-car-side w-6"></i> Agregar Vehículo</button>
+                <button onclick="switchAdminSection('sec-inventory')" class="admin-tab-btn w-full text-left px-5 py-3 rounded-full font-medium text-sm text-gray-600 hover:bg-gray-100 transition-all bg-transparent"><i class="fa-solid fa-list w-6"></i> Inventario Actual</button>
                 
-                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest pl-2 mt-4 mb-1">Configuración Web</p>
-                <button onclick="switchAdminSection('sec-hero')" class="admin-tab-btn w-full text-left px-4 py-2.5 rounded-lg font-bold text-sm text-gray-600 hover:bg-gray-200 transition-all bg-transparent"><i class="fa-solid fa-image w-6"></i> Diseño de Portada</button>
-                <button onclick="switchAdminSection('sec-demand')" class="admin-tab-btn w-full text-left px-4 py-2.5 rounded-lg font-bold text-sm text-gray-600 hover:bg-gray-200 transition-all bg-transparent"><i class="fa-solid fa-fire w-6 text-red-400"></i> Demanda Alta</button>
-                <button onclick="switchAdminSection('sec-locations')" class="admin-tab-btn w-full text-left px-4 py-2.5 rounded-lg font-bold text-sm text-gray-600 hover:bg-gray-200 transition-all bg-transparent"><i class="fa-solid fa-map-marker-alt w-6"></i> Lugares de Recogida</button>
-                <button onclick="switchAdminSection('sec-extras')" class="admin-tab-btn w-full text-left px-4 py-2.5 rounded-lg font-bold text-sm text-gray-600 hover:bg-gray-200 transition-all bg-transparent"><i class="fa-solid fa-plus-circle w-6"></i> Accesorios Extra</button>
-                <button onclick="switchAdminSection('sec-categories')" class="admin-tab-btn w-full text-left px-4 py-2.5 rounded-lg font-bold text-sm text-gray-600 hover:bg-gray-200 transition-all bg-transparent"><i class="fa-solid fa-layer-group w-6"></i> Categorías</button>
-                <button onclick="switchAdminSection('sec-equipment')" class="admin-tab-btn w-full text-left px-4 py-2.5 rounded-lg font-bold text-sm text-gray-600 hover:bg-gray-200 transition-all bg-transparent"><i class="fa-solid fa-cogs w-6"></i> Equipamiento</button>
-                <button onclick="switchAdminSection('sec-faqs')" class="admin-tab-btn w-full text-left px-4 py-2.5 rounded-lg font-bold text-sm text-gray-600 hover:bg-gray-200 transition-all bg-transparent"><i class="fa-solid fa-question-circle w-6"></i> Preguntas (FAQ)</button>
-                <button onclick="switchAdminSection('sec-regional')" class="admin-tab-btn w-full text-left px-4 py-2.5 rounded-lg font-bold text-sm text-gray-600 hover:bg-gray-200 transition-all bg-transparent"><i class="fa-solid fa-globe w-6 text-blue-400"></i> Ajustes Regionales</button>
+                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest px-4 mt-6 mb-2">Configuración Web</p>
+                <button onclick="switchAdminSection('sec-hero')" class="admin-tab-btn w-full text-left px-5 py-3 rounded-full font-medium text-sm text-gray-600 hover:bg-gray-100 transition-all bg-transparent"><i class="fa-solid fa-image w-6"></i> Diseño de Portada</button>
+                <button onclick="switchAdminSection('sec-demand')" class="admin-tab-btn w-full text-left px-5 py-3 rounded-full font-medium text-sm text-gray-600 hover:bg-gray-100 transition-all bg-transparent"><i class="fa-solid fa-fire w-6 text-red-400"></i> Demanda Alta</button>
+                <button onclick="switchAdminSection('sec-locations')" class="admin-tab-btn w-full text-left px-5 py-3 rounded-full font-medium text-sm text-gray-600 hover:bg-gray-100 transition-all bg-transparent"><i class="fa-solid fa-map-marker-alt w-6"></i> Lugares de Recogida</button>
+                <button onclick="switchAdminSection('sec-extras')" class="admin-tab-btn w-full text-left px-5 py-3 rounded-full font-medium text-sm text-gray-600 hover:bg-gray-100 transition-all bg-transparent"><i class="fa-solid fa-plus-circle w-6"></i> Accesorios Extra</button>
+                <button onclick="switchAdminSection('sec-categories')" class="admin-tab-btn w-full text-left px-5 py-3 rounded-full font-medium text-sm text-gray-600 hover:bg-gray-100 transition-all bg-transparent"><i class="fa-solid fa-layer-group w-6"></i> Categorías</button>
+                <button onclick="switchAdminSection('sec-equipment')" class="admin-tab-btn w-full text-left px-5 py-3 rounded-full font-medium text-sm text-gray-600 hover:bg-gray-100 transition-all bg-transparent"><i class="fa-solid fa-cogs w-6"></i> Equipamiento</button>
+                <button onclick="switchAdminSection('sec-faqs')" class="admin-tab-btn w-full text-left px-5 py-3 rounded-full font-medium text-sm text-gray-600 hover:bg-gray-100 transition-all bg-transparent"><i class="fa-solid fa-question-circle w-6"></i> Preguntas (FAQ)</button>
+                <button onclick="switchAdminSection('sec-regional')" class="admin-tab-btn w-full text-left px-5 py-3 rounded-full font-medium text-sm text-gray-600 hover:bg-gray-100 transition-all bg-transparent"><i class="fa-solid fa-globe w-6 text-blue-400"></i> Ajustes Regionales</button>
             </div>
 
             <!-- Admin Content Area -->
-            <div class="flex-1 min-w-0 bg-white p-4 md:p-8 rounded-xl border shadow-sm min-h-[500px] overflow-hidden">
+            <div class="flex-1 min-w-0 bg-white p-6 md:p-10 rounded-[2rem] border border-gray-100 shadow-[0_4px_20px_rgb(0,0,0,0.03)] min-h-[500px] overflow-hidden">
                 
                 <!-- SEC: RESERVAS -->
                 <div id="sec-reservations" class="admin-section block fade-in">
-                    <h3 class="oswald text-2xl font-bold uppercase mb-6 border-b pb-4"><i class="fa-solid fa-calendar-check text-brand-orange mr-2"></i> Gestión de Reservas</h3>
-                    <div class="overflow-x-auto">
+                    <h3 class="text-2xl font-bold tracking-tight mb-6"><i class="fa-solid fa-calendar-check text-brand-orange mr-2"></i> Gestión de Reservas</h3>
+                    <div class="overflow-x-auto rounded-2xl border border-gray-100">
                         <table class="w-full text-left text-sm whitespace-nowrap">
-                            <thead class="uppercase tracking-wider border-b-2 text-gray-500 bg-gray-50 text-[10px]">
+                            <thead class="tracking-wider border-b bg-gray-50 text-[10px] uppercase text-gray-500 font-semibold">
                                 <tr>
-                                    <th class="px-4 py-3">Cliente</th>
-                                    <th class="px-4 py-3">Vehículo</th>
-                                    <th class="px-4 py-3">Fechas</th>
-                                    <th class="px-4 py-3">Detalles</th>
-                                    <th class="px-4 py-3">Total</th>
-                                    <th class="px-4 py-3 text-center">Estado</th>
-                                    <th class="px-4 py-3 text-center">Acciones</th>
+                                    <th class="px-6 py-4">Cliente</th>
+                                    <th class="px-6 py-4">Vehículo</th>
+                                    <th class="px-6 py-4">Fechas</th>
+                                    <th class="px-6 py-4">Detalles</th>
+                                    <th class="px-6 py-4">Total</th>
+                                    <th class="px-6 py-4 text-center">Estado</th>
+                                    <th class="px-6 py-4 text-center">Acciones</th>
                                 </tr>
                             </thead>
                             <tbody id="admin-reservations-list" class="divide-y divide-gray-100">
@@ -265,24 +298,24 @@
 
                 <!-- SEC: AGREGAR/EDITAR CARRO -->
                 <div id="sec-addcar" class="admin-section hidden fade-in max-w-3xl">
-                    <div class="flex justify-between items-center mb-6 border-b pb-4">
-                        <h3 id="adminFormTitle" class="oswald text-2xl font-bold uppercase"><i class="fa-solid fa-car-side text-brand-orange mr-2"></i> Agregar Vehículo Nuevo</h3>
-                        <button type="button" id="btnCancelEdit" onclick="cancelEditCar()" class="hidden text-[10px] bg-gray-200 hover:bg-gray-300 text-gray-700 px-3 py-1.5 rounded font-bold uppercase transition-colors"><i class="fa-solid fa-times mr-1"></i> Cancelar Edición</button>
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 id="adminFormTitle" class="text-2xl font-bold tracking-tight"><i class="fa-solid fa-car-side text-brand-orange mr-2"></i> Agregar Vehículo Nuevo</h3>
+                        <button type="button" id="btnCancelEdit" onclick="cancelEditCar()" class="hidden text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-full font-semibold transition-colors">Cancelar Edición</button>
                     </div>
                     <form id="adminForm" onsubmit="addCar(event)" class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                        <input id="adminCarName" type="text" required class="md:col-span-2 border-gray-200 rounded py-3 text-sm bg-gray-50 focus:border-brand-orange" placeholder="Nombre del Vehículo">
+                        <input id="adminCarName" type="text" required class="md:col-span-2 g-input rounded-2xl py-3.5 px-4 text-sm" placeholder="Nombre del Vehículo">
                         
                         <div>
-                            <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Precio Normal (Q)</label>
-                            <input id="adminCarPrice" type="number" required class="w-full border-gray-200 rounded py-3 text-sm bg-gray-50 focus:border-brand-orange" placeholder="Ej. 450" oninput="document.getElementById('adminCarPriceHigh').value = Math.round(this.value * 1.1)">
+                            <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Precio Normal (Q)</label>
+                            <input id="adminCarPrice" type="number" required class="w-full g-input rounded-xl py-3 px-4 text-sm" placeholder="Ej. 450" oninput="document.getElementById('adminCarPriceHigh').value = Math.round(this.value * 1.1)">
                         </div>
                         <div>
-                            <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Precio Demanda Alta (Q) (+10%)</label>
-                            <input id="adminCarPriceHigh" type="number" required class="w-full border-gray-200 rounded py-3 text-sm bg-gray-50 focus:border-brand-orange" placeholder="Ej. 495">
+                            <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Precio Demanda Alta (Q) (+10%)</label>
+                            <input id="adminCarPriceHigh" type="number" required class="w-full g-input rounded-xl py-3 px-4 text-sm" placeholder="Ej. 495">
                         </div>
 
-                        <select id="adminCarType" required class="w-full border-gray-200 rounded py-3 text-sm bg-gray-50 focus:border-brand-orange"></select>
-                        <select id="adminCarTrans" required class="w-full border-gray-200 rounded py-3 text-sm bg-gray-50 focus:border-brand-orange">
+                        <select id="adminCarType" required class="w-full g-input rounded-xl py-3 px-4 text-sm"></select>
+                        <select id="adminCarTrans" required class="w-full g-input rounded-xl py-3 px-4 text-sm">
                             <option value="">Transmisión...</option>
                             <option value="Automático">Automático</option>
                             <option value="Mecánico">Mecánico</option>
@@ -290,149 +323,149 @@
 
                         <div class="flex gap-4 md:col-span-2">
                             <div class="flex-1 relative">
-                                <span class="absolute left-3 top-3.5 text-gray-400"><i class="fa-solid fa-users"></i></span>
-                                <input id="adminCarPax" type="number" min="1" required class="w-full pl-9 border-gray-200 rounded py-3 text-sm bg-gray-50 focus:border-brand-orange" placeholder="Pasajeros">
+                                <span class="absolute left-4 top-3.5 text-gray-400"><i class="fa-solid fa-users"></i></span>
+                                <input id="adminCarPax" type="number" min="1" required class="w-full pl-10 g-input rounded-xl py-3 px-4 text-sm" placeholder="Pasajeros">
                             </div>
                             <div class="flex-1 relative">
-                                <span class="absolute left-3 top-3.5 text-gray-400"><i class="fa-solid fa-suitcase"></i></span>
-                                <input id="adminCarLuggage" type="number" min="0" required class="w-full pl-9 border-gray-200 rounded py-3 text-sm bg-gray-50 focus:border-brand-orange" placeholder="Maletas">
+                                <span class="absolute left-4 top-3.5 text-gray-400"><i class="fa-solid fa-suitcase"></i></span>
+                                <input id="adminCarLuggage" type="number" min="0" required class="w-full pl-10 g-input rounded-xl py-3 px-4 text-sm" placeholder="Maletas">
                             </div>
                         </div>
                         
                         <!-- Gestión de Fotos Progresiva -->
-                        <div class="md:col-span-2 border border-gray-200 rounded p-4 bg-gray-50">
-                            <label class="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-3">Galería de Fotos del Vehículo</label>
-                            <div id="pendingImagesPreview" class="flex flex-wrap gap-2 mb-3"></div>
-                            <div class="relative w-full border-2 border-dashed border-gray-300 rounded p-4 text-center hover:bg-gray-100 transition-colors cursor-pointer bg-white">
+                        <div class="md:col-span-2 border border-gray-100 rounded-[2rem] p-6 bg-gray-50/50">
+                            <label class="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-4">Galería de Fotos</label>
+                            <div id="pendingImagesPreview" class="flex flex-wrap gap-3 mb-4"></div>
+                            <div class="relative w-full border-2 border-dashed border-gray-200 rounded-2xl p-6 text-center hover:bg-gray-50 transition-colors cursor-pointer bg-white">
                                 <input type="file" id="adminCarImage" accept="image/*" multiple class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" onchange="handleCarImages(this)">
-                                <div class="text-xs text-gray-500 font-bold">
-                                    <i class="fa-solid fa-plus-circle mb-1 text-2xl text-brand-orange"></i><br>
-                                    Agregar Fotos (La primera será la principal)
+                                <div class="text-sm text-gray-500 font-medium">
+                                    <i class="fa-solid fa-plus-circle mb-2 text-3xl text-brand-orange"></i><br>
+                                    Agregar Fotos <span class="block text-xs font-normal mt-1">(La primera será la principal)</span>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="md:col-span-2 border-t pt-4 mt-2">
-                            <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">Equipamiento Incluido (Opcional)</label>
+                        <div class="md:col-span-2 border-t border-gray-100 pt-6 mt-2">
+                            <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3 ml-1">Equipamiento Incluido</label>
                             <div id="adminEquipmentCheckboxes" class="flex flex-wrap gap-3"></div>
                         </div>
 
-                        <button type="submit" id="btnGuardarCarro" class="md:col-span-2 mt-4 bg-brand-dark text-white font-bold py-4 rounded uppercase text-sm hover:bg-black transition-colors">Guardar Vehículo</button>
+                        <button type="submit" id="btnGuardarCarro" class="md:col-span-2 mt-6 bg-brand-dark text-white font-semibold py-4 rounded-full text-sm hover:bg-black transition-colors shadow-md">Guardar Vehículo</button>
                     </form>
                 </div>
 
                 <!-- SEC: INVENTARIO -->
                 <div id="sec-inventory" class="admin-section hidden fade-in">
-                    <h3 class="oswald text-2xl font-bold uppercase mb-6 border-b pb-4"><i class="fa-solid fa-list text-brand-orange mr-2"></i> Inventario Actual</h3>
-                    <div id="admin-car-list" class="space-y-4"></div>
+                    <h3 class="text-2xl font-bold tracking-tight mb-6"><i class="fa-solid fa-list text-brand-orange mr-2"></i> Inventario Actual</h3>
+                    <div id="admin-car-list" class="grid grid-cols-1 gap-4"></div>
                 </div>
 
                 <!-- SEC: HERO (PORTADA) -->
                 <div id="sec-hero" class="admin-section hidden fade-in max-w-2xl">
-                    <h3 class="oswald text-2xl font-bold uppercase mb-6 border-b pb-4"><i class="fa-solid fa-image text-brand-orange mr-2"></i> Diseño de Portada</h3>
-                    <div class="space-y-4">
-                        <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest">Título Principal</label>
-                        <input type="text" id="adminHeroTitle" class="w-full border-gray-200 rounded py-3 text-sm bg-gray-50">
-                        <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-4">Subtítulo Corto</label>
-                        <textarea id="adminHeroSubtitle" rows="3" class="w-full border-gray-200 rounded py-3 text-sm bg-gray-50"></textarea>
-                        <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-4">Imágenes de Fondo (Alta Calidad)</label>
-                        <div class="border border-dashed border-gray-300 rounded p-4 bg-gray-50">
-                            <input type="file" id="adminHeroBgInput" accept="image/*" multiple class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:bg-white file:font-bold file:text-brand-dark cursor-pointer shadow-sm">
+                    <h3 class="text-2xl font-bold tracking-tight mb-6"><i class="fa-solid fa-image text-brand-orange mr-2"></i> Diseño de Portada</h3>
+                    <div class="space-y-5 bg-gray-50 p-6 rounded-[2rem] border border-gray-100">
+                        <div>
+                            <label class="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1.5 ml-1">Título Principal</label>
+                            <input type="text" id="adminHeroTitle" class="w-full g-input rounded-xl py-3 px-4 text-sm">
                         </div>
-                        <button onclick="saveHeroSettings()" class="w-full bg-brand-dark text-white py-3 rounded text-xs font-bold uppercase mt-4 hover:bg-black">Actualizar Portada</button>
+                        <div>
+                            <label class="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1.5 ml-1">Subtítulo Corto</label>
+                            <textarea id="adminHeroSubtitle" rows="3" class="w-full g-input rounded-xl py-3 px-4 text-sm"></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1.5 ml-1">Imágenes de Fondo (Alta Calidad)</label>
+                            <div class="border border-dashed border-gray-200 rounded-xl p-4 bg-white">
+                                <input type="file" id="adminHeroBgInput" accept="image/*" multiple class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-gray-100 file:font-semibold file:text-brand-dark cursor-pointer">
+                            </div>
+                        </div>
+                        <button onclick="saveHeroSettings()" class="w-full bg-brand-dark text-white py-3.5 rounded-full text-sm font-semibold mt-2 hover:bg-black transition-colors shadow-md">Actualizar Portada</button>
                     </div>
                 </div>
 
                 <!-- SEC: DEMANDA ALTA -->
                 <div id="sec-demand" class="admin-section hidden fade-in max-w-2xl">
-                    <h3 class="oswald text-2xl font-bold uppercase mb-6 border-b pb-4"><i class="fa-solid fa-fire text-red-500 mr-2"></i> Fechas de Demanda Alta</h3>
-                    <div class="flex gap-2 mb-6">
-                        <input type="date" id="hdStartDate" class="flex-1 border-gray-200 rounded py-3 bg-gray-50 text-sm">
-                        <input type="date" id="hdEndDate" class="flex-1 border-gray-200 rounded py-3 bg-gray-50 text-sm">
-                        <button onclick="addHighDemand()" class="bg-red-500 hover:bg-red-600 text-white px-5 rounded font-bold transition-colors"><i class="fa-solid fa-plus"></i> Añadir Rango</button>
+                    <h3 class="text-2xl font-bold tracking-tight mb-6"><i class="fa-solid fa-fire text-red-500 mr-2"></i> Fechas de Demanda Alta</h3>
+                    <div class="flex flex-col md:flex-row gap-3 mb-6 bg-red-50/50 p-4 rounded-[1.5rem] border border-red-100">
+                        <input type="date" id="hdStartDate" class="flex-1 g-input rounded-xl py-3 px-4 text-sm">
+                        <input type="date" id="hdEndDate" class="flex-1 g-input rounded-xl py-3 px-4 text-sm">
+                        <button onclick="addHighDemand()" class="bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-full font-semibold transition-colors shadow-sm"><i class="fa-solid fa-plus mr-1"></i> Añadir</button>
                     </div>
                     <ul id="hdListAdmin" class="space-y-3"></ul>
                 </div>
 
                 <!-- SEC: LUGARES DE RECOGIDA -->
                 <div id="sec-locations" class="admin-section hidden fade-in max-w-xl">
-                    <h3 class="oswald text-2xl font-bold uppercase mb-6 border-b pb-4"><i class="fa-solid fa-map-marker-alt text-brand-orange mr-2"></i> Lugares de Recogida</h3>
-                    <div class="flex gap-2 mb-6">
-                        <input type="text" id="newLocInput" placeholder="Ej. Aeropuerto" class="flex-1 border-gray-200 rounded py-3 bg-gray-50 text-sm">
-                        <button onclick="addSettingString('locations', 'newLocInput')" class="bg-brand-dark hover:bg-black text-white px-5 rounded font-bold"><i class="fa-solid fa-plus"></i></button>
+                    <h3 class="text-2xl font-bold tracking-tight mb-6"><i class="fa-solid fa-map-marker-alt text-brand-orange mr-2"></i> Lugares de Recogida</h3>
+                    <div class="flex gap-3 mb-6 bg-gray-50 p-4 rounded-[1.5rem] border border-gray-100">
+                        <input type="text" id="newLocInput" placeholder="Ej. Aeropuerto" class="flex-1 g-input rounded-xl py-3 px-4 text-sm">
+                        <button onclick="addSettingString('locations', 'newLocInput')" class="bg-brand-dark hover:bg-black text-white px-6 rounded-full font-bold transition-colors"><i class="fa-solid fa-plus"></i></button>
                     </div>
-                    <ul id="locListAdmin" class="space-y-3"></ul>
+                    <ul id="locListAdmin" class="space-y-2"></ul>
                 </div>
 
                 <!-- SEC: EXTRAS -->
                 <div id="sec-extras" class="admin-section hidden fade-in max-w-2xl">
-                    <h3 class="oswald text-2xl font-bold uppercase mb-6 border-b pb-4"><i class="fa-solid fa-plus-circle text-brand-orange mr-2"></i> Accesorios Extra</h3>
-                    <p class="text-xs text-gray-500 mb-4">Estos accesorios los elegirá el cliente al momento de reservar. Deja el precio en 0 si es gratis.</p>
-                    <div class="flex gap-2 mb-6">
-                        <input type="text" id="newExtraInput" placeholder="Nombre (Ej. Silla de bebé)" class="flex-1 border-gray-200 rounded py-3 bg-gray-50 text-sm">
-                        <input type="number" id="newExtraPrice" placeholder="Precio Q (0 = Gratis)" class="w-36 border-gray-200 rounded py-3 bg-gray-50 text-sm">
-                        <button onclick="addExtra()" class="bg-brand-dark hover:bg-black text-white px-5 rounded font-bold"><i class="fa-solid fa-plus"></i></button>
+                    <h3 class="text-2xl font-bold tracking-tight mb-6"><i class="fa-solid fa-plus-circle text-brand-orange mr-2"></i> Accesorios Extra</h3>
+                    <p class="text-sm text-gray-500 mb-4 ml-1">Estos accesorios los elegirá el cliente al reservar. Precio 0 = Gratis.</p>
+                    <div class="flex flex-col md:flex-row gap-3 mb-6 bg-gray-50 p-4 rounded-[1.5rem] border border-gray-100">
+                        <input type="text" id="newExtraInput" placeholder="Nombre (Ej. Silla de bebé)" class="flex-1 g-input rounded-xl py-3 px-4 text-sm">
+                        <input type="number" id="newExtraPrice" placeholder="Precio Q" class="w-full md:w-32 g-input rounded-xl py-3 px-4 text-sm">
+                        <button onclick="addExtra()" class="bg-brand-dark hover:bg-black text-white px-6 py-3 md:py-0 rounded-full font-bold transition-colors"><i class="fa-solid fa-plus"></i></button>
                     </div>
-                    <ul id="extraListAdmin" class="space-y-3"></ul>
+                    <ul id="extraListAdmin" class="space-y-2"></ul>
                 </div>
 
                 <!-- SEC: CATEGORÍAS -->
                 <div id="sec-categories" class="admin-section hidden fade-in max-w-xl">
-                    <h3 class="oswald text-2xl font-bold uppercase mb-6 border-b pb-4"><i class="fa-solid fa-layer-group text-brand-orange mr-2"></i> Categorías de Vehículos</h3>
-                    <div class="flex gap-2 mb-6">
-                        <input type="text" id="newCategoryInput" placeholder="Ej. SUV, Pickup, Lujo" class="flex-1 border-gray-200 rounded py-3 bg-gray-50 text-sm">
-                        <button onclick="addSettingString('categories', 'newCategoryInput')" class="bg-brand-dark hover:bg-black text-white px-5 rounded font-bold"><i class="fa-solid fa-plus"></i></button>
+                    <h3 class="text-2xl font-bold tracking-tight mb-6"><i class="fa-solid fa-layer-group text-brand-orange mr-2"></i> Categorías de Vehículos</h3>
+                    <div class="flex gap-3 mb-6 bg-gray-50 p-4 rounded-[1.5rem] border border-gray-100">
+                        <input type="text" id="newCategoryInput" placeholder="Ej. SUV, Pickup, Lujo" class="flex-1 g-input rounded-xl py-3 px-4 text-sm">
+                        <button onclick="addSettingString('categories', 'newCategoryInput')" class="bg-brand-dark hover:bg-black text-white px-6 rounded-full font-bold transition-colors"><i class="fa-solid fa-plus"></i></button>
                     </div>
-                    <ul id="categoriesListAdmin" class="space-y-3"></ul>
+                    <ul id="categoriesListAdmin" class="space-y-2"></ul>
                 </div>
 
                 <!-- SEC: EQUIPAMIENTO BÁSICO -->
                 <div id="sec-equipment" class="admin-section hidden fade-in max-w-xl">
-                    <h3 class="oswald text-2xl font-bold uppercase mb-6 border-b pb-4"><i class="fa-solid fa-cogs text-brand-orange mr-2"></i> Equipamiento Básico</h3>
-                    <p class="text-xs text-gray-500 mb-4">Estas opciones te aparecerán como casillas cuando estés agregando un carro nuevo.</p>
-                    <div class="flex gap-2 mb-6">
-                        <input type="text" id="newEquipmentInput" placeholder="Ej. Apple CarPlay" class="flex-1 border-gray-200 rounded py-3 bg-gray-50 text-sm">
-                        <button onclick="addSettingString('equipment', 'newEquipmentInput')" class="bg-brand-dark hover:bg-black text-white px-5 rounded font-bold"><i class="fa-solid fa-plus"></i></button>
+                    <h3 class="text-2xl font-bold tracking-tight mb-6"><i class="fa-solid fa-cogs text-brand-orange mr-2"></i> Equipamiento Básico</h3>
+                    <p class="text-sm text-gray-500 mb-4 ml-1">Opciones que aparecen como casillas al crear un carro.</p>
+                    <div class="flex gap-3 mb-6 bg-gray-50 p-4 rounded-[1.5rem] border border-gray-100">
+                        <input type="text" id="newEquipmentInput" placeholder="Ej. Apple CarPlay" class="flex-1 g-input rounded-xl py-3 px-4 text-sm">
+                        <button onclick="addSettingString('equipment', 'newEquipmentInput')" class="bg-brand-dark hover:bg-black text-white px-6 rounded-full font-bold transition-colors"><i class="fa-solid fa-plus"></i></button>
                     </div>
-                    <ul id="equipmentListAdmin" class="space-y-3"></ul>
+                    <ul id="equipmentListAdmin" class="space-y-2"></ul>
                 </div>
 
                 <!-- SEC: FAQS -->
                 <div id="sec-faqs" class="admin-section hidden fade-in max-w-3xl">
-                    <h3 class="oswald text-2xl font-bold uppercase mb-6 border-b pb-4"><i class="fa-solid fa-question-circle text-brand-orange mr-2"></i> Preguntas Frecuentes</h3>
-                    <div class="space-y-3 mb-6 bg-gray-50 p-6 rounded-lg border border-gray-200">
-                        <input type="text" id="newFaqQ" placeholder="Pregunta (Ej. ¿Aceptan mascotas?)" class="w-full border-gray-200 rounded py-3 text-sm">
-                        <textarea id="newFaqA" placeholder="Respuesta detallada..." rows="3" class="w-full border-gray-200 rounded py-3 text-sm"></textarea>
-                        <button onclick="addFaq()" class="bg-brand-dark text-white px-6 py-2.5 rounded font-bold uppercase text-xs hover:bg-black">Guardar FAQ</button>
+                    <h3 class="text-2xl font-bold tracking-tight mb-6"><i class="fa-solid fa-question-circle text-brand-orange mr-2"></i> Preguntas Frecuentes</h3>
+                    <div class="space-y-3 mb-8 bg-gray-50 p-6 rounded-[2rem] border border-gray-100">
+                        <input type="text" id="newFaqQ" placeholder="Pregunta (Ej. ¿Aceptan mascotas?)" class="w-full g-input rounded-xl py-3 px-4 text-sm">
+                        <textarea id="newFaqA" placeholder="Respuesta detallada..." rows="3" class="w-full g-input rounded-xl py-3 px-4 text-sm"></textarea>
+                        <button onclick="addFaq()" class="w-full md:w-auto bg-brand-dark text-white px-8 py-3.5 rounded-full font-semibold text-sm hover:bg-black transition-colors mt-2 shadow-md">Guardar FAQ</button>
                     </div>
                     <ul id="faqAdminList" class="space-y-4"></ul>
                 </div>
 
                 <!-- SEC: REGIONAL -->
                 <div id="sec-regional" class="admin-section hidden fade-in max-w-xl">
-                    <h3 class="oswald text-2xl font-bold uppercase mb-6 border-b pb-4"><i class="fa-solid fa-globe text-blue-500 mr-2"></i> Ajustes Regionales</h3>
-                    <div class="space-y-5 bg-blue-50 p-6 rounded-lg border border-blue-100">
+                    <h3 class="text-2xl font-bold tracking-tight mb-6"><i class="fa-solid fa-globe text-blue-500 mr-2"></i> Ajustes Regionales</h3>
+                    <div class="space-y-6 bg-blue-50/30 p-8 rounded-[2rem] border border-blue-100">
                         <div>
-                            <label class="block text-[10px] font-bold text-gray-600 uppercase tracking-widest mb-1">Tasa de Cambio (1 USD = ? GTQ)</label>
-                            <input type="number" step="0.01" id="adminExchangeRate" placeholder="Ej. 7.7" class="w-full border-gray-200 rounded py-3 text-sm shadow-sm">
-                            <p class="text-[10px] text-gray-500 mt-1">Usada para calcular automáticamente precios en el extranjero.</p>
-                        </div>
-                        <div>
-                            <label class="block text-[10px] font-bold text-gray-600 uppercase tracking-widest mb-1">Email de Notificaciones</label>
-                            <input type="email" id="adminContactEmail" placeholder="ejemplo@turbo.com" class="w-full border-gray-200 rounded py-3 text-sm shadow-sm">
+                            <label class="block text-[10px] font-bold text-gray-600 uppercase tracking-widest mb-2 ml-1">Tasa de Cambio (1 USD = ? GTQ)</label>
+                            <input type="number" step="0.01" id="adminExchangeRate" placeholder="Ej. 7.7" class="w-full bg-white border border-gray-200 focus:border-blue-500 rounded-xl py-3 px-4 text-sm outline-none transition-colors shadow-sm">
                         </div>
                         
-                        <div class="pt-4 border-t border-blue-200 mt-4">
-                            <h4 class="text-[10px] font-bold text-gray-600 uppercase tracking-widest mb-3"><i class="fa-solid fa-envelope-open-text mr-1"></i> Integración EmailJS (Notificaciones automáticas)</h4>
-                            <div class="space-y-2">
-                                <input type="text" id="adminEmailJsPublic" placeholder="Public Key" class="w-full border-gray-200 rounded py-2 text-sm shadow-sm">
-                                <input type="text" id="adminEmailJsService" placeholder="Service ID" class="w-full border-gray-200 rounded py-2 text-sm shadow-sm">
-                                <input type="text" id="adminEmailJsTemplate" placeholder="Template ID" class="w-full border-gray-200 rounded py-2 text-sm shadow-sm">
+                        <div class="pt-6 border-t border-blue-100">
+                            <h4 class="text-[10px] font-bold text-blue-600 uppercase tracking-widest mb-3 ml-1"><i class="fa-solid fa-envelope-open-text mr-1"></i> Integración EmailJS Automática</h4>
+                            <div class="space-y-3 bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
+                                <input type="text" id="adminEmailJsPublic" placeholder="Public Key" class="w-full g-input rounded-lg py-2.5 px-3 text-sm">
+                                <input type="text" id="adminEmailJsService" placeholder="Service ID" class="w-full g-input rounded-lg py-2.5 px-3 text-sm">
+                                <input type="text" id="adminEmailJsTemplate" placeholder="Template ID" class="w-full g-input rounded-lg py-2.5 px-3 text-sm">
                             </div>
-                            <p class="text-[10px] text-gray-500 mt-2">Al llenar estos campos, recibirás un correo automático sin que el cliente tenga que hacer nada.</p>
                         </div>
 
-                        <button onclick="saveRegionalSettings()" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded text-sm font-bold uppercase shadow-md transition-colors mt-4">Guardar Configuración</button>
+                        <button onclick="saveRegionalSettings()" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-full text-sm font-semibold shadow-md transition-colors mt-2">Guardar Configuración</button>
                     </div>
                 </div>
 
@@ -440,62 +473,63 @@
         </section>
 
         <!-- FOOTER -->
-        <footer id="mainFooter" class="py-8 bg-gray-900 text-center text-gray-500 text-sm w-full" data-en="&copy; 2025 All rights reserved.">
-            &copy; 2025 Todos los derechos reservados.
+        <footer id="mainFooter" class="py-10 bg-white border-t border-gray-100 text-center text-gray-500 text-sm w-full font-medium" data-en="&copy; 2026 Turbo. All rights reserved.">
+            &copy; 2026 Turbo. Todos los derechos reservados.
         </footer>
 
         <!-- MODAL BLOQUEO DE FECHAS -->
-        <div id="blockDatesModal" class="hidden fixed inset-0 bg-black/60 z-[9999] flex items-center justify-center fade-in backdrop-blur-sm">
-            <div class="bg-white p-8 rounded-xl w-full max-w-sm shadow-2xl border">
-                <h3 class="oswald text-xl font-bold mb-2 uppercase">Bloquear Fechas</h3>
-                <p id="blockDatesCarName" class="text-sm text-gray-500 mb-5 font-bold"></p>
-                <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Fecha de Inicio</label>
-                <input type="date" id="blockStartDate" class="w-full mb-4 rounded border-gray-200 text-sm bg-gray-50 focus:ring-brand-orange">
-                <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Fecha de Fin</label>
-                <input type="date" id="blockEndDate" class="w-full mb-6 rounded border-gray-200 text-sm bg-gray-50 focus:ring-brand-orange">
+        <div id="blockDatesModal" class="hidden fixed inset-0 bg-gray-900/40 z-[9999] flex items-center justify-center fade-in backdrop-blur-sm px-4">
+            <div class="bg-white p-8 rounded-[2rem] w-full max-w-sm shadow-[0_24px_38px_3px_rgba(0,0,0,0.14)]">
+                <h3 class="text-xl font-bold mb-1 tracking-tight text-gray-900">Bloquear Fechas</h3>
+                <p id="blockDatesCarName" class="text-sm text-gray-500 mb-6 font-medium"></p>
+                <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Fecha de Inicio</label>
+                <input type="date" id="blockStartDate" class="w-full mb-4 g-input rounded-xl py-3 px-4 text-sm">
+                <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Fecha de Fin</label>
+                <input type="date" id="blockEndDate" class="w-full mb-8 g-input rounded-xl py-3 px-4 text-sm">
                 <div class="flex justify-end gap-3">
-                    <button onclick="closeBlockModal()" class="px-4 py-2 text-xs font-bold text-gray-500 hover:text-gray-900 uppercase transition-colors">Cancelar</button>
-                    <button onclick="saveBlockedDates()" class="px-6 py-2 bg-red-600 hover:bg-red-700 text-white text-xs font-bold uppercase rounded transition-colors">Confirmar Bloqueo</button>
+                    <button onclick="closeBlockModal()" class="px-5 py-2.5 text-sm font-semibold text-gray-600 hover:bg-gray-100 rounded-full transition-colors">Cancelar</button>
+                    <button onclick="saveBlockedDates()" class="px-6 py-2.5 bg-red-600 hover:bg-red-700 text-white text-sm font-semibold rounded-full transition-colors shadow-sm">Confirmar</button>
                 </div>
-                <div class="mt-6 pt-4 border-t">
-                    <h4 class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Bloqueos Activos</h4>
+                <div class="mt-8 pt-5 border-t border-gray-100">
+                    <h4 class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3 ml-1">Bloqueos Activos</h4>
                     <ul id="activeBlocksList" class="space-y-2 text-sm"></ul>
                 </div>
             </div>
         </div>
 
         <!-- MODAL LOGIN ADMIN -->
-        <div id="loginModal" class="hidden fixed inset-0 bg-black/80 z-[9999] flex items-center justify-center fade-in backdrop-blur-sm">
-            <div class="bg-white p-8 rounded-xl w-80 shadow-2xl border text-center">
-                <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4 text-gray-400">
-                    <i class="fa-solid fa-lock text-2xl"></i>
+        <div id="loginModal" class="hidden fixed inset-0 bg-gray-900/40 z-[9999] flex items-center justify-center fade-in backdrop-blur-sm px-4">
+            <div class="bg-white p-8 rounded-[2rem] w-full max-w-sm shadow-[0_24px_38px_3px_rgba(0,0,0,0.14)] text-center">
+                <div class="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-5 text-gray-400">
+                    <i class="fa-solid fa-lock text-xl"></i>
                 </div>
-                <h3 class="oswald text-2xl font-bold mb-2 uppercase">Acceso Restringido</h3>
-                <p class="text-xs text-gray-500 mb-6">Ingresa la clave de administrador.</p>
-                <input type="password" id="adminPassword" placeholder="Contraseña" class="w-full mb-4 rounded border-gray-200 text-center tracking-widest focus:ring-brand-orange">
-                <div class="flex gap-2">
-                    <button onclick="closeLoginModal()" class="flex-1 py-3 text-xs font-bold text-gray-500 bg-gray-100 rounded hover:bg-gray-200 uppercase transition-colors">Cancelar</button>
-                    <button onclick="verifyAdmin()" class="flex-1 py-3 bg-brand-dark text-white text-xs font-bold uppercase rounded hover:bg-black transition-colors">Ingresar</button>
+                <h3 class="text-xl font-bold mb-2 tracking-tight text-gray-900">Acceso Restringido</h3>
+                <p class="text-sm text-gray-500 mb-6">Ingresa la clave de administrador.</p>
+                <input type="password" id="adminPassword" placeholder="Contraseña" class="w-full mb-6 g-input rounded-xl py-3 px-4 text-center tracking-[0.2em]">
+                <div class="flex gap-3">
+                    <button onclick="closeLoginModal()" class="flex-1 py-3 text-sm font-semibold text-gray-600 hover:bg-gray-100 rounded-full transition-colors">Cancelar</button>
+                    <button onclick="verifyAdmin()" class="flex-1 py-3 bg-brand-dark text-white text-sm font-semibold rounded-full hover:bg-black transition-colors shadow-sm">Ingresar</button>
                 </div>
             </div>
         </div>
 
         <!-- MODAL ÉXITO RESERVA -->
-        <div id="successModal" class="hidden fixed inset-0 bg-black/80 z-[9999] flex items-center justify-center fade-in backdrop-blur-sm">
-            <div class="bg-white p-8 rounded-xl w-full max-w-sm shadow-2xl border text-center">
-                <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-5 text-green-500">
+        <div id="successModal" class="hidden fixed inset-0 bg-gray-900/40 z-[9999] flex items-center justify-center fade-in backdrop-blur-sm px-4">
+            <div class="bg-white p-10 rounded-[2.5rem] w-full max-w-md shadow-[0_24px_38px_3px_rgba(0,0,0,0.14)] text-center">
+                <div class="w-24 h-24 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-6 text-green-500">
                     <i class="fa-solid fa-check text-4xl"></i>
                 </div>
-                <h3 class="oswald text-2xl font-bold mb-3 uppercase" data-en="Booking Confirmed!">¡Reserva Confirmada!</h3>
-                <p class="text-sm text-gray-500 mb-8" data-en="We have successfully received your request. We will contact you very soon to finalize details.">Hemos recibido tu solicitud exitosamente. Nos pondremos en contacto contigo muy pronto para afinar los detalles.</p>
-                <button onclick="closeSuccessModal()" class="w-full py-4 bg-brand-dark text-white text-sm font-bold uppercase rounded shadow-lg hover:bg-black transition-colors" data-en="Back to Home">Volver al Inicio</button>
+                <h3 class="text-2xl font-bold mb-3 tracking-tight text-gray-900" data-en="Booking Confirmed!">¡Reserva Confirmada!</h3>
+                <p class="text-base text-gray-500 mb-8 leading-relaxed" data-en="We have successfully received your request. We will contact you very soon to finalize details.">Hemos recibido tu solicitud exitosamente. Nos pondremos en contacto contigo muy pronto para afinar detalles.</p>
+                <button onclick="closeSuccessModal()" class="w-full py-4 bg-brand-dark text-white text-sm font-bold rounded-full shadow-md hover:bg-black transition-colors" data-en="Back to Home">Volver al Inicio</button>
             </div>
         </div>
     </div>
 
     <!-- NOTIFICACIÓN -->
-    <div id="notif" class="fixed bottom-10 right-10 bg-gray-900 text-white p-5 rounded-lg shadow-2xl translate-y-40 transition-transform duration-300 z-[200] border-l-4 border-brand-orange">
-        <p id="notif-text" class="text-sm font-bold"></p>
+    <div id="notif" class="fixed bottom-6 right-6 md:bottom-10 md:right-10 bg-gray-900 text-white px-6 py-4 rounded-2xl shadow-xl translate-y-40 transition-transform duration-300 z-[200] flex items-center gap-3">
+        <i class="fa-solid fa-circle-info text-brand-orange"></i>
+        <p id="notif-text" class="text-sm font-medium"></p>
     </div>
 
     <script type="module">
@@ -505,7 +539,7 @@
             const cachedTitle = localStorage.getItem('turboHeroTitle');
             const cachedSub = localStorage.getItem('turboHeroSub');
             if(cachedBg) {
-                document.getElementById('hero').style.backgroundImage = `linear-gradient(to right, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0) 100%), url('${cachedBg}')`;
+                document.getElementById('hero').style.backgroundImage = `linear-gradient(to right, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0) 100%), url('${cachedBg}')`;
             }
             if(cachedTitle) document.getElementById('heroTitle').innerText = cachedTitle;
             if(cachedSub) document.getElementById('heroSubtitle').innerText = cachedSub;
@@ -546,7 +580,7 @@
                 promoMsg: "Renta 4 días o más para un descuento especial.",
                 applyMsg: "¡Descuento especial aplicado!",
                 totalFor: "Total por {d} día(s):",
-                addExt: "Añadir Extras a tu reserva", free: "(Gratis)",
+                addExt: "Añadir Extras a tu reserva", free: "Gratis",
                 reqDates: "Fechas requeridas", accDates: "Aceptar Fechas",
                 pickupLoc: "Recogida", timeLoc: "Hora (7am-5pm)", contRes: "Continuar Reserva",
                 urData: "Tus Datos", name: "Nombre completo", phone: "Número de WhatsApp", email: "Correo electrónico", address: "Dirección de hospedaje",
@@ -554,7 +588,7 @@
                 info2: "Importante: Depósito con Tarjeta de Crédito",
                 info3: "Se debe tener disponible un depósito de <strong>{amt}</strong> en su tarjeta de crédito para completar la renta. Debe tener este monto disponible en su tarjeta de crédito al momento de recoger el vehículo. Esta es una retención/autorización, no un cargo.",
                 reviewData: "Revisa tus datos", btnConfirm: "Confirmar", btnEdit: "Modificar datos",
-                submitRes: "Reservar", btnBack: "← Regresar a detalles",
+                submitRes: "Reservar", btnBack: "Regresar a detalles",
                 errData: "Llená tus datos de contacto para continuar.", errDates: "Elegí fechas de viaje.", errLoc: "Seleccioná lugar y horario.",
                 process: "Procesando...", success: "¡Reserva enviada exitosamente!", errRes: "Error al procesar reserva",
                 noFaq: "Aún no hay preguntas."
@@ -567,7 +601,7 @@
                 promoMsg: "Rent 4 days or more for a special discount.",
                 applyMsg: "Special discount applied!",
                 totalFor: "Total for {d} day(s):",
-                addExt: "Add Extras to your booking", free: "(Free)",
+                addExt: "Add Extras to your booking", free: "Free",
                 reqDates: "Required dates", accDates: "Accept Dates",
                 pickupLoc: "Pickup", timeLoc: "Time (7am-5pm)", contRes: "Continue Booking",
                 urData: "Your Details", name: "Full Name", phone: "WhatsApp Number", email: "Email address", address: "Accommodation address",
@@ -575,7 +609,7 @@
                 info2: "Important: Credit Card Deposit",
                 info3: "A deposit of <strong>{amt}</strong> must be available on your credit card to complete the rental. You must have this amount available on your credit card at the time of vehicle pickup. This is a hold/authorization, not a charge.",
                 reviewData: "Review your details", btnConfirm: "Confirm", btnEdit: "Edit details",
-                submitRes: "Book Now", btnBack: "← Back to details",
+                submitRes: "Book Now", btnBack: "Back to details",
                 errData: "Fill your contact details to continue.", errDates: "Choose travel dates.", errLoc: "Select location and time.",
                 process: "Processing...", success: "Booking successfully sent!", errRes: "Error processing booking",
                 noFaq: "No questions yet."
@@ -608,9 +642,7 @@
             highDemandRanges: [],
             faqs: [{ q: "¿Cuáles son los requisitos para rentar?", a: "DPI o Pasaporte vigente y licencia de conducir al día." }],
             hero: {
-                title: "",
-                subtitle: "",
-                bgs: []
+                title: "", subtitle: "", bgs: []
             }
         };
 
@@ -618,11 +650,8 @@
         let heroBgInterval;
         let currentBgIndex = 0;
         
-        window.startDay = null;
-        window.endDay = null;
-        window.selectedCar = null;
-        window.currentMonth = 3; 
-        window.currentYear = 2026;
+        window.startDay = null; window.endDay = null; window.selectedCar = null;
+        window.currentMonth = 3; window.currentYear = 2026;
         window.monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
 
         const ADMIN_PIN = "turbo2026";
@@ -657,11 +686,11 @@
             
             document.querySelectorAll('.admin-tab-btn').forEach(btn => {
                 if (btn.getAttribute('onclick').includes(sectionId)) {
-                    btn.classList.remove('text-gray-600', 'hover:bg-gray-200', 'bg-transparent');
-                    btn.classList.add('bg-brand-dark', 'text-white', 'shadow-md');
+                    btn.classList.remove('text-gray-600', 'hover:bg-gray-100', 'bg-transparent');
+                    btn.classList.add('bg-orange-100', 'text-brand-orange');
                 } else {
-                    btn.classList.add('text-gray-600', 'hover:bg-gray-200', 'bg-transparent');
-                    btn.classList.remove('bg-brand-dark', 'text-white', 'shadow-md');
+                    btn.classList.add('text-gray-600', 'hover:bg-gray-100', 'bg-transparent');
+                    btn.classList.remove('bg-orange-100', 'text-brand-orange');
                 }
             });
         };
@@ -673,7 +702,7 @@
             document.getElementById('admin-view').classList.remove('hidden');
             window.scrollTo(0, 0);
             window.renderAdminCars(); window.renderAdminReservations(); window.renderAdminSettings(); 
-            window.switchAdminSection('sec-reservations'); // Tab default
+            window.switchAdminSection('sec-reservations');
         };
         
         window.closeDetail = () => window.goHome(false);
@@ -722,14 +751,13 @@
         window.renderPendingImages = () => {
             const container = document.getElementById('pendingImagesPreview');
             if(window.pendingCarImagesBase64.length === 0) {
-                container.innerHTML = '<p class="text-xs text-gray-400 italic">No hay fotos seleccionadas.</p>';
-                return;
+                container.innerHTML = ''; return;
             }
             container.innerHTML = window.pendingCarImagesBase64.map((b64, i) => `
-                <div class="relative w-16 h-16 rounded overflow-hidden border shadow-sm ${i===0 ? 'border-brand-orange ring-2 ring-brand-orange/30' : 'border-gray-200'}">
+                <div class="relative w-20 h-20 rounded-xl overflow-hidden border shadow-sm ${i===0 ? 'border-brand-orange ring-2 ring-brand-orange/30' : 'border-gray-200'}">
                     ${i===0 ? '<span class="absolute bottom-0 left-0 right-0 bg-brand-orange text-white text-[8px] font-bold text-center py-0.5 z-10">PRINCIPAL</span>' : ''}
                     <img src="${b64}" class="w-full h-full object-cover">
-                    <button type="button" onclick="window.removePendingImage(${i})" class="absolute top-0 right-0 bg-red-500 text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-bl shadow hover:bg-red-700 z-20 transition-colors"><i class="fa-solid fa-times"></i></button>
+                    <button type="button" onclick="window.removePendingImage(${i})" class="absolute top-1 right-1 bg-white/90 text-red-500 hover:text-red-700 text-[10px] w-5 h-5 flex items-center justify-center rounded-full shadow z-20 transition-colors"><i class="fa-solid fa-times"></i></button>
                 </div>
             `).join('');
         };
@@ -774,10 +802,10 @@
                 if(isHD) html += `<p class="text-xs font-bold text-red-500 mb-1"><i class="fa-solid fa-fire mr-1"></i> ${window.T('highDem')}</p>`;
                 
                 if(discountPct > 0) {
-                    html += `<p class="text-xs text-green-600 font-bold mb-1">${window.T('volDisc')}</p>`;
-                    html += `<div class="text-brand-orange text-2xl font-bold">${window.T('totalFor', {d: days})} <span class="line-through text-gray-400 text-sm mr-2 font-normal">${window.formatPrice(subtotal)}</span> ${window.formatPrice(total)}</div>`;
+                    html += `<p class="text-xs text-green-600 font-semibold mb-1 tracking-tight">${window.T('volDisc')}</p>`;
+                    html += `<div class="text-brand-dark text-3xl font-bold tracking-tight">${window.T('totalFor', {d: days})} <span class="line-through text-gray-400 text-lg mr-2 font-normal">${window.formatPrice(subtotal)}</span> ${window.formatPrice(total)}</div>`;
                 } else {
-                    html += `<div class="text-brand-orange text-2xl font-bold">${window.T('totalFor', {d: days})} ${window.formatPrice(total)}</div>`;
+                    html += `<div class="text-brand-dark text-3xl font-bold tracking-tight">${window.T('totalFor', {d: days})} ${window.formatPrice(total)}</div>`;
                 }
                 el.innerHTML = html;
             } else el.innerHTML = '';
@@ -792,25 +820,23 @@
             if (countEl) countEl.innerText = `${list.length} ${window.T('avail')}`;
             
             grid.innerHTML = list.map(car => `
-                <div class="bg-white rounded-lg overflow-hidden border shadow-sm cursor-pointer group flex flex-col h-full hover:shadow-lg transition-all" onclick="openDetail('${car.id}')">
-                    <div class="h-56 overflow-hidden shrink-0 relative">
+                <div class="bg-white rounded-[2rem] overflow-hidden border border-gray-100 cursor-pointer group flex flex-col h-full hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-300">
+                    <div class="h-64 overflow-hidden shrink-0 relative bg-gray-50">
                         <img src="${car.images && car.images[0] ? car.images[0] : ''}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
                     </div>
-                    <div class="p-6 flex flex-col flex-grow">
-                        <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">${car.type}</span>
-                        <h3 class="oswald text-2xl font-bold uppercase text-gray-900 mb-4">${car.name}</h3>
+                    <div class="p-8 flex flex-col flex-grow">
+                        <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1 block">${car.type}</span>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-5 tracking-tight">${car.name}</h3>
                         
-                        <div class="flex flex-wrap items-center gap-3 text-[11px] text-gray-500 font-bold mb-5 bg-gray-50 py-2 px-3 rounded w-fit">
-                            <span class="flex items-center gap-1"><i class="fa-solid fa-users text-gray-400"></i> ${car.passengers || 4}</span>
-                            <span class="text-gray-300">|</span>
-                            <span class="flex items-center gap-1"><i class="fa-solid fa-suitcase text-gray-400"></i> ${car.luggage || 2}</span>
-                            <span class="text-gray-300">|</span>
-                            <span class="flex items-center gap-1"><i class="fa-solid fa-gear text-gray-400"></i> ${car.transmission || 'Auto'}</span>
+                        <div class="flex flex-wrap items-center gap-2 text-xs text-gray-600 font-medium mb-6">
+                            <span class="bg-gray-100 px-3 py-1.5 rounded-full flex items-center gap-1.5"><i class="fa-solid fa-users text-gray-400"></i> ${car.passengers || 4}</span>
+                            <span class="bg-gray-100 px-3 py-1.5 rounded-full flex items-center gap-1.5"><i class="fa-solid fa-suitcase text-gray-400"></i> ${car.luggage || 2}</span>
+                            <span class="bg-gray-100 px-3 py-1.5 rounded-full flex items-center gap-1.5"><i class="fa-solid fa-gear text-gray-400"></i> ${car.transmission || 'Auto'}</span>
                         </div>
 
-                        <div class="mt-auto flex justify-between items-center pt-2">
-                            <p class="text-gray-900 font-bold text-2xl">${window.formatPrice(car.price)} <span class="text-[10px] text-gray-400 uppercase font-normal">${window.T('perDay') || '/ Día'}</span></p>
-                            <span class="w-10 h-10 bg-gray-50 rounded-full flex items-center justify-center text-gray-600 group-hover:bg-brand-orange group-hover:text-white transition-colors">
+                        <div class="mt-auto flex justify-between items-center pt-4 border-t border-gray-50">
+                            <p class="text-brand-dark font-bold text-2xl tracking-tight">${window.formatPrice(car.price)} <span class="text-sm text-gray-400 font-normal tracking-normal">${window.T('perDay') || '/ Día'}</span></p>
+                            <span class="w-12 h-12 bg-gray-50 rounded-full flex items-center justify-center text-gray-600 group-hover:bg-brand-dark group-hover:text-white transition-colors">
                                 <i class="fa-solid fa-arrow-right"></i>
                             </span>
                         </div>
@@ -830,133 +856,140 @@
             let eqHtml = '';
             if (window.selectedCar.equipment && window.selectedCar.equipment.length > 0) {
                 const filteredEq = window.selectedCar.equipment.filter(e => e.toLowerCase() !== (window.selectedCar.transmission || '').toLowerCase());
-                eqHtml = filteredEq.map(e => `<span class="bg-gray-100 text-gray-600 px-3 py-1.5 rounded text-[10px] font-bold uppercase"><i class="fa-solid fa-check text-green-500 mr-1.5"></i>${e}</span>`).join('');
+                eqHtml = filteredEq.map(e => `<span class="bg-white border border-gray-200 text-gray-600 px-3 py-1.5 rounded-full text-xs font-medium"><i class="fa-solid fa-check text-green-500 mr-1.5"></i>${e}</span>`).join('');
             }
 
             let extrasCheckboxes = '';
             if(window.SETTINGS.extras && window.SETTINGS.extras.length > 0) {
-                extrasCheckboxes = `<div class="mb-4"><label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">${window.T('addExt')}</label><div class="flex flex-col gap-2">` + 
+                extrasCheckboxes = `<div class="mb-4 pt-4 border-t border-gray-100"><label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3 ml-1">${window.T('addExt')}</label><div class="flex flex-col gap-2">` + 
                 window.SETTINGS.extras.map(ex => `
-                    <label class="inline-flex items-center cursor-pointer bg-white border border-gray-200 rounded px-3 py-2 hover:bg-gray-50">
-                        <input type="checkbox" onchange="window.updateTotalPrice()" class="client-extra-checkbox rounded text-brand-orange focus:ring-brand-orange w-4 h-4" value="${ex.name}" data-price="${ex.price}">
-                        <span class="ml-2 text-xs font-bold text-gray-700">${ex.name} <span class="text-brand-orange ml-1">${ex.price > 0 ? '+'+window.formatPrice(ex.price)+'/'+window.T('day').toLowerCase() : window.T('free')}</span></span>
+                    <label class="inline-flex items-center cursor-pointer bg-white border border-gray-200 rounded-2xl px-4 py-3 hover:bg-gray-50 transition-colors">
+                        <input type="checkbox" onchange="window.updateTotalPrice()" class="client-extra-checkbox rounded text-brand-orange focus:ring-brand-orange w-4 h-4 border-gray-300" value="${ex.name}" data-price="${ex.price}">
+                        <span class="ml-3 text-sm font-medium text-gray-700">${ex.name} <span class="text-brand-orange ml-1 text-xs font-bold">${ex.price > 0 ? '+'+window.formatPrice(ex.price)+'/'+window.T('day').toLowerCase() : window.T('free')}</span></span>
                     </label>
                 `).join('') + `</div></div>`;
             }
 
             const locOptions = (window.SETTINGS.locations || []).map(l => `<option value="${l}">${l}</option>`).join('');
             const mainImg = window.selectedCar.images && window.selectedCar.images[0] ? window.selectedCar.images[0] : '';
-            const thumbsHtml = (window.selectedCar.images || []).map(img => `<img src="${img}" onclick="changeMainImage('${img}')" class="w-20 h-16 object-cover rounded cursor-pointer border-2 border-transparent hover:border-brand-orange transition-colors">`).join('');
+            const thumbsHtml = (window.selectedCar.images || []).map(img => `<img src="${img}" onclick="changeMainImage('${img}')" class="w-20 h-16 object-cover rounded-xl cursor-pointer border-2 border-transparent hover:border-brand-orange transition-colors">`).join('');
 
             document.getElementById('detail-content').innerHTML = `
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
-                    <div class="lg:col-span-2">
-                        <img id="mainGalleryImage" src="${mainImg}" class="w-full h-[350px] md:h-[500px] object-cover rounded-xl border shadow-sm mb-4 transition-all">
-                        ${(window.selectedCar.images || []).length > 1 ? `<div class="flex gap-2 overflow-x-auto hide-scrollbar pb-2">${thumbsHtml}</div>` : ''}
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+                    <div class="lg:col-span-7">
+                        <img id="mainGalleryImage" src="${mainImg}" class="w-full h-[350px] md:h-[550px] object-cover rounded-[2.5rem] bg-gray-50 mb-4 transition-all">
+                        ${(window.selectedCar.images || []).length > 1 ? `<div class="flex gap-3 overflow-x-auto hide-scrollbar pb-2 px-2">${thumbsHtml}</div>` : ''}
+                        
+                        <div class="mt-10 mb-8">
+                            <h2 class="text-2xl font-bold tracking-tight mb-4">Características</h2>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="bg-gray-50 text-gray-700 px-4 py-2 rounded-full text-sm font-medium"><i class="fa-solid fa-users text-gray-400 mr-2"></i>${window.selectedCar.passengers || 4} ${window.T('pax')}</span>
+                                <span class="bg-gray-50 text-gray-700 px-4 py-2 rounded-full text-sm font-medium"><i class="fa-solid fa-suitcase text-gray-400 mr-2"></i>${window.selectedCar.luggage || 2} ${window.T('lug')}</span>
+                                <span class="bg-gray-50 text-gray-700 px-4 py-2 rounded-full text-sm font-medium"><i class="fa-solid fa-gear text-gray-400 mr-2"></i>${window.selectedCar.transmission || 'Auto'}</span>
+                                ${eqHtml}
+                            </div>
+                        </div>
                     </div>
                     
-                    <div class="bg-white p-8 rounded-xl border shadow-xl self-start sticky top-28">
-                        <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-1">${window.selectedCar.type}</span>
-                        <h1 class="oswald text-4xl font-bold uppercase mb-4">${window.selectedCar.name}</h1>
-                        
-                        <div class="flex flex-wrap gap-2 mb-6">
-                            <span class="bg-gray-100 text-gray-600 px-3 py-1.5 rounded text-[10px] font-bold uppercase"><i class="fa-solid fa-users text-gray-400 mr-1.5"></i>${window.selectedCar.passengers || 4} ${window.T('pax')}</span>
-                            <span class="bg-gray-100 text-gray-600 px-3 py-1.5 rounded text-[10px] font-bold uppercase"><i class="fa-solid fa-suitcase text-gray-400 mr-1.5"></i>${window.selectedCar.luggage || 2} ${window.T('lug')}</span>
-                            <span class="bg-gray-100 text-gray-600 px-3 py-1.5 rounded text-[10px] font-bold uppercase"><i class="fa-solid fa-gear text-gray-400 mr-1.5"></i>${window.selectedCar.transmission || 'Auto'}</span>
-                            ${eqHtml}
-                        </div>
+                    <div class="lg:col-span-5">
+                        <div class="bg-brand-surface p-8 rounded-[2rem] self-start sticky top-28 border border-gray-100">
+                            <span class="text-[10px] font-bold text-brand-orange uppercase tracking-widest block mb-2">${window.selectedCar.type}</span>
+                            <h1 class="text-4xl font-bold tracking-tight mb-6">${window.selectedCar.name}</h1>
 
-                        <div class="mb-6 border-b pb-6">
-                            <p class="text-4xl font-bold text-brand-orange">${window.formatPrice(window.selectedCar.price)} <span class="text-sm text-gray-400 uppercase font-normal">${window.T('perDay') || '/ Día'}</span></p>
-                            <div id="detailTotalPrice" class="mt-3"></div>
-                        </div>
-                        
-                        <div id="booking-step-1" class="space-y-4">
-                            <div>
-                                <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">${window.T('reqDates')}</label>
-                                <input type="text" id="detailDateInput" class="w-full rounded border-gray-200 py-3 bg-gray-50 font-bold cursor-pointer focus:ring-brand-orange" value="${dateText}" readonly onclick="toggleCalendar(event, 'detailCalendarModal')">
-                            </div>
-
-                            <div id="detailCalendarModal" class="calendar-modal bg-white rounded-xl border p-5">
-                                <div class="flex justify-between items-center mb-4">
-                                    <button type="button" class="text-gray-800 p-2" onclick="changeMonth(event, -1, 'detailCalendar')"><i class="fa-solid fa-chevron-left"></i></button>
-                                    <h4 id="detailCalendarMonthTitle" class="text-sm font-bold uppercase oswald text-gray-900">${window.monthNames[window.currentMonth]} ${window.currentYear}</h4>
-                                    <button type="button" class="text-gray-800 p-2" onclick="changeMonth(event, 1, 'detailCalendar')"><i class="fa-solid fa-chevron-right"></i></button>
-                                </div>
-                                <div class="grid grid-cols-7 gap-y-1" id="detailCalendarGrid"></div>
-                                <p id="detailDiscountMsg" class="text-[10px] text-brand-orange font-bold text-center mt-3 h-3"></p>
-                                <button onclick="applyDates(event, 'detailCalendarModal')" class="w-full mt-4 bg-brand-dark text-white py-2 rounded font-bold uppercase text-xs hover:bg-black">${window.T('accDates')}</button>
+                            <div class="mb-6 pb-6 border-b border-gray-200">
+                                <p class="text-4xl font-bold text-brand-dark tracking-tight">${window.formatPrice(window.selectedCar.price)} <span class="text-base text-gray-500 font-normal">/ ${window.T('day')}</span></p>
+                                <div id="detailTotalPrice" class="mt-4"></div>
                             </div>
                             
-                            <div class="grid grid-cols-2 gap-4">
-                                <div>
-                                    <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">${window.T('pickupLoc')}</label>
-                                    <select id="detailLocation" class="w-full rounded border-gray-200 py-2 text-sm bg-gray-50 focus:ring-brand-orange">
-                                        <option value="">...</option>
-                                        ${locOptions}
-                                    </select>
+                            <!-- PASO 1 -->
+                            <div id="booking-step-1" class="space-y-5">
+                                <div class="relative group">
+                                    <label class="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1.5 ml-1">${window.T('reqDates')}</label>
+                                    <input type="text" id="detailDateInput" class="w-full g-input rounded-xl py-3.5 px-4 text-sm font-semibold cursor-pointer" value="${dateText}" readonly onclick="toggleCalendar(event, 'detailCalendarModal')">
                                 </div>
-                                <div>
-                                    <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">${window.T('timeLoc')}</label>
-                                    <select id="detailTime" class="w-full rounded border-gray-200 py-2 text-sm bg-gray-50 focus:ring-brand-orange">
-                                        <option value="">...</option>
-                                        <option value="07:00">07:00</option>
-                                        <option value="08:00">08:00</option>
-                                        <option value="09:00">09:00</option>
-                                        <option value="10:00">10:00</option>
-                                        <option value="11:00">11:00</option>
-                                        <option value="12:00">12:00</option>
-                                        <option value="13:00">13:00</option>
-                                        <option value="14:00">14:00</option>
-                                        <option value="15:00">15:00</option>
-                                        <option value="16:00">16:00</option>
-                                        <option value="17:00">17:00</option>
-                                    </select>
+
+                                <div id="detailCalendarModal" class="calendar-modal bg-white p-5 fade-in">
+                                    <div class="flex justify-between items-center mb-4">
+                                        <button type="button" class="text-gray-500 hover:bg-gray-100 p-2 rounded-full w-8 h-8 flex items-center justify-center transition-colors" onclick="changeMonth(event, -1, 'detailCalendar')"><i class="fa-solid fa-chevron-left"></i></button>
+                                        <h4 id="detailCalendarMonthTitle" class="text-sm font-bold text-gray-900">${window.monthNames[window.currentMonth]} ${window.currentYear}</h4>
+                                        <button type="button" class="text-gray-500 hover:bg-gray-100 p-2 rounded-full w-8 h-8 flex items-center justify-center transition-colors" onclick="changeMonth(event, 1, 'detailCalendar')"><i class="fa-solid fa-chevron-right"></i></button>
+                                    </div>
+                                    <div class="grid grid-cols-7 gap-y-1" id="detailCalendarGrid"></div>
+                                    <p id="detailDiscountMsg" class="text-[10px] text-brand-orange font-medium text-center mt-3 h-3"></p>
+                                    <button onclick="applyDates(event, 'detailCalendarModal')" class="w-full mt-4 bg-brand-dark text-white py-3 rounded-full font-bold text-xs hover:bg-black transition-colors">${window.T('accDates')}</button>
                                 </div>
+                                
+                                <div class="grid grid-cols-2 gap-3">
+                                    <div>
+                                        <label class="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1.5 ml-1">${window.T('pickupLoc')}</label>
+                                        <select id="detailLocation" class="w-full g-input rounded-xl py-3 px-3 text-sm appearance-none">
+                                            <option value="">...</option>
+                                            ${locOptions}
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1.5 ml-1">${window.T('timeLoc')}</label>
+                                        <select id="detailTime" class="w-full g-input rounded-xl py-3 px-3 text-sm appearance-none">
+                                            <option value="">...</option>
+                                            <option value="07:00">07:00</option>
+                                            <option value="08:00">08:00</option>
+                                            <option value="09:00">09:00</option>
+                                            <option value="10:00">10:00</option>
+                                            <option value="11:00">11:00</option>
+                                            <option value="12:00">12:00</option>
+                                            <option value="13:00">13:00</option>
+                                            <option value="14:00">14:00</option>
+                                            <option value="15:00">15:00</option>
+                                            <option value="16:00">16:00</option>
+                                            <option value="17:00">17:00</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                ${extrasCheckboxes}
+                                <button onclick="validateAndProceed()" class="w-full bg-brand-orange hover:bg-brand-yellow text-white font-bold py-4 rounded-full shadow-md transition-colors mt-4">${window.T('contRes')}</button>
                             </div>
 
-                            ${extrasCheckboxes}
-                            <button onclick="validateAndProceed()" class="w-full bg-brand-orange hover:bg-yellow-500 text-white font-bold py-4 rounded shadow-md uppercase transition-colors mt-2">${window.T('contRes')}</button>
-                        </div>
+                            <!-- PASO 2: FORMULARIO DATOS -->
+                            <div id="booking-step-2" class="hidden space-y-4 fade-in">
+                                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest border-b border-gray-200 pb-3 mb-4 ml-1">${window.T('urData')}</p>
+                                <input id="clientName" type="text" class="w-full g-input rounded-xl py-3.5 px-4 text-sm" placeholder="${window.T('name')}">
+                                <input id="clientPhone" type="tel" class="w-full g-input rounded-xl py-3.5 px-4 text-sm" placeholder="${window.T('phone')}">
+                                <input id="clientEmail" type="email" class="w-full g-input rounded-xl py-3.5 px-4 text-sm" placeholder="${window.T('email')}">
+                                <input id="clientAddress" type="text" class="w-full g-input rounded-xl py-3.5 px-4 text-sm" placeholder="${window.T('address')}">
+                                
+                                <div class="bg-gray-100 p-4 rounded-2xl mt-4">
+                                    <p class="text-[11px] text-gray-500 font-medium leading-relaxed"><i class="fa-solid fa-circle-info mr-1 text-gray-400"></i> ${window.T('info1')}</p>
+                                </div>
 
-                        <!-- PASO 2: FORMULARIO DATOS -->
-                        <div id="booking-step-2" class="hidden space-y-4 fade-in">
-                            <p class="text-xs font-bold text-gray-500 uppercase tracking-widest border-b pb-2 mb-2">${window.T('urData')}</p>
-                            <input id="clientName" type="text" class="w-full rounded border-gray-200 py-3 text-sm focus:ring-brand-orange" placeholder="${window.T('name')}">
-                            <input id="clientPhone" type="tel" class="w-full rounded border-gray-200 py-3 text-sm focus:ring-brand-orange" placeholder="${window.T('phone')}">
-                            <input id="clientEmail" type="email" class="w-full rounded border-gray-200 py-3 text-sm focus:ring-brand-orange" placeholder="${window.T('email')}">
-                            <input id="clientAddress" type="text" class="w-full rounded border-gray-200 py-3 text-sm focus:ring-brand-orange" placeholder="${window.T('address')}">
-                            
-                            <div class="bg-gray-50 p-3 rounded border border-gray-100 mt-2">
-                                <p class="text-[10px] text-gray-500 font-medium leading-tight"><i class="fa-solid fa-circle-info mr-1 text-brand-orange"></i> ${window.T('info1')}</p>
+                                <div class="bg-orange-50 border border-orange-100 p-5 mt-4 rounded-2xl text-xs text-orange-800">
+                                    <p class="font-bold uppercase tracking-widest mb-2"><i class="fa-solid fa-lock mr-1"></i> ${window.T('info2')}</p>
+                                    <p class="leading-relaxed opacity-90">${window.T('info3', {amt: window.formatPrice(10000)})}</p>
+                                </div>
+
+                                <div class="mt-6">
+                                    <button onclick="goToReview()" class="w-full bg-brand-dark hover:bg-black text-white font-bold py-4 rounded-full shadow-md transition-colors">${window.T('btnConfirm')}</button>
+                                </div>
+                                <button onclick="document.getElementById('booking-step-2').classList.add('hidden'); document.getElementById('booking-step-1').classList.remove('hidden');" class="w-full text-xs text-gray-500 font-semibold hover:text-gray-900 py-3 mt-2 rounded-full hover:bg-gray-100 transition-colors"><i class="fa-solid fa-arrow-left mr-1"></i> ${window.T('btnBack')}</button>
                             </div>
 
-                            <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4 rounded text-xs text-yellow-800">
-                                <p class="font-bold uppercase tracking-widest mb-1"><i class="fa-solid fa-triangle-exclamation mr-1"></i> ${window.T('info2')}</p>
-                                <p class="leading-relaxed">${window.T('info3', {amt: window.formatPrice(10000)})}</p>
+                            <!-- PASO 3: REVISIÓN FINAL -->
+                            <div id="booking-step-3" class="hidden space-y-4 fade-in">
+                                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest border-b border-gray-200 pb-3 mb-4 ml-1"><i class="fa-solid fa-check-double mr-1 text-brand-orange"></i> ${window.T('reviewData')}</p>
+                                <div class="bg-white p-6 rounded-2xl text-sm space-y-3 border border-gray-200 text-gray-600 shadow-sm">
+                                    <p><strong class="text-gray-900 font-semibold mr-1">${window.T('name')}:</strong> <span id="revName"></span></p>
+                                    <p><strong class="text-gray-900 font-semibold mr-1">${window.T('phone')}:</strong> <span id="revPhone"></span></p>
+                                    <p><strong class="text-gray-900 font-semibold mr-1">${window.T('email')}:</strong> <span id="revEmail"></span></p>
+                                    <p><strong class="text-gray-900 font-semibold mr-1">${window.T('address')}:</strong> <span id="revAddress"></span></p>
+                                    <div class="h-px bg-gray-100 my-2"></div>
+                                    <p><strong class="text-gray-900 font-semibold mr-1">${window.T('pickupLoc')}:</strong> <span id="revLoc"></span></p>
+                                    <p><strong class="text-gray-900 font-semibold mr-1">Fechas:</strong> <span id="revDates"></span></p>
+                                </div>
+                                <div class="mt-6">
+                                    <button onclick="submitBooking(event)" class="w-full bg-brand-dark hover:bg-black text-white font-bold py-4 rounded-full shadow-md transition-colors text-sm tracking-wide"><span data-en="Book Now">${window.T('submitRes')}</span></button>
+                                </div>
+                                <button onclick="document.getElementById('booking-step-3').classList.add('hidden'); document.getElementById('booking-step-2').classList.remove('hidden');" class="w-full text-xs text-gray-500 font-semibold hover:text-gray-900 py-3 mt-2 rounded-full hover:bg-gray-100 transition-colors"><i class="fa-solid fa-pen mr-1"></i> ${window.T('btnEdit')}</button>
                             </div>
-
-                            <div class="grid grid-cols-1 gap-2 mt-4">
-                                <button onclick="goToReview()" class="w-full bg-brand-dark hover:bg-black text-white font-bold py-4 rounded shadow-md uppercase transition-colors"><i class="fa-solid fa-clipboard-check mr-2 text-xl align-middle"></i> <span data-en="Confirm">${window.T('btnConfirm')}</span></button>
-                            </div>
-                            <button onclick="document.getElementById('booking-step-2').classList.add('hidden'); document.getElementById('booking-step-1').classList.remove('hidden');" class="w-full text-xs text-gray-400 font-bold uppercase hover:text-gray-600 py-2">${window.T('btnBack')}</button>
-                        </div>
-
-                        <!-- PASO 3: REVISIÓN FINAL -->
-                        <div id="booking-step-3" class="hidden space-y-4 fade-in">
-                            <p class="text-xs font-bold text-brand-orange uppercase tracking-widest border-b pb-2 mb-2"><i class="fa-solid fa-check-double mr-1"></i> ${window.T('reviewData')}</p>
-                            <div class="bg-gray-50 p-4 rounded text-sm space-y-2 border border-gray-200 text-gray-700">
-                                <p><strong class="text-gray-900">${window.T('name')}:</strong> <span id="revName"></span></p>
-                                <p><strong class="text-gray-900">${window.T('phone')}:</strong> <span id="revPhone"></span></p>
-                                <p><strong class="text-gray-900">${window.T('email')}:</strong> <span id="revEmail"></span></p>
-                                <p><strong class="text-gray-900">${window.T('address')}:</strong> <span id="revAddress"></span></p>
-                                <p class="pt-2 mt-2 border-t border-gray-200"><strong class="text-gray-900">${window.T('pickupLoc')}:</strong> <span id="revLoc"></span></p>
-                                <p><strong class="text-gray-900">Fechas:</strong> <span id="revDates"></span></p>
-                            </div>
-                            <div class="grid grid-cols-1 gap-2 mt-4">
-                                <button onclick="submitBooking(event)" class="w-full bg-brand-dark hover:bg-black text-white font-bold py-4 rounded shadow-md uppercase transition-colors"><i class="fa-solid fa-paper-plane mr-2 text-xl align-middle"></i> <span data-en="Book Now">${window.T('submitRes')}</span></button>
-                            </div>
-                            <button onclick="document.getElementById('booking-step-3').classList.add('hidden'); document.getElementById('booking-step-2').classList.remove('hidden');" class="w-full text-xs text-gray-400 font-bold uppercase hover:text-gray-600 py-2">${window.T('btnEdit')}</button>
                         </div>
                     </div>
                 </div>
@@ -1084,7 +1117,6 @@
                         client_address: address,
                         extras: extrasStr || 'Ninguno'
                     });
-                    console.log('EmailJS enviado con éxito');
                 } catch(e) { console.error('Error detallado enviando EmailJS:', e); }
                 
                 // Reinicio Total Automático de variables
@@ -1257,25 +1289,25 @@
             list.innerHTML = window.CARS.map(car => {
                 let blockedHtml = '';
                 if (car.bookedRanges && car.bookedRanges.length > 0) {
-                    blockedHtml = `<div class="mt-2 flex flex-wrap gap-1">` + 
-                        car.bookedRanges.map(r => `<span class="bg-red-50 text-red-600 text-[9px] px-2 py-0.5 rounded border border-red-100 font-bold uppercase tracking-wider"><i class="fa-solid fa-lock mr-1"></i>${r.start} / ${r.end}</span>`).join('') 
+                    blockedHtml = `<div class="mt-3 flex flex-wrap gap-1.5">` + 
+                        car.bookedRanges.map(r => `<span class="bg-red-50 text-red-600 text-[10px] px-2.5 py-1 rounded-md font-semibold"><i class="fa-solid fa-lock mr-1.5"></i>${r.start} / ${r.end}</span>`).join('') 
                     + `</div>`;
                 }
 
                 return `
-                <div class="flex flex-col md:flex-row md:items-center justify-between p-4 border rounded-lg bg-gray-50 hover:bg-white transition-colors gap-4">
-                    <div class="flex items-start gap-4">
-                        <img src="${car.images && car.images[0] ? car.images[0] : ''}" class="w-20 h-14 object-cover rounded shadow-sm shrink-0">
+                <div class="flex flex-col md:flex-row md:items-center justify-between p-5 border border-gray-100 rounded-2xl bg-white hover:border-gray-200 transition-colors gap-5 shadow-sm">
+                    <div class="flex items-start gap-5">
+                        <img src="${car.images && car.images[0] ? car.images[0] : ''}" class="w-24 h-16 object-cover rounded-xl shrink-0">
                         <div>
-                            <p class="font-bold text-sm text-gray-900">${car.name}</p>
-                            <p class="text-[10px] text-gray-500 font-medium uppercase tracking-widest mt-0.5">${car.type} • ${car.transmission || 'Automático'} • Q${car.price}/día</p>
+                            <p class="font-bold text-base text-gray-900 tracking-tight">${car.name}</p>
+                            <p class="text-[11px] text-gray-500 font-medium uppercase tracking-widest mt-1">${car.type} • ${car.transmission || 'Automático'} • Q${car.price}/día</p>
                             ${blockedHtml}
                         </div>
                     </div>
                     <div class="flex flex-wrap gap-2 shrink-0 self-end md:self-auto">
-                        <button onclick="editCar('${car.id}')" class="text-gray-500 hover:text-brand-orange bg-white border border-gray-200 px-3 py-1.5 rounded text-[10px] font-bold uppercase transition-colors"><i class="fa-solid fa-pen mr-1"></i>Editar</button>
-                        <button onclick="openBlockModal('${car.id}')" class="text-gray-500 hover:text-brand-orange bg-white border border-gray-200 px-3 py-1.5 rounded text-[10px] font-bold uppercase transition-colors"><i class="fa-solid fa-calendar-xmark mr-1"></i>Bloqueos</button>
-                        <button onclick="deleteCar('${car.id}')" class="text-red-500 hover:text-red-700 bg-white border border-gray-200 px-3 py-1.5 rounded text-[10px] font-bold uppercase transition-colors"><i class="fa-solid fa-trash mr-1"></i></button>
+                        <button onclick="editCar('${car.id}')" class="text-gray-600 hover:text-brand-dark bg-gray-50 hover:bg-gray-100 px-4 py-2 rounded-full text-xs font-semibold transition-colors"><i class="fa-solid fa-pen mr-1.5"></i>Editar</button>
+                        <button onclick="openBlockModal('${car.id}')" class="text-gray-600 hover:text-brand-dark bg-gray-50 hover:bg-gray-100 px-4 py-2 rounded-full text-xs font-semibold transition-colors"><i class="fa-solid fa-calendar-xmark mr-1.5"></i>Bloqueos</button>
+                        <button onclick="deleteCar('${car.id}')" class="text-red-500 hover:text-red-700 bg-red-50 hover:bg-red-100 w-8 h-8 rounded-full text-xs font-semibold transition-colors flex items-center justify-center"><i class="fa-solid fa-trash"></i></button>
                     </div>
                 </div>
             `}).join('');
@@ -1373,9 +1405,9 @@
             const ul = document.getElementById('activeBlocksList');
             if (car.bookedRanges && car.bookedRanges.length > 0) {
                 ul.innerHTML = car.bookedRanges.map((range, index) => 
-                    `<li class="flex justify-between items-center bg-gray-50 p-3 rounded border text-sm">
+                    `<li class="flex justify-between items-center bg-gray-50 p-4 rounded-xl border border-gray-100 text-sm">
                         <span class="font-bold text-gray-700">${range.start} <i class="fa-solid fa-arrow-right text-gray-400 mx-2 text-xs"></i> ${range.end}</span>
-                        <button onclick="removeBlock('${carId}', ${index})" class="text-red-500 hover:text-red-700 text-[10px] uppercase font-bold tracking-wider"><i class="fa-solid fa-times mr-1"></i> Quitar</button>
+                        <button onclick="removeBlock('${carId}', ${index})" class="text-red-500 hover:text-red-700 text-xs font-semibold px-3 py-1.5 hover:bg-red-50 rounded-md transition-colors">Quitar</button>
                     </li>`
                 ).join('');
             } else {
@@ -1416,9 +1448,6 @@
             const exRate = document.getElementById('adminExchangeRate');
             if(exRate) exRate.value = window.SETTINGS.exchangeRate || 7.7;
             
-            const contactEmail = document.getElementById('adminContactEmail');
-            if(contactEmail) contactEmail.value = window.SETTINGS.contactEmail || 'reservas@turbo.com';
-            
             const emPub = document.getElementById('adminEmailJsPublic');
             if(emPub) emPub.value = window.SETTINGS.emailjsPublic || '';
             
@@ -1437,17 +1466,17 @@
             const eqContainer = document.getElementById('adminEquipmentCheckboxes');
             if(eqContainer) {
                 eqContainer.innerHTML = (window.SETTINGS.equipment || []).map(e => `
-                    <label class="inline-flex items-center cursor-pointer bg-white border border-gray-200 rounded px-3 py-2 hover:bg-gray-50">
-                        <input type="checkbox" class="eq-checkbox rounded text-brand-orange focus:ring-brand-orange w-4 h-4" value="${e}">
-                        <span class="ml-2 text-xs font-bold text-gray-700">${e}</span>
+                    <label class="inline-flex items-center cursor-pointer bg-white border border-gray-200 rounded-xl px-4 py-2.5 hover:bg-gray-50 transition-colors">
+                        <input type="checkbox" class="eq-checkbox rounded text-brand-orange focus:ring-brand-orange w-4 h-4 border-gray-300" value="${e}">
+                        <span class="ml-2.5 text-sm font-medium text-gray-700">${e}</span>
                     </label>`).join('');
             }
 
             const fillList = (id, listKey) => {
                 const el = document.getElementById(id);
                 if(el) el.innerHTML = (window.SETTINGS[listKey] || []).map((v, i) => `
-                    <li class="flex justify-between items-center bg-gray-50 p-2 rounded border text-sm">
-                        ${v} <button onclick="deleteSetting('${listKey}', ${i})" class="text-red-500 hover:text-red-700"><i class="fa-solid fa-trash text-xs"></i></button>
+                    <li class="flex justify-between items-center bg-white p-3.5 rounded-xl border border-gray-100 text-sm shadow-sm">
+                        <span class="font-medium text-gray-700">${v}</span> <button onclick="deleteSetting('${listKey}', ${i})" class="text-gray-400 hover:text-red-500 transition-colors"><i class="fa-solid fa-trash"></i></button>
                     </li>`).join('');
             };
             fillList('categoriesListAdmin', 'categories');
@@ -1457,18 +1486,18 @@
             const extraListAdmin = document.getElementById('extraListAdmin');
             if(extraListAdmin) {
                 extraListAdmin.innerHTML = (window.SETTINGS.extras || []).map((ex, i) => `
-                    <li class="flex justify-between items-center bg-gray-50 p-2 rounded border text-sm">
-                        <span>${ex.name} <strong class="text-brand-orange ml-1">${ex.price > 0 ? 'Q'+ex.price : '(Gratis)'}</strong></span>
-                        <button onclick="deleteSetting('extras', ${i})" class="text-red-500 hover:text-red-700"><i class="fa-solid fa-trash text-xs"></i></button>
+                    <li class="flex justify-between items-center bg-white p-3.5 rounded-xl border border-gray-100 text-sm shadow-sm">
+                        <span class="font-medium text-gray-700">${ex.name} <strong class="text-brand-orange ml-1 text-xs">${ex.price > 0 ? 'Q'+ex.price : '(Gratis)'}</strong></span>
+                        <button onclick="deleteSetting('extras', ${i})" class="text-gray-400 hover:text-red-500 transition-colors"><i class="fa-solid fa-trash"></i></button>
                     </li>`).join('');
             }
 
             const hdList = document.getElementById('hdListAdmin');
             if(hdList) {
                 hdList.innerHTML = (window.SETTINGS.highDemandRanges || []).map((r, i) => `
-                    <li class="bg-red-50 p-2 rounded border border-red-100 flex justify-between items-center text-sm">
+                    <li class="bg-red-50/50 p-4 rounded-xl border border-red-100 flex justify-between items-center text-sm">
                         <span class="font-bold text-red-800">${r.start} <i class="fa-solid fa-arrow-right text-red-300 mx-2 text-xs"></i> ${r.end}</span>
-                        <button onclick="deleteSetting('highDemandRanges', ${i})" class="text-red-500 hover:text-red-700"><i class="fa-solid fa-trash text-xs"></i></button>
+                        <button onclick="deleteSetting('highDemandRanges', ${i})" class="text-red-400 hover:text-red-600 transition-colors"><i class="fa-solid fa-trash"></i></button>
                     </li>
                 `).join('');
             }
@@ -1476,10 +1505,10 @@
             const faqAdminList = document.getElementById('faqAdminList');
             if(faqAdminList && window.SETTINGS.faqs) {
                 faqAdminList.innerHTML = window.SETTINGS.faqs.map((f, i) => `
-                    <li class="bg-gray-50 p-3 rounded border relative">
-                        <button onclick="deleteSetting('faqs', ${i})" class="absolute top-3 right-3 text-red-500 hover:text-red-700"><i class="fa-solid fa-trash text-xs"></i></button>
-                        <p class="font-bold text-sm text-gray-800 pr-6">${f.q}</p>
-                        <p class="text-xs text-gray-500 mt-1">${f.a}</p>
+                    <li class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm relative">
+                        <button onclick="deleteSetting('faqs', ${i})" class="absolute top-4 right-4 text-gray-300 hover:text-red-500 transition-colors"><i class="fa-solid fa-trash"></i></button>
+                        <p class="font-bold text-base text-gray-900 pr-8 tracking-tight">${f.q}</p>
+                        <p class="text-sm text-gray-500 mt-2 leading-relaxed">${f.a}</p>
                     </li>
                 `).join('');
             }
@@ -1487,13 +1516,11 @@
 
         window.saveRegionalSettings = async () => {
             const exRate = document.getElementById('adminExchangeRate');
-            const contactEmail = document.getElementById('adminContactEmail');
             const emPub = document.getElementById('adminEmailJsPublic');
             const emSrv = document.getElementById('adminEmailJsService');
             const emTpl = document.getElementById('adminEmailJsTemplate');
 
             window.SETTINGS.exchangeRate = exRate ? (Number(exRate.value) || 7.7) : 7.7;
-            window.SETTINGS.contactEmail = contactEmail ? contactEmail.value.trim() : 'reservas@turbo.com';
             window.SETTINGS.emailjsPublic = emPub ? emPub.value.trim() : '';
             window.SETTINGS.emailjsService = emSrv ? emSrv.value.trim() : '';
             window.SETTINGS.emailjsTemplate = emTpl ? emTpl.value.trim() : '';
@@ -1575,7 +1602,7 @@
             const list = document.getElementById('admin-reservations-list');
             if(!list) return;
             if(window.RESERVATIONS.length === 0) {
-                list.innerHTML = `<tr><td colspan="7" class="px-4 py-4 text-center text-gray-400 italic">No hay reservas registradas.</td></tr>`;
+                list.innerHTML = `<tr><td colspan="7" class="px-6 py-8 text-center text-gray-500 font-medium">No hay reservas registradas.</td></tr>`;
                 return;
             }
 
@@ -1583,40 +1610,40 @@
 
             list.innerHTML = sortedRes.map(res => {
                 let statusClass = 'bg-gray-100 text-gray-700';
-                if(res.status === 'Atendida') statusClass = 'bg-blue-100 text-blue-700';
-                else if(res.status === 'En ruta') statusClass = 'bg-orange-100 text-orange-700';
-                else if(res.status === 'Entregado') statusClass = 'bg-green-100 text-green-700';
+                if(res.status === 'Atendida') statusClass = 'bg-blue-50 text-blue-600';
+                else if(res.status === 'En ruta') statusClass = 'bg-orange-50 text-orange-600';
+                else if(res.status === 'Entregado') statusClass = 'bg-green-50 text-green-600';
                 
                 return `
-                <tr class="hover:bg-gray-50 transition-colors border-b">
-                    <td class="px-4 py-3 align-top">
-                        <p class="font-bold text-gray-900">${res.clientName}</p>
-                        <p class="text-[10px] text-gray-500"><i class="fa-brands fa-whatsapp text-green-500"></i> ${res.clientPhone}</p>
+                <tr class="hover:bg-gray-50 transition-colors border-b border-gray-50">
+                    <td class="px-6 py-5 align-top">
+                        <p class="font-bold text-gray-900 mb-1">${res.clientName}</p>
+                        <p class="text-xs text-gray-500"><i class="fa-brands fa-whatsapp text-green-500 mr-1"></i> ${res.clientPhone}</p>
                     </td>
-                    <td class="px-4 py-3 font-medium text-gray-700 align-top">${res.carName}</td>
-                    <td class="px-4 py-3 align-top">
-                        <p class="text-xs font-bold">${res.startDate} al ${res.endDate}</p>
-                        <p class="text-[10px] text-gray-500">${res.pickupTime} | ${res.pickupLocation}</p>
+                    <td class="px-6 py-5 font-semibold text-gray-800 align-top">${res.carName}</td>
+                    <td class="px-6 py-5 align-top">
+                        <p class="text-sm font-bold text-gray-900 mb-1">${res.startDate} al ${res.endDate}</p>
+                        <p class="text-xs text-gray-500">${res.pickupTime} | ${res.pickupLocation}</p>
                     </td>
-                    <td class="px-4 py-3 align-top">
-                        <p class="text-[10px] text-gray-500 w-48 truncate" title="${res.clientEmail}"><i class="fa-solid fa-envelope"></i> ${res.clientEmail}</p>
-                        <p class="text-[10px] text-gray-500 w-48 truncate" title="${res.clientAddress}"><i class="fa-solid fa-map-pin"></i> ${res.clientAddress}</p>
-                        ${res.extras ? `<p class="text-[10px] text-brand-orange mt-1">Extras: ${res.extras.replace(/\n/g, ', ')}</p>` : ''}
+                    <td class="px-6 py-5 align-top">
+                        <p class="text-xs text-gray-500 w-48 truncate mb-1" title="${res.clientEmail}"><i class="fa-solid fa-envelope mr-1"></i> ${res.clientEmail}</p>
+                        <p class="text-xs text-gray-500 w-48 truncate" title="${res.clientAddress}"><i class="fa-solid fa-map-pin mr-1"></i> ${res.clientAddress}</p>
+                        ${res.extras ? `<p class="text-[10px] text-brand-orange mt-2 bg-orange-50 inline-block px-2 py-1 rounded-md font-medium">Extras: ${res.extras.replace(/\n/g, ', ')}</p>` : ''}
                     </td>
-                    <td class="px-4 py-3 font-bold text-brand-orange align-top">${res.totalPrice}</td>
-                    <td class="px-4 py-3 text-center align-top">
-                        <span class="px-2 py-1 rounded text-[10px] font-bold uppercase ${statusClass}">
+                    <td class="px-6 py-5 font-bold text-brand-dark align-top tracking-tight text-base">${res.totalPrice}</td>
+                    <td class="px-6 py-5 text-center align-top">
+                        <span class="px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-widest ${statusClass}">
                             ${res.status || 'Pendiente'}
                         </span>
                     </td>
-                    <td class="px-4 py-3 text-center flex flex-wrap justify-center gap-1 w-48 align-top">
-                        <button onclick="changeResStatus('${res.id}', 'Pendiente')" class="text-[9px] font-bold uppercase border px-2 py-1 rounded text-gray-500 hover:bg-gray-100">Pendiente</button>
-                        <button onclick="changeResStatus('${res.id}', 'Atendida')" class="text-[9px] font-bold uppercase border px-2 py-1 rounded text-blue-500 hover:bg-blue-50">Atender</button>
+                    <td class="px-6 py-5 text-center flex flex-wrap justify-center gap-1.5 w-48 align-top">
+                        <button onclick="changeResStatus('${res.id}', 'Pendiente')" class="text-[10px] font-bold uppercase tracking-wider bg-white border border-gray-200 px-3 py-1.5 rounded-full text-gray-500 hover:bg-gray-50 transition-colors shadow-sm">Pendiente</button>
+                        <button onclick="changeResStatus('${res.id}', 'Atendida')" class="text-[10px] font-bold uppercase tracking-wider bg-white border border-gray-200 px-3 py-1.5 rounded-full text-blue-600 hover:bg-blue-50 transition-colors shadow-sm">Atender</button>
                         ${res.status === 'En ruta' ? 
-                            `<button onclick="changeResStatus('${res.id}', 'Entregado')" class="text-[9px] font-bold uppercase border px-2 py-1 rounded text-green-600 hover:bg-green-50">Recibir Carro</button>` : 
-                            `<button onclick="finalizeRes('${res.id}')" class="text-[9px] font-bold uppercase border px-2 py-1 rounded text-orange-500 hover:bg-orange-50">Finalizar</button>`
+                            `<button onclick="changeResStatus('${res.id}', 'Entregado')" class="text-[10px] font-bold uppercase tracking-wider bg-green-500 border border-green-600 px-3 py-1.5 rounded-full text-white hover:bg-green-600 transition-colors shadow-sm">Recibir Carro</button>` : 
+                            `<button onclick="finalizeRes('${res.id}')" class="text-[10px] font-bold uppercase tracking-wider bg-orange-500 border border-orange-600 px-3 py-1.5 rounded-full text-white hover:bg-orange-600 transition-colors shadow-sm">Finalizar</button>`
                         }
-                        <button onclick="deleteReservation('${res.id}')" class="text-[9px] font-bold uppercase border px-2 py-1 rounded text-red-500 hover:bg-red-50 ml-2" title="Eliminar"><i class="fa-solid fa-trash"></i></button>
+                        <button onclick="deleteReservation('${res.id}')" class="text-xs font-bold w-8 h-8 rounded-full text-gray-400 hover:bg-red-50 hover:text-red-500 transition-colors ml-1" title="Eliminar"><i class="fa-solid fa-trash"></i></button>
                     </td>
                 </tr>
                 `;
@@ -1663,13 +1690,13 @@
                 
                 if (bgs.length > 0) {
                     localStorage.setItem('turboHeroBg', bgs[0]);
-                    heroEl.style.backgroundImage = `linear-gradient(to right, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0) 100%), url('${bgs[0]}')`;
+                    heroEl.style.backgroundImage = `linear-gradient(to right, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0) 100%), url('${bgs[0]}')`;
                     clearInterval(heroBgInterval);
                     if (bgs.length > 1) {
                         currentBgIndex = 0;
                         heroBgInterval = setInterval(() => {
                             currentBgIndex = (currentBgIndex + 1) % bgs.length;
-                            heroEl.style.backgroundImage = `linear-gradient(to right, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0) 100%), url('${bgs[currentBgIndex]}')`;
+                            heroEl.style.backgroundImage = `linear-gradient(to right, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0) 100%), url('${bgs[currentBgIndex]}')`;
                         }, 5000);
                     }
                 }
@@ -1692,9 +1719,9 @@
             if (faqContainer) {
                 faqContainer.innerHTML = (!window.SETTINGS.faqs || window.SETTINGS.faqs.length === 0) ? `<p class="text-center text-gray-500">${window.T('noFaq')}</p>` : 
                 window.SETTINGS.faqs.map(faq => `
-                    <div class="bg-gray-50 p-6 rounded-xl border border-gray-100 shadow-sm text-left">
-                        <h4 class="font-bold text-lg mb-2 oswald uppercase tracking-wide"><i class="fa-solid fa-circle-question text-brand-orange mr-2"></i>${faq.q}</h4>
-                        <p class="text-gray-600 text-sm leading-relaxed">${faq.a}</p>
+                    <div class="bg-white p-8 rounded-[2rem] border border-gray-100 shadow-[0_4px_20px_rgb(0,0,0,0.03)] text-left hover:shadow-md transition-shadow">
+                        <h4 class="font-bold text-xl mb-3 tracking-tight text-gray-900"><i class="fa-solid fa-circle-question text-brand-orange mr-3"></i>${faq.q}</h4>
+                        <p class="text-gray-500 text-sm leading-relaxed ml-8 pl-1">${faq.a}</p>
                     </div>`).join('');
             }
         };
@@ -1737,7 +1764,7 @@
                 if (docSnap.exists()) {
                     let data = docSnap.data();
                     if(data.extras && typeof data.extras[0] === 'string') data.extras = data.extras.map(e => ({name: e, price: 0}));
-                    // Proteger claves de EmailJS por si se guardó vacío antes
+                    // Proteger claves de EmailJS
                     if (!data.emailjsPublic) data.emailjsPublic = '4W40WME2FB2Ku9-vZ';
                     if (!data.emailjsService) data.emailjsService = 'service_salcl6o';
                     if (!data.emailjsTemplate) data.emailjsTemplate = 'template_vr6n7ll';
