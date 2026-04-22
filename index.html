@@ -517,7 +517,14 @@
         import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, collection, doc, addDoc, updateDoc, deleteDoc, getDoc, onSnapshot, setDoc, arrayUnion, arrayRemove, runTransaction } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        const configToUse = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
+        const configToUse = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
+    apiKey: "AIzaSyDN5m6y0D06qmjxC5aJgTIJgFqWTrkWM3g",
+    authDomain: "mycar-532b2.firebaseapp.com",
+    projectId: "mycar-532b2",
+    storageBucket: "mycar-532b2.firebasestorage.app",
+    messagingSenderId: "999070913490",
+    appId: "1:999070913490:web:0f79b5cc64c4f429fe2e0b"
+};
 
         let db, auth;
         const currentAppId = typeof __app_id !== 'undefined' ? __app_id : 'mycar-532b2';
