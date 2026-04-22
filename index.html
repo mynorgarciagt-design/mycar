@@ -6,11 +6,9 @@
     <title>Turbo - Car Rental</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"/>
-    <!-- Inter Font (Similar a Google Sans) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <!-- EmailJS Script -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 
     <style>
@@ -24,9 +22,7 @@
             transition: background-image 0.5s ease-in-out;
         }
 
-        header:not(.scrolled) {
-            text-shadow: 0 2px 5px rgba(0,0,0,0.6);
-        }
+        header:not(.scrolled) { text-shadow: 0 2px 5px rgba(0,0,0,0.6); }
 
         header.scrolled {
             background-color: rgba(255, 255, 255, 0.95) !important;
@@ -55,7 +51,7 @@
         
         .calendar-day.selected { background-color: #f59e0b !important; color: white !important; border-radius: 50%; }
         .calendar-day.in-range { background-color: #fef3c7; color: #92400e; }
-        .calendar-day.disabled { color: #d1d5db; cursor: not-allowed; pointer-events: none; background-color: transparent; }
+        .calendar-day.disabled { color: #d1d5db; cursor: not-allowed; pointer-events: none; background-color: transparent; opacity: 0.5;}
 
         .fade-in { animation: fadeIn 0.6s cubic-bezier(0.2, 0, 0, 1); }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
@@ -63,7 +59,6 @@
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-        /* Google-like Inputs */
         .g-input {
             background-color: #f1f3f4;
             border: 1px solid transparent;
@@ -77,26 +72,17 @@
             ring: 0;
         }
 
-        /* Forzar ocultar flechas de select nativas */
         .custom-select {
             -webkit-appearance: none !important;
             -moz-appearance: none !important;
             appearance: none !important;
             background-image: none !important;
         }
-        .custom-select::-ms-expand {
-            display: none !important;
-        }
+        .custom-select::-ms-expand { display: none !important; }
     </style>
     <script>
         tailwind.config = {
-          theme: {
-            extend: {
-              colors: {
-                brand: { orange: '#f59e0b', dark: '#202124', yellow: '#fbbf24', surface: '#f8f9fa', border: '#dadce0' }
-              }
-            }
-          }
+          theme: { extend: { colors: { brand: { orange: '#f59e0b', dark: '#202124', yellow: '#fbbf24', surface: '#f8f9fa', border: '#dadce0' } } } }
         }
     </script>
 </head>
@@ -125,14 +111,11 @@
                         <p id="heroSubtitle" class="text-lg md:text-xl text-gray-100 max-w-2xl mx-auto font-medium text-shadow-sm"></p>
                     </div>
 
-                    <!-- Buscador estilo Google (Píldora ancha) -->
                     <div class="bg-white rounded-[2rem] p-2 md:p-3 shadow-[0_8px_30px_rgb(0,0,0,0.12)] w-full max-w-4xl fade-in relative flex flex-col md:flex-row gap-2 calendar-wrapper">
                         <form class="flex flex-col md:flex-row w-full gap-2 items-center" onsubmit="handleSearch(event)">
                             <div class="w-full md:flex-1 relative group">
                                 <label class="absolute left-4 top-2 text-[10px] font-semibold text-gray-500 z-10" data-en="Pickup Point">Punto de Recogida</label>
-                                <select id="searchLocation" class="w-full border-none bg-transparent pt-6 pb-2 pl-4 pr-12 text-sm font-medium text-gray-800 focus:ring-0 cursor-pointer custom-select truncate">
-                                    <!-- Dinamico -->
-                                </select>
+                                <select id="searchLocation" class="w-full border-none bg-transparent pt-6 pb-2 pl-4 pr-12 text-sm font-medium text-gray-800 focus:ring-0 cursor-pointer custom-select truncate"></select>
                                 <div class="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400"><i class="fa-solid fa-location-dot"></i></div>
                             </div>
                             
@@ -143,11 +126,10 @@
                                 <input id="dateInput" type="text" class="w-full border-none bg-transparent pt-6 pb-2 pl-4 pr-12 text-sm font-medium text-gray-800 focus:ring-0 cursor-pointer truncate" value="Seleccionar fechas" readonly onclick="toggleCalendar(event, 'homeCalendarModal')">
                                 <div class="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400"><i class="fa-regular fa-calendar"></i></div>
                                 
-                                <!-- Calendario Flotante -->
                                 <div id="homeCalendarModal" class="calendar-modal bg-white p-5 fade-in">
                                     <div class="flex justify-between items-center mb-4">
                                         <button type="button" class="text-gray-500 hover:bg-gray-100 p-2 rounded-full w-8 h-8 flex items-center justify-center transition-colors" onclick="changeMonth(event, -1, 'homeCalendar')"><i class="fa-solid fa-chevron-left"></i></button>
-                                        <h4 id="homeCalendarMonthTitle" class="text-sm font-bold text-gray-900">Abril 2026</h4>
+                                        <h4 id="homeCalendarMonthTitle" class="text-sm font-bold text-gray-900">...</h4>
                                         <button type="button" class="text-gray-500 hover:bg-gray-100 p-2 rounded-full w-8 h-8 flex items-center justify-center transition-colors" onclick="changeMonth(event, 1, 'homeCalendar')"><i class="fa-solid fa-chevron-right"></i></button>
                                     </div>
                                     <div class="grid grid-cols-7 gap-y-1" id="homeCalendarGrid"></div>
@@ -186,7 +168,7 @@
                 </main>
             </section>
 
-            <!-- BANNERS: POR QUÉ ELEGIRNOS -->
+            <!-- BANNERS -->
             <section id="section-banners" class="py-24 bg-brand-surface px-6 md:px-12 lg:px-24">
                 <div class="text-center mb-16 max-w-2xl mx-auto">
                     <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-brand-dark mb-4" data-en="Why choose Turbo">Por qué elegir Turbo</h2>
@@ -217,6 +199,7 @@
                 </div>
             </section>
 
+            <!-- FLOTA -->
             <section id="section-fleet" class="py-24 bg-white px-6 md:px-12 lg:px-24 border-t border-brand-border">
                 <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-end mb-12 gap-4">
                     <div>
@@ -234,9 +217,7 @@
                     <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-brand-dark mb-4" data-en="Frequently Asked Questions">Preguntas Frecuentes</h2>
                     <p class="text-gray-500 text-lg" data-en="We solve your main doubts so you can rent without worries.">Resolvemos tus dudas principales para que rentes con total tranquilidad.</p>
                 </div>
-                <div id="faq-public-container" class="max-w-3xl mx-auto space-y-4">
-                    <!-- Dinámico -->
-                </div>
+                <div id="faq-public-container" class="max-w-3xl mx-auto space-y-4"></div>
             </section>
         </div>
 
@@ -252,13 +233,10 @@
 
         <!-- ADMIN PANEL -->
         <section id="admin-view" class="hidden pt-28 pb-20 px-4 md:px-8 fade-in min-h-screen bg-brand-surface flex flex-col md:flex-row gap-6 max-w-screen-2xl mx-auto">
-            
-            <!-- Admin Sidebar Menu -->
             <div class="w-full md:w-64 shrink-0 flex flex-col gap-1">
                 <button onclick="goHome()" class="mb-6 flex items-center gap-2 text-gray-500 hover:text-gray-900 font-bold text-xs uppercase px-4">
                     <i class="fa-solid fa-arrow-left"></i> Salir de Admin
                 </button>
-                
                 <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest px-4 mb-2">Opciones Principales</p>
                 <button onclick="switchAdminSection('sec-reservations')" class="admin-tab-btn w-full text-left px-5 py-3 rounded-full font-medium text-sm bg-orange-100 text-brand-orange transition-all"><i class="fa-solid fa-calendar-check w-6"></i> Reservas</button>
                 <button onclick="switchAdminSection('sec-addcar')" class="admin-tab-btn w-full text-left px-5 py-3 rounded-full font-medium text-sm text-gray-600 hover:bg-gray-100 transition-all bg-transparent"><i class="fa-solid fa-car-side w-6"></i> Agregar Vehículo</button>
@@ -275,10 +253,7 @@
                 <button onclick="switchAdminSection('sec-regional')" class="admin-tab-btn w-full text-left px-5 py-3 rounded-full font-medium text-sm text-gray-600 hover:bg-gray-100 transition-all bg-transparent"><i class="fa-solid fa-globe w-6 text-blue-400"></i> Ajustes Regionales</button>
             </div>
 
-            <!-- Admin Content Area -->
             <div class="flex-1 min-w-0 bg-white p-6 md:p-10 rounded-[2rem] border border-gray-100 shadow-[0_4px_20px_rgb(0,0,0,0.03)] min-h-[500px] overflow-hidden">
-                
-                <!-- SEC: RESERVAS -->
                 <div id="sec-reservations" class="admin-section block fade-in">
                     <h3 class="text-2xl font-bold tracking-tight mb-6"><i class="fa-solid fa-calendar-check text-brand-orange mr-2"></i> Gestión de Reservas</h3>
                     <div class="overflow-x-auto rounded-2xl border border-gray-100">
@@ -294,14 +269,11 @@
                                     <th class="px-6 py-4 text-center">Acciones</th>
                                 </tr>
                             </thead>
-                            <tbody id="admin-reservations-list" class="divide-y divide-gray-100">
-                                <!-- Dinámico -->
-                            </tbody>
+                            <tbody id="admin-reservations-list" class="divide-y divide-gray-100"></tbody>
                         </table>
                     </div>
                 </div>
 
-                <!-- SEC: AGREGAR/EDITAR CARRO -->
                 <div id="sec-addcar" class="admin-section hidden fade-in max-w-3xl">
                     <div class="flex justify-between items-center mb-6">
                         <h3 id="adminFormTitle" class="text-2xl font-bold tracking-tight"><i class="fa-solid fa-car-side text-brand-orange mr-2"></i> Agregar Vehículo Nuevo</h3>
@@ -309,7 +281,6 @@
                     </div>
                     <form id="adminForm" onsubmit="addCar(event)" class="grid grid-cols-1 md:grid-cols-2 gap-5">
                         <input id="adminCarName" type="text" required class="md:col-span-2 g-input rounded-2xl py-3.5 px-4 text-sm" placeholder="Nombre del Vehículo">
-                        
                         <div>
                             <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Precio Normal (Q)</label>
                             <input id="adminCarPrice" type="number" required class="w-full g-input rounded-xl py-3 px-4 text-sm" placeholder="Ej. 450" oninput="document.getElementById('adminCarPriceHigh').value = Math.round(this.value * 1.1)">
@@ -318,87 +289,57 @@
                             <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Precio Demanda Alta (Q) (+10%)</label>
                             <input id="adminCarPriceHigh" type="number" required class="w-full g-input rounded-xl py-3 px-4 text-sm" placeholder="Ej. 495">
                         </div>
-
                         <select id="adminCarType" required class="w-full g-input rounded-xl py-3 px-4 text-sm"></select>
                         <select id="adminCarTrans" required class="w-full g-input rounded-xl py-3 px-4 text-sm custom-select">
-                            <option value="">Transmisión...</option>
-                            <option value="Automático">Automático</option>
-                            <option value="Mecánico">Mecánico</option>
+                            <option value="">Transmisión...</option><option value="Automático">Automático</option><option value="Mecánico">Mecánico</option>
                         </select>
-
                         <div class="flex gap-4 md:col-span-2">
-                            <div class="flex-1 relative">
-                                <span class="absolute left-4 top-3.5 text-gray-400"><i class="fa-solid fa-users"></i></span>
-                                <input id="adminCarPax" type="number" min="1" required class="w-full pl-10 g-input rounded-xl py-3 px-4 text-sm" placeholder="Pasajeros">
-                            </div>
-                            <div class="flex-1 relative">
-                                <span class="absolute left-4 top-3.5 text-gray-400"><i class="fa-solid fa-suitcase"></i></span>
-                                <input id="adminCarLuggage" type="number" min="0" required class="w-full pl-10 g-input rounded-xl py-3 px-4 text-sm" placeholder="Maletas">
-                            </div>
+                            <div class="flex-1 relative"><span class="absolute left-4 top-3.5 text-gray-400"><i class="fa-solid fa-users"></i></span><input id="adminCarPax" type="number" min="1" required class="w-full pl-10 g-input rounded-xl py-3 px-4 text-sm" placeholder="Pasajeros"></div>
+                            <div class="flex-1 relative"><span class="absolute left-4 top-3.5 text-gray-400"><i class="fa-solid fa-suitcase"></i></span><input id="adminCarLuggage" type="number" min="0" required class="w-full pl-10 g-input rounded-xl py-3 px-4 text-sm" placeholder="Maletas"></div>
                         </div>
-                        
-                        <!-- Gestión de Fotos Progresiva -->
                         <div class="md:col-span-2 border border-gray-100 rounded-[2rem] p-6 bg-gray-50/50">
                             <label class="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-4">Galería de Fotos</label>
                             <div id="pendingImagesPreview" class="flex flex-wrap gap-3 mb-4"></div>
                             <div class="relative w-full border-2 border-dashed border-gray-200 rounded-2xl p-6 text-center hover:bg-gray-50 transition-colors cursor-pointer bg-white">
                                 <input type="file" id="adminCarImage" accept="image/*" multiple class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" onchange="handleCarImages(this)">
-                                <div class="text-sm text-gray-500 font-medium">
-                                    <i class="fa-solid fa-plus-circle mb-2 text-3xl text-brand-orange"></i><br>
-                                    Agregar Fotos <span class="block text-xs font-normal mt-1">(La primera será la principal)</span>
-                                </div>
+                                <div class="text-sm text-gray-500 font-medium"><i class="fa-solid fa-plus-circle mb-2 text-3xl text-brand-orange"></i><br>Agregar Fotos <span class="block text-xs font-normal mt-1">(La primera será la principal)</span></div>
                             </div>
                         </div>
-
                         <div class="md:col-span-2 border-t border-gray-100 pt-6 mt-2">
                             <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3 ml-1">Equipamiento Incluido</label>
                             <div id="adminEquipmentCheckboxes" class="flex flex-wrap gap-3"></div>
                         </div>
-
                         <button type="submit" id="btnGuardarCarro" class="md:col-span-2 mt-6 bg-brand-dark text-white font-semibold py-4 rounded-full text-sm hover:bg-black transition-colors shadow-md">Guardar Vehículo</button>
                     </form>
                 </div>
 
-                <!-- SEC: INVENTARIO -->
                 <div id="sec-inventory" class="admin-section hidden fade-in">
                     <h3 class="text-2xl font-bold tracking-tight mb-6"><i class="fa-solid fa-list text-brand-orange mr-2"></i> Inventario Actual</h3>
                     <div id="admin-car-list" class="grid grid-cols-1 gap-4"></div>
                 </div>
 
-                <!-- SEC: HERO (PORTADA) -->
                 <div id="sec-hero" class="admin-section hidden fade-in max-w-2xl">
                     <h3 class="text-2xl font-bold tracking-tight mb-6"><i class="fa-solid fa-image text-brand-orange mr-2"></i> Diseño de Portada</h3>
                     <div class="space-y-5 bg-gray-50 p-6 rounded-[2rem] border border-gray-100">
-                        <div>
-                            <label class="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1.5 ml-1">Título Principal</label>
-                            <input type="text" id="adminHeroTitle" class="w-full g-input rounded-xl py-3 px-4 text-sm">
-                        </div>
-                        <div>
-                            <label class="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1.5 ml-1">Subtítulo Corto</label>
-                            <textarea id="adminHeroSubtitle" rows="3" class="w-full g-input rounded-xl py-3 px-4 text-sm"></textarea>
-                        </div>
+                        <div><label class="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1.5 ml-1">Título Principal</label><input type="text" id="adminHeroTitle" class="w-full g-input rounded-xl py-3 px-4 text-sm"></div>
+                        <div><label class="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1.5 ml-1">Subtítulo Corto</label><textarea id="adminHeroSubtitle" rows="3" class="w-full g-input rounded-xl py-3 px-4 text-sm"></textarea></div>
                         <div>
                             <label class="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1.5 ml-1">Imágenes de Fondo (Alta Calidad)</label>
-                            <div class="border border-dashed border-gray-200 rounded-xl p-4 bg-white">
-                                <input type="file" id="adminHeroBgInput" accept="image/*" multiple class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-gray-100 file:font-semibold file:text-brand-dark cursor-pointer">
-                            </div>
+                            <div class="border border-dashed border-gray-200 rounded-xl p-4 bg-white"><input type="file" id="adminHeroBgInput" accept="image/*" multiple class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-gray-100 file:font-semibold file:text-brand-dark cursor-pointer"></div>
                         </div>
                         <button onclick="saveHeroSettings()" class="w-full bg-brand-dark text-white py-3.5 rounded-full text-sm font-semibold mt-2 hover:bg-black transition-colors shadow-md">Actualizar Portada</button>
                     </div>
                 </div>
 
-                <!-- SEC: DEMANDA ALTA -->
                 <div id="sec-demand" class="admin-section hidden fade-in max-w-2xl">
                     <h3 class="text-2xl font-bold tracking-tight mb-6"><i class="fa-solid fa-fire text-red-500 mr-2"></i> Fechas de Demanda Alta</h3>
                     <div class="flex flex-col md:flex-row gap-3 mb-6 bg-red-50/50 p-4 rounded-[1.5rem] border border-red-100">
-                        <input type="date" id="hdStartDate" class="flex-1 g-input rounded-xl py-3 px-4 text-sm">
-                        <input type="date" id="hdEndDate" class="flex-1 g-input rounded-xl py-3 px-4 text-sm">
+                        <input type="date" id="hdStartDate" class="flex-1 g-input rounded-xl py-3 px-4 text-sm"><input type="date" id="hdEndDate" class="flex-1 g-input rounded-xl py-3 px-4 text-sm">
                         <button onclick="addHighDemand()" class="bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-full font-semibold transition-colors shadow-sm"><i class="fa-solid fa-plus mr-1"></i> Añadir</button>
                     </div>
                     <ul id="hdListAdmin" class="space-y-3"></ul>
                 </div>
 
-                <!-- SEC: LUGARES DE RECOGIDA -->
                 <div id="sec-locations" class="admin-section hidden fade-in max-w-xl">
                     <h3 class="text-2xl font-bold tracking-tight mb-6"><i class="fa-solid fa-map-marker-alt text-brand-orange mr-2"></i> Lugares de Recogida</h3>
                     <div class="flex gap-3 mb-6 bg-gray-50 p-4 rounded-[1.5rem] border border-gray-100">
@@ -408,7 +349,6 @@
                     <ul id="locListAdmin" class="space-y-2"></ul>
                 </div>
 
-                <!-- SEC: EXTRAS -->
                 <div id="sec-extras" class="admin-section hidden fade-in max-w-2xl">
                     <h3 class="text-2xl font-bold tracking-tight mb-6"><i class="fa-solid fa-plus-circle text-brand-orange mr-2"></i> Accesorios Extra</h3>
                     <p class="text-sm text-gray-500 mb-4 ml-1">Estos accesorios los elegirá el cliente al reservar. Precio 0 = Gratis.</p>
@@ -420,7 +360,6 @@
                     <ul id="extraListAdmin" class="space-y-2"></ul>
                 </div>
 
-                <!-- SEC: CATEGORÍAS -->
                 <div id="sec-categories" class="admin-section hidden fade-in max-w-xl">
                     <h3 class="text-2xl font-bold tracking-tight mb-6"><i class="fa-solid fa-layer-group text-brand-orange mr-2"></i> Categorías de Vehículos</h3>
                     <div class="flex gap-3 mb-6 bg-gray-50 p-4 rounded-[1.5rem] border border-gray-100">
@@ -430,7 +369,6 @@
                     <ul id="categoriesListAdmin" class="space-y-2"></ul>
                 </div>
 
-                <!-- SEC: EQUIPAMIENTO BÁSICO -->
                 <div id="sec-equipment" class="admin-section hidden fade-in max-w-xl">
                     <h3 class="text-2xl font-bold tracking-tight mb-6"><i class="fa-solid fa-cogs text-brand-orange mr-2"></i> Equipamiento Básico</h3>
                     <p class="text-sm text-gray-500 mb-4 ml-1">Opciones que aparecen como casillas al crear un carro.</p>
@@ -441,7 +379,6 @@
                     <ul id="equipmentListAdmin" class="space-y-2"></ul>
                 </div>
 
-                <!-- SEC: FAQS -->
                 <div id="sec-faqs" class="admin-section hidden fade-in max-w-3xl">
                     <h3 class="text-2xl font-bold tracking-tight mb-6"><i class="fa-solid fa-question-circle text-brand-orange mr-2"></i> Preguntas Frecuentes</h3>
                     <div class="space-y-3 mb-8 bg-gray-50 p-6 rounded-[2rem] border border-gray-100">
@@ -452,7 +389,6 @@
                     <ul id="faqAdminList" class="space-y-4"></ul>
                 </div>
 
-                <!-- SEC: REGIONAL -->
                 <div id="sec-regional" class="admin-section hidden fade-in max-w-xl">
                     <h3 class="text-2xl font-bold tracking-tight mb-6"><i class="fa-solid fa-globe text-blue-500 mr-2"></i> Ajustes Regionales</h3>
                     <div class="space-y-6 bg-blue-50/30 p-8 rounded-[2rem] border border-blue-100">
@@ -460,7 +396,6 @@
                             <label class="block text-[10px] font-bold text-gray-600 uppercase tracking-widest mb-2 ml-1">Tasa de Cambio (1 USD = ? GTQ)</label>
                             <input type="number" step="0.01" id="adminExchangeRate" placeholder="Ej. 7.7" class="w-full bg-white border border-gray-200 focus:border-blue-500 rounded-xl py-3 px-4 text-sm outline-none transition-colors shadow-sm">
                         </div>
-                        
                         <div class="pt-6 border-t border-blue-100">
                             <h4 class="text-[10px] font-bold text-blue-600 uppercase tracking-widest mb-3 ml-1"><i class="fa-solid fa-envelope-open-text mr-1"></i> Integración EmailJS Automática</h4>
                             <div class="space-y-3 bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
@@ -469,11 +404,9 @@
                                 <input type="text" id="adminEmailJsTemplate" placeholder="Template ID" class="w-full g-input rounded-lg py-2.5 px-3 text-sm">
                             </div>
                         </div>
-
                         <button onclick="saveRegionalSettings()" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-full text-sm font-semibold shadow-md transition-colors mt-2">Guardar Configuración</button>
                     </div>
                 </div>
-
             </div>
         </section>
 
@@ -518,6 +451,21 @@
             </div>
         </div>
 
+        <!-- CUSTOM CONFIRM MODAL -->
+        <div id="customConfirmModal" class="hidden fixed inset-0 bg-gray-900/50 z-[9999] flex items-center justify-center fade-in backdrop-blur-sm px-4">
+            <div class="bg-white p-8 rounded-[2rem] w-full max-w-sm shadow-2xl text-center">
+                <div class="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-5 text-red-500">
+                    <i class="fa-solid fa-triangle-exclamation text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-3 tracking-tight text-gray-900">¿Estás seguro?</h3>
+                <p id="confirmMessage" class="text-sm text-gray-500 mb-8 leading-relaxed"></p>
+                <div class="flex gap-3">
+                    <button onclick="closeConfirmModal()" class="flex-1 py-3 text-sm font-semibold text-gray-600 hover:bg-gray-100 rounded-full transition-colors">Cancelar</button>
+                    <button id="confirmActionBtn" class="flex-1 py-3 bg-brand-dark text-white text-sm font-semibold rounded-full hover:bg-black transition-colors shadow-sm">Confirmar</button>
+                </div>
+            </div>
+        </div>
+
         <!-- MODAL ÉXITO RESERVA -->
         <div id="successModal" class="hidden fixed inset-0 bg-gray-900/40 z-[9999] flex items-center justify-center fade-in backdrop-blur-sm px-4">
             <div class="bg-white p-10 rounded-[2.5rem] w-full max-w-md shadow-[0_24px_38px_3px_rgba(0,0,0,0.14)] text-center">
@@ -531,55 +479,68 @@
         </div>
     </div>
 
-    <!-- NOTIFICACIÓN -->
     <div id="notif" class="fixed bottom-6 right-6 md:bottom-10 md:right-10 bg-gray-900 text-white px-6 py-4 rounded-2xl shadow-xl translate-y-40 transition-transform duration-300 z-[200] flex items-center gap-3">
         <i class="fa-solid fa-circle-info text-brand-orange"></i>
         <p id="notif-text" class="text-sm font-medium"></p>
     </div>
 
     <script type="module">
-        // PINTADO RÁPIDO DE PORTADA (CACHE PREVIO A FIREBASE)
+        window.esc = (str) => {
+            if (!str) return '';
+            return String(str).replace(/[&<>'"]/g, match => {
+                return {'&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'}[match];
+            });
+        };
+
+        let confirmActionCallback = null;
+        window.showConfirmModal = (msg, callback) => {
+            document.getElementById('confirmMessage').innerText = msg;
+            confirmActionCallback = callback;
+            document.getElementById('customConfirmModal').classList.remove('hidden');
+        };
+        window.closeConfirmModal = () => { document.getElementById('customConfirmModal').classList.add('hidden'); };
+        document.getElementById('confirmActionBtn').addEventListener('click', () => {
+            window.closeConfirmModal();
+            if (confirmActionCallback) confirmActionCallback();
+        });
+
         try {
             const cachedBg = localStorage.getItem('turboHeroBg');
             const cachedTitle = localStorage.getItem('turboHeroTitle');
             const cachedSub = localStorage.getItem('turboHeroSub');
-            if(cachedBg) {
-                document.getElementById('hero').style.backgroundImage = `linear-gradient(to right, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0) 100%), url('${cachedBg}')`;
-            }
+            if(cachedBg) document.getElementById('hero').style.backgroundImage = `linear-gradient(to right, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0) 100%), url('${esc(cachedBg)}')`;
             if(cachedTitle) document.getElementById('heroTitle').innerText = cachedTitle;
             if(cachedSub) document.getElementById('heroSubtitle').innerText = cachedSub;
-        } catch(e) {}
+        } catch(e) { console.warn("Local storage full or restricted"); }
 
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, doc, addDoc, updateDoc, deleteDoc, onSnapshot, setDoc, arrayUnion, arrayRemove } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, collection, doc, addDoc, updateDoc, deleteDoc, getDoc, onSnapshot, setDoc, arrayUnion, arrayRemove, runTransaction } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        const myFirebaseConfig = {
-            apiKey: "AIzaSyDN5m6y0D06qmjxC5aJgTIJgFqWTrkWM3g",
-            authDomain: "mycar-532b2.firebaseapp.com",
-            projectId: "mycar-532b2",
-            storageBucket: "mycar-532b2.firebasestorage.app",
-            messagingSenderId: "999070913490",
-            appId: "1:999070913490:web:0f79b5cc64c4f429fe2e0b"
-        };
+        const configToUse = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
 
         let db, auth;
         const currentAppId = typeof __app_id !== 'undefined' ? __app_id : 'mycar-532b2';
-        let currentBlockingCarId = null;
-        window.editingCarId = null;
-        window.pendingCarImagesBase64 = [];
+        
+        let _isAuthed = false;
 
-        // --- I18N Y VARIABLES GLOBALES ---
-        window.CARS = [];
-        window.RESERVATIONS = [];
-        window.searchData = { location: '', time: '' }; 
-        window.CURRENCY = 'GTQ';
-        window.LANG = 'es';
+        window.TurboState = {
+            CARS: [],
+            RESERVATIONS: [],
+            searchData: { location: '', time: '' },
+            startDay: null,
+            endDay: null,
+            selectedCar: null,
+            currentMonth: new Date().getMonth(),
+            currentYear: new Date().getFullYear(),
+            CURRENCY: 'GTQ',
+            LANG: 'es'
+        };
 
         const i18n = {
             es: {
                 dates: "Seleccionar fechas", locPlaceholder: "Seleccionar ubicación", clear: "Limpiar", confirm: "Confirmar",
-                avail: "disponibles", pax: "Pasajeros", lug: "Maletas", day: "Día", 
+                avail: "disponibles", pax: "Pasajeros", lug: "Maletas", day: "Día", perDay: "/ Día",
                 totalBase: "Tarifa base:", highDem: "Demanda Alta",
                 volDisc: "¡Descuento especial por volumen aplicado!",
                 promoMsg: "Renta 4 días o más para un descuento especial.",
@@ -600,7 +561,7 @@
             },
             en: {
                 dates: "Select dates", locPlaceholder: "Select location", clear: "Clear", confirm: "Confirm",
-                avail: "available", pax: "Passengers", lug: "Luggage", day: "Day", 
+                avail: "available", pax: "Passengers", lug: "Luggage", day: "Day", perDay: "/ Day",
                 totalBase: "Base rate:", highDem: "High Demand",
                 volDisc: "Special volume discount applied!",
                 promoMsg: "Rent 4 days or more for a special discount.",
@@ -622,50 +583,66 @@
         };
 
         window.T = (key, params={}) => {
-            let text = i18n[window.LANG][key] || key;
+            let text = i18n[window.TurboState.LANG][key] || key;
             for(let k in params) text = text.replace(`{${k}}`, params[k]);
             return text;
         };
 
         window.formatPrice = (priceInGTQ) => {
-            if (window.CURRENCY === 'USD') {
-                const rate = window.SETTINGS.exchangeRate || 7.7;
+            if (window.TurboState.CURRENCY === 'USD') {
+                const rate = window.SETTINGS?.exchangeRate || 7.7;
                 return `$${Math.round(priceInGTQ / rate).toLocaleString()}`;
             }
             return `Q${priceInGTQ.toLocaleString()}`;
         };
 
-        const defaultSettings = { 
+        const defaultSettings = {
             exchangeRate: 7.7,
-            emailjsPublic: '4W40WME2FB2Ku9-vZ', 
-            emailjsService: 'service_salcl6o', 
-            emailjsTemplate: 'template_vr6n7ll',
-            categories: ['SUV Compacto', 'Sedán', 'Pickup', 'Lujo', 'Familiar'], 
+            emailjsPublic: '',
+            emailjsService: '',
+            emailjsTemplate: '',
+            categories: ['SUV Compacto', 'Sedán', 'Pickup', 'Lujo', 'Familiar'],
             equipment: ['A/C', 'Bluetooth', 'GPS', 'Cámara de Retroceso'],
             locations: ['Panajachel, Sololá', 'Aeropuerto La Aurora', 'Antigua Guatemala'],
             extras: [{name: 'Silla de bebé', price: 50}, {name: 'Seguro Premium', price: 0}],
             highDemandRanges: [],
             faqs: [{ q: "¿Cuáles son los requisitos para rentar?", a: "DPI o Pasaporte vigente y licencia de conducir al día." }],
             hero: {
-                title: "", subtitle: "", bgs: []
+                title: "MAKE YOUR RIDE EASY & FAST WITH TURBO",
+                subtitle: "Explora Guatemala con estilo. Tu vehículo ideal te espera para la próxima aventura.",
+                bgs: []
             }
         };
 
         window.SETTINGS = { ...defaultSettings };
+
         let heroBgInterval;
         let currentBgIndex = 0;
-        
-        window.startDay = null; window.endDay = null; window.selectedCar = null;
-        window.currentMonth = 3; window.currentYear = 2026;
+        let currentBlockingCarId = null;
+        window.editingCarId = null;
+        window.pendingCarImagesBase64 = [];
+
         window.monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
 
-        const ADMIN_PIN = "turbo2026";
+        const ADMIN_HASH = "c983d8cf6ddb0337b51b3ba7582b14d2a14bba2ebce31e9c5ed5a13c9bdc0d48";
+        
+        async function hashPIN(pin) {
+            const msgUint8 = new TextEncoder().encode(pin);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        }
 
         window.openLoginModal = () => { document.getElementById('loginModal').classList.remove('hidden'); document.getElementById('adminPassword').value = ''; document.getElementById('adminPassword').focus(); };
         window.closeLoginModal = () => document.getElementById('loginModal').classList.add('hidden');
-        window.verifyAdmin = () => {
-            if(document.getElementById('adminPassword').value === ADMIN_PIN) { window.closeLoginModal(); window.openAdmin(); } 
-            else window.showNotif("Contraseña incorrecta");
+        window.verifyAdmin = async () => {
+            const pinInput = document.getElementById('adminPassword').value;
+            const hash = await hashPIN(pinInput);
+            if(hash === ADMIN_HASH) { 
+                _isAuthed = true;
+                window.closeLoginModal(); window.openAdmin(); 
+            } 
+            else { window.showNotif("Contraseña incorrecta"); }
         };
 
         window.showNotif = (msg) => {
@@ -673,7 +650,6 @@
             if (n) { n.querySelector('p').innerText = msg; n.classList.remove('translate-y-40'); setTimeout(() => n.classList.add('translate-y-40'), 4000); }
         };
 
-        // --- MANEJO DE HISTORIAL ---
         window.goHome = (fromPopState = false) => {
             document.getElementById('page-detail').classList.add('hidden');
             document.getElementById('admin-view').classList.add('hidden');
@@ -684,7 +660,6 @@
             if (!fromPopState) history.pushState({ view: 'home' }, '', '#home');
         };
 
-        // --- SISTEMA ADMIN TABS ---
         window.switchAdminSection = (sectionId) => {
             document.querySelectorAll('.admin-section').forEach(el => el.classList.add('hidden'));
             document.getElementById(sectionId).classList.remove('hidden');
@@ -701,6 +676,7 @@
         };
 
         window.openAdmin = () => {
+            if(!_isAuthed) return window.showNotif("Acceso Denegado");
             document.getElementById('main-view').classList.add('hidden');
             document.getElementById('page-detail').classList.add('hidden');
             document.getElementById('mainFooter').classList.add('hidden');
@@ -738,7 +714,7 @@
                         ctx.drawImage(img, 0, 0, w, h);
                         resolve(canvas.toDataURL('image/jpeg', isHero ? 0.8 : 0.6));
                     };
-                    img.src = e.target.result;
+                    img.src = e.target.result; // Data URL sin esc() para no corromper la imagen
                 };
                 reader.readAsDataURL(file);
             });
@@ -778,39 +754,42 @@
             });
         };
 
+        window.calculatePricing = (car, startDay, endDay, extrasDailyAmount = 0) => {
+            if(!car || !startDay || !endDay) return { days: 0, subtotal: 0, total: 0, discountPct: 0 };
+            const start = new Date(startDay.y, startDay.m, startDay.d).getTime();
+            const end = new Date(endDay.y, endDay.m, endDay.d).getTime();
+            let days = Math.max(1, Math.ceil((end - start) / (1000 * 60 * 60 * 24)));
+
+            const isHD = window.isHighDemand(startDay);
+            const baseDaily = isHD && car.highDemandPrice ? car.highDemandPrice : car.price;
+            const subtotal = baseDaily * days;
+
+            let discountPct = 0;
+            if(days >= 4 && days <= 8) discountPct = 0.06;
+            else if(days >= 9) discountPct = 0.08;
+
+            const total = (subtotal * (1 - discountPct)) + (extrasDailyAmount * days);
+            return { days, baseDaily, subtotal, discountPct, total, isHD };
+        };
+
         window.updateTotalPrice = () => {
             const el = document.getElementById('detailTotalPrice');
-            if(!el || !window.selectedCar) return;
+            if(!el || !window.TurboState.selectedCar) return;
             
-            if(window.startDay && window.endDay) {
-                const start = new Date(window.startDay.y, window.startDay.m, window.startDay.d).getTime();
-                const end = new Date(window.endDay.y, window.endDay.m, window.endDay.d).getTime();
-                
-                let days = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
-                if (days === 0) days = 1;
-
-                let isHD = window.isHighDemand(window.startDay);
-                let baseDaily = isHD && window.selectedCar.highDemandPrice ? window.selectedCar.highDemandPrice : window.selectedCar.price;
-
-                let subtotal = baseDaily * days;
-                let discountPct = 0;
-                
-                if(days >= 4 && days <= 8) discountPct = 0.06;
-                else if(days >= 9) discountPct = 0.08;
-
+            if(window.TurboState.startDay && window.TurboState.endDay) {
                 let extrasDaily = 0;
                 document.querySelectorAll('.client-extra-checkbox:checked').forEach(cb => { extrasDaily += parseFloat(cb.getAttribute('data-price') || 0); });
 
-                let total = (subtotal * (1 - discountPct)) + (extrasDaily * days);
+                const p = window.calculatePricing(window.TurboState.selectedCar, window.TurboState.startDay, window.TurboState.endDay, extrasDaily);
 
                 let html = '';
-                if(isHD) html += `<p class="text-xs font-bold text-red-500 mb-1"><i class="fa-solid fa-fire mr-1"></i> ${window.T('highDem')}</p>`;
+                if(p.isHD) html += `<p class="text-xs font-bold text-red-500 mb-1"><i class="fa-solid fa-fire mr-1"></i> ${window.T('highDem')}</p>`;
                 
-                if(discountPct > 0) {
+                if(p.discountPct > 0) {
                     html += `<p class="text-xs text-green-600 font-semibold mb-1 tracking-tight">${window.T('volDisc')}</p>`;
-                    html += `<div class="text-brand-dark text-3xl font-bold tracking-tight">${window.T('totalFor', {d: days})} <span class="line-through text-gray-400 text-lg mr-2 font-normal">${window.formatPrice(subtotal)}</span> ${window.formatPrice(total)}</div>`;
+                    html += `<div class="text-brand-dark text-3xl font-bold tracking-tight">${window.T('totalFor', {d: p.days})} <span class="line-through text-gray-400 text-lg mr-2 font-normal">${window.formatPrice(p.subtotal)}</span> ${window.formatPrice(p.total)}</div>`;
                 } else {
-                    html += `<div class="text-brand-dark text-3xl font-bold tracking-tight">${window.T('totalFor', {d: days})} ${window.formatPrice(total)}</div>`;
+                    html += `<div class="text-brand-dark text-3xl font-bold tracking-tight">${window.T('totalFor', {d: p.days})} ${window.formatPrice(p.total)}</div>`;
                 }
                 el.innerHTML = html;
             } else el.innerHTML = '';
@@ -818,30 +797,30 @@
 
         window.changeMainImage = (src) => { const img = document.getElementById('mainGalleryImage'); if(img) img.src = src; };
 
-        window.renderCars = (list = window.CARS) => {
+        window.renderCars = (list = window.TurboState.CARS) => {
             const grid = document.getElementById('car-grid');
             if(!grid) return;
             const countEl = document.getElementById('fleet-count');
             if (countEl) countEl.innerText = `${list.length} ${window.T('avail')}`;
             
             grid.innerHTML = list.map(car => `
-                <div class="bg-white rounded-[2rem] overflow-hidden border border-gray-100 cursor-pointer flex flex-col h-full shadow-sm" onclick="openDetail('${car.id}')">
+                <div class="bg-white rounded-[2rem] overflow-hidden border border-gray-100 cursor-pointer flex flex-col h-full shadow-sm hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-300" onclick="openDetail('${esc(car.id)}')">
                     <div class="h-64 overflow-hidden shrink-0 relative bg-gray-50">
                         <img src="${car.images && car.images[0] ? car.images[0] : ''}" class="w-full h-full object-cover">
                     </div>
                     <div class="p-8 flex flex-col flex-grow">
-                        <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1 block">${car.type}</span>
-                        <h3 class="text-2xl font-bold text-gray-900 mb-5 tracking-tight">${car.name}</h3>
+                        <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1 block">${esc(car.type)}</span>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-5 tracking-tight">${esc(car.name)}</h3>
                         
                         <div class="flex flex-wrap items-center gap-2 text-xs text-gray-600 font-medium mb-6">
-                            <span class="bg-gray-100 px-3 py-1.5 rounded-full flex items-center gap-1.5"><i class="fa-solid fa-users text-gray-400"></i> ${car.passengers || 4}</span>
-                            <span class="bg-gray-100 px-3 py-1.5 rounded-full flex items-center gap-1.5"><i class="fa-solid fa-suitcase text-gray-400"></i> ${car.luggage || 2}</span>
-                            <span class="bg-gray-100 px-3 py-1.5 rounded-full flex items-center gap-1.5"><i class="fa-solid fa-gear text-gray-400"></i> ${car.transmission || 'Auto'}</span>
+                            <span class="bg-gray-100 px-3 py-1.5 rounded-full flex items-center gap-1.5"><i class="fa-solid fa-users text-gray-400"></i> ${esc(car.passengers) || 4}</span>
+                            <span class="bg-gray-100 px-3 py-1.5 rounded-full flex items-center gap-1.5"><i class="fa-solid fa-suitcase text-gray-400"></i> ${esc(car.luggage) || 2}</span>
+                            <span class="bg-gray-100 px-3 py-1.5 rounded-full flex items-center gap-1.5"><i class="fa-solid fa-gear text-gray-400"></i> ${esc(car.transmission) || 'Auto'}</span>
                         </div>
 
                         <div class="mt-auto flex justify-between items-center pt-4 border-t border-gray-50">
-                            <p class="text-brand-dark font-bold text-2xl tracking-tight">${window.formatPrice(car.price)} <span class="text-sm text-gray-400 font-normal tracking-normal">${window.T('perDay') || '/ Día'}</span></p>
-                            <span class="w-12 h-12 bg-gray-50 rounded-full flex items-center justify-center text-gray-600 transition-colors">
+                            <p class="text-brand-dark font-bold text-2xl tracking-tight">${window.formatPrice(car.price)} <span class="text-sm text-gray-400 font-normal tracking-normal">${window.T('perDay')}</span></p>
+                            <span class="w-12 h-12 bg-gray-50 rounded-full flex items-center justify-center text-gray-600 transition-colors hover:bg-brand-dark hover:text-white">
                                 <i class="fa-solid fa-arrow-right"></i>
                             </span>
                         </div>
@@ -851,17 +830,19 @@
         };
 
         window.openDetail = (id, fromPopState = false) => {
-            window.selectedCar = window.CARS.find(c => c.id === id);
-            if (!window.selectedCar) return;
+            window.TurboState.selectedCar = window.TurboState.CARS.find(c => c.id === id);
+            if (!window.TurboState.selectedCar) {
+                window.goHome(true); return;
+            }
             if (!fromPopState) history.pushState({ view: 'detail', id: id }, '', '#car-' + id);
 
             const format = (d) => d ? `${String(d.d).padStart(2,'0')}/${String(d.m + 1).padStart(2,'0')}` : "";
-            const dateText = window.startDay && window.endDay ? `${format(window.startDay)} - ${format(window.endDay)}` : window.T('dates');
+            const dateText = window.TurboState.startDay && window.TurboState.endDay ? `${format(window.TurboState.startDay)} - ${format(window.TurboState.endDay)}` : window.T('dates');
 
             let eqHtml = '';
-            if (window.selectedCar.equipment && window.selectedCar.equipment.length > 0) {
-                const filteredEq = window.selectedCar.equipment.filter(e => e.toLowerCase() !== (window.selectedCar.transmission || '').toLowerCase());
-                eqHtml = filteredEq.map(e => `<span class="bg-white border border-gray-200 text-gray-600 px-3 py-1.5 rounded-full text-xs font-medium"><i class="fa-solid fa-check text-green-500 mr-1.5"></i>${e}</span>`).join('');
+            if (window.TurboState.selectedCar.equipment && window.TurboState.selectedCar.equipment.length > 0) {
+                const filteredEq = window.TurboState.selectedCar.equipment.filter(e => e.toLowerCase() !== (window.TurboState.selectedCar.transmission || '').toLowerCase());
+                eqHtml = filteredEq.map(e => `<span class="bg-white border border-gray-200 text-gray-600 px-3 py-1.5 rounded-full text-xs font-medium"><i class="fa-solid fa-check text-green-500 mr-1.5"></i>${esc(e)}</span>`).join('');
             }
 
             let extrasCheckboxes = '';
@@ -869,28 +850,28 @@
                 extrasCheckboxes = `<div class="mb-4 pt-4 border-t border-gray-100"><label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3 ml-1">${window.T('addExt')}</label><div class="flex flex-col gap-2">` + 
                 window.SETTINGS.extras.map(ex => `
                     <label class="inline-flex items-center cursor-pointer bg-white border border-gray-200 rounded-2xl px-4 py-3 hover:bg-gray-50 transition-colors">
-                        <input type="checkbox" onchange="window.updateTotalPrice()" class="client-extra-checkbox rounded text-brand-orange focus:ring-brand-orange w-4 h-4 border-gray-300" value="${ex.name}" data-price="${ex.price}">
-                        <span class="ml-3 text-sm font-medium text-gray-700">${ex.name} <span class="text-brand-orange ml-1 text-xs font-bold">${ex.price > 0 ? '+'+window.formatPrice(ex.price)+'/'+window.T('day').toLowerCase() : window.T('free')}</span></span>
+                        <input type="checkbox" onchange="window.updateTotalPrice()" class="client-extra-checkbox rounded text-brand-orange focus:ring-brand-orange w-4 h-4 border-gray-300" value="${esc(ex.name)}" data-price="${ex.price}">
+                        <span class="ml-3 text-sm font-medium text-gray-700">${esc(ex.name)} <span class="text-brand-orange ml-1 text-xs font-bold">${ex.price > 0 ? '+'+window.formatPrice(ex.price)+'/'+window.T('day').toLowerCase() : window.T('free')}</span></span>
                     </label>
                 `).join('') + `</div></div>`;
             }
 
-            const locOptions = (window.SETTINGS.locations || []).map(l => `<option value="${l}">${l}</option>`).join('');
-            const mainImg = window.selectedCar.images && window.selectedCar.images[0] ? window.selectedCar.images[0] : '';
-            const thumbsHtml = (window.selectedCar.images || []).map(img => `<img src="${img}" onclick="changeMainImage('${img}')" class="w-20 h-16 object-cover rounded-xl cursor-pointer border-2 border-transparent hover:border-brand-orange transition-colors">`).join('');
+            const locOptions = (window.SETTINGS.locations || []).map(l => `<option value="${esc(l)}">${esc(l)}</option>`).join('');
+            const mainImg = window.TurboState.selectedCar.images && window.TurboState.selectedCar.images[0] ? window.TurboState.selectedCar.images[0] : '';
+            const thumbsHtml = (window.TurboState.selectedCar.images || []).map(img => `<img src="${img}" onclick="changeMainImage('${img}')" class="w-20 h-16 object-cover rounded-xl cursor-pointer border-2 border-transparent hover:border-brand-orange transition-colors">`).join('');
 
             document.getElementById('detail-content').innerHTML = `
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
                     <div class="lg:col-span-7">
                         <img id="mainGalleryImage" src="${mainImg}" class="w-full h-[350px] md:h-[550px] object-cover rounded-[2.5rem] bg-gray-50 mb-4 transition-all">
-                        ${(window.selectedCar.images || []).length > 1 ? `<div class="flex gap-3 overflow-x-auto hide-scrollbar pb-2 px-2">${thumbsHtml}</div>` : ''}
+                        ${(window.TurboState.selectedCar.images || []).length > 1 ? `<div class="flex gap-3 overflow-x-auto hide-scrollbar pb-2 px-2">${thumbsHtml}</div>` : ''}
                         
                         <div class="mt-10 mb-8">
                             <h2 class="text-2xl font-bold tracking-tight mb-4">Características</h2>
                             <div class="flex flex-wrap gap-2">
-                                <span class="bg-gray-50 text-gray-700 px-4 py-2 rounded-full text-sm font-medium"><i class="fa-solid fa-users text-gray-400 mr-2"></i>${window.selectedCar.passengers || 4} ${window.T('pax')}</span>
-                                <span class="bg-gray-50 text-gray-700 px-4 py-2 rounded-full text-sm font-medium"><i class="fa-solid fa-suitcase text-gray-400 mr-2"></i>${window.selectedCar.luggage || 2} ${window.T('lug')}</span>
-                                <span class="bg-gray-50 text-gray-700 px-4 py-2 rounded-full text-sm font-medium"><i class="fa-solid fa-gear text-gray-400 mr-2"></i>${window.selectedCar.transmission || 'Auto'}</span>
+                                <span class="bg-gray-50 text-gray-700 px-4 py-2 rounded-full text-sm font-medium"><i class="fa-solid fa-users text-gray-400 mr-2"></i>${esc(window.TurboState.selectedCar.passengers) || 4} ${window.T('pax')}</span>
+                                <span class="bg-gray-50 text-gray-700 px-4 py-2 rounded-full text-sm font-medium"><i class="fa-solid fa-suitcase text-gray-400 mr-2"></i>${esc(window.TurboState.selectedCar.luggage) || 2} ${window.T('lug')}</span>
+                                <span class="bg-gray-50 text-gray-700 px-4 py-2 rounded-full text-sm font-medium"><i class="fa-solid fa-gear text-gray-400 mr-2"></i>${esc(window.TurboState.selectedCar.transmission) || 'Auto'}</span>
                                 ${eqHtml}
                             </div>
                         </div>
@@ -898,11 +879,11 @@
                     
                     <div class="lg:col-span-5">
                         <div class="bg-brand-surface p-8 rounded-[2rem] self-start sticky top-28 border border-gray-100">
-                            <span class="text-[10px] font-bold text-brand-orange uppercase tracking-widest block mb-2">${window.selectedCar.type}</span>
-                            <h1 class="text-4xl font-bold tracking-tight mb-6">${window.selectedCar.name}</h1>
+                            <span class="text-[10px] font-bold text-brand-orange uppercase tracking-widest block mb-2">${esc(window.TurboState.selectedCar.type)}</span>
+                            <h1 class="text-4xl font-bold tracking-tight mb-6">${esc(window.TurboState.selectedCar.name)}</h1>
 
                             <div class="mb-6 pb-6 border-b border-gray-200">
-                                <p class="text-4xl font-bold text-brand-dark tracking-tight">${window.formatPrice(window.selectedCar.price)} <span class="text-base text-gray-500 font-normal">/ ${window.T('day')}</span></p>
+                                <p class="text-4xl font-bold text-brand-dark tracking-tight">${window.formatPrice(window.TurboState.selectedCar.price)} <span class="text-base text-gray-500 font-normal">${window.T('perDay')}</span></p>
                                 <div id="detailTotalPrice" class="mt-4"></div>
                             </div>
                             
@@ -919,7 +900,7 @@
                                 <div id="detailCalendarModal" class="calendar-modal bg-white p-5 fade-in">
                                     <div class="flex justify-between items-center mb-4">
                                         <button type="button" class="text-gray-500 hover:bg-gray-100 p-2 rounded-full w-8 h-8 flex items-center justify-center transition-colors" onclick="changeMonth(event, -1, 'detailCalendar')"><i class="fa-solid fa-chevron-left"></i></button>
-                                        <h4 id="detailCalendarMonthTitle" class="text-sm font-bold text-gray-900">${window.monthNames[window.currentMonth]} ${window.currentYear}</h4>
+                                        <h4 id="detailCalendarMonthTitle" class="text-sm font-bold text-gray-900">${window.monthNames[window.TurboState.currentMonth]} ${window.TurboState.currentYear}</h4>
                                         <button type="button" class="text-gray-500 hover:bg-gray-100 p-2 rounded-full w-8 h-8 flex items-center justify-center transition-colors" onclick="changeMonth(event, 1, 'detailCalendar')"><i class="fa-solid fa-chevron-right"></i></button>
                                     </div>
                                     <div class="grid grid-cols-7 gap-y-1" id="detailCalendarGrid"></div>
@@ -1015,8 +996,8 @@
             window.updateHeaderOnScroll();
             window.generateCalendar('detailCalendarGrid');
             
-            if(window.searchData.location) document.getElementById('detailLocation').value = window.searchData.location;
-            if(window.searchData.time) document.getElementById('detailTime').value = window.searchData.time;
+            if(window.TurboState.searchData.location) document.getElementById('detailLocation').value = window.TurboState.searchData.location;
+            if(window.TurboState.searchData.time) document.getElementById('detailTime').value = window.TurboState.searchData.time;
 
             window.updateTotalPrice();
         };
@@ -1025,14 +1006,17 @@
             if (e) e.preventDefault();
             const loc = document.getElementById('searchLocation');
             const time = document.getElementById('homeTime');
-            if(loc) window.searchData.location = loc.value;
-            if(time) window.searchData.time = time.value;
+            if(loc) window.TurboState.searchData.location = loc.value;
+            if(time) window.TurboState.searchData.time = time.value;
+            
+            if (!window.TurboState.startDay) window.showNotif("Mostrando flota completa. Selecciona fechas para confirmar disponibilidad.");
+            
             window.renderCars(window.getAvailableCars());
             window.scrollToFleet();
         };
 
         window.validateAndProceed = () => {
-            if(!window.startDay || !window.endDay) return window.showNotif(window.T('errDates'));
+            if(!window.TurboState.startDay || !window.TurboState.endDay) return window.showNotif(window.T('errDates'));
             const loc = document.getElementById('detailLocation').value;
             const time = document.getElementById('detailTime').value;
             if(!loc || !time) return window.showNotif(window.T('errLoc'));
@@ -1041,24 +1025,25 @@
         };
 
         window.goToReview = () => {
-            const n = document.getElementById('clientName').value;
-            const p = document.getElementById('clientPhone').value;
-            const email = document.getElementById('clientEmail').value;
-            const address = document.getElementById('clientAddress').value;
+            const n = document.getElementById('clientName').value.trim();
+            const p = document.getElementById('clientPhone').value.trim();
+            const email = document.getElementById('clientEmail').value.trim();
+            const address = document.getElementById('clientAddress').value.trim();
             
             if(!n || !p || !email || !address) return window.showNotif(window.T('errData'));
+            if(!/^[0-9\+\-\s]+$/.test(p)) return window.showNotif("Teléfono inválido");
 
-            document.getElementById('revName').innerText = n;
-            document.getElementById('revPhone').innerText = p;
-            document.getElementById('revEmail').innerText = email;
-            document.getElementById('revAddress').innerText = address;
+            document.getElementById('revName').innerText = esc(n);
+            document.getElementById('revPhone').innerText = esc(p);
+            document.getElementById('revEmail').innerText = esc(email);
+            document.getElementById('revAddress').innerText = esc(address);
             
             const loc = document.getElementById('detailLocation').value;
             const time = document.getElementById('detailTime').value;
-            document.getElementById('revLoc').innerText = `${loc} (${time} hrs)`;
+            document.getElementById('revLoc').innerText = `${esc(loc)} (${esc(time)} hrs)`;
             
             const fmt = (d) => `${String(d.d).padStart(2,'0')}/${String(d.m + 1).padStart(2,'0')}/${d.y}`;
-            document.getElementById('revDates').innerText = `${fmt(window.startDay)} - ${fmt(window.endDay)}`;
+            document.getElementById('revDates').innerText = `${fmt(window.TurboState.startDay)} - ${fmt(window.TurboState.endDay)}`;
 
             document.getElementById('booking-step-2').classList.add('hidden');
             document.getElementById('booking-step-3').classList.remove('hidden');
@@ -1066,10 +1051,10 @@
 
         window.submitBooking = async (e) => {
             if (e) e.preventDefault();
-            const n = document.getElementById('clientName').value;
-            const p = document.getElementById('clientPhone').value;
-            const email = document.getElementById('clientEmail').value;
-            const address = document.getElementById('clientAddress').value;
+            const n = document.getElementById('clientName').value.trim();
+            const p = document.getElementById('clientPhone').value.trim();
+            const email = document.getElementById('clientEmail').value.trim();
+            const address = document.getElementById('clientAddress').value.trim();
             const location = document.getElementById('detailLocation').value;
             const time = document.getElementById('detailTime').value;
             
@@ -1078,74 +1063,90 @@
             btn.innerText = window.T('process'); btn.disabled = true;
 
             const fmt = (d) => `${String(d.d).padStart(2,'0')}/${String(d.m + 1).padStart(2,'0')}/${d.y}`;
-            const startDate = fmt(window.startDay);
-            const endDate = fmt(window.endDay);
-
-            const sTime = new Date(window.startDay.y, window.startDay.m, window.startDay.d).getTime();
-            const eTime = new Date(window.endDay.y, window.endDay.m, window.endDay.d).getTime();
-            let days = Math.ceil((eTime - sTime) / (1000 * 60 * 60 * 24));
-            if (days === 0) days = 1;
-            
-            let isHD = window.isHighDemand(window.startDay);
-            let baseDaily = isHD && window.selectedCar.highDemandPrice ? window.selectedCar.highDemandPrice : window.selectedCar.price;
-            let subtotal = baseDaily * days;
-            let discountPct = (days >= 4 && days <= 8) ? 0.06 : (days >= 9 ? 0.08 : 0);
-            
-            let extrasDaily = 0;
-            let extrasStr = '';
-            document.querySelectorAll('.client-extra-checkbox:checked').forEach(cb => {
-                extrasStr += `- ${cb.value}\n`;
-                extrasDaily += parseFloat(cb.getAttribute('data-price') || 0);
-            });
-
-            let finalTotal = (subtotal * (1 - discountPct)) + (extrasDaily * days);
-            const totalStr = window.formatPrice(finalTotal);
+            const startDate = fmt(window.TurboState.startDay);
+            const endDate = fmt(window.TurboState.endDay);
 
             try {
+                let extrasDaily = 0;
+                let extrasStr = '';
+                document.querySelectorAll('.client-extra-checkbox:checked').forEach(cb => {
+                    extrasStr += `- ${cb.value}\n`;
+                    extrasDaily += parseFloat(cb.getAttribute('data-price') || 0);
+                });
+
+                const pricing = window.calculatePricing(window.TurboState.selectedCar, window.TurboState.startDay, window.TurboState.endDay, extrasDaily);
+                const totalStr = window.formatPrice(pricing.total);
+
+                const carRef = doc(db, 'artifacts', currentAppId, 'public', 'data', 'cars', window.TurboState.selectedCar.id);
                 const resRef = collection(db, 'artifacts', currentAppId, 'public', 'data', 'reservations');
-                await addDoc(resRef, {
-                    carId: window.selectedCar.id, carName: window.selectedCar.name,
-                    clientName: n, clientPhone: p, clientEmail: email, clientAddress: address,
-                    pickupLocation: location, pickupTime: time, extras: extrasStr,
-                    startDate: startDate, endDate: endDate, totalPrice: totalStr,
-                    status: 'Pendiente', // Estado inicial explícito
-                    timestamp: new Date().toISOString()
+
+                // TRANSACCION ATOMICA PARA EVITAR RACE CONDITIONS
+                await runTransaction(db, async (transaction) => {
+                    const carCheckDoc = await transaction.get(carRef);
+                    if (!carCheckDoc.exists()) {
+                        throw new Error("El vehículo no existe.");
+                    }
+
+                    if (window.isDateBlocked(window.TurboState.startDay, carCheckDoc.data()) || window.isDateBlocked(window.TurboState.endDay, carCheckDoc.data())) {
+                        throw new Error("Lo sentimos, este vehículo acaba de ser reservado para esas fechas.");
+                    }
+
+                    // Pre-bloquear las fechas en el carro inmediatamente
+                    const currentRanges = carCheckDoc.data().bookedRanges || [];
+                    const newRange = { start: `${window.TurboState.startDay.y}-${String(window.TurboState.startDay.m + 1).padStart(2,'0')}-${String(window.TurboState.startDay.d).padStart(2,'0')}`, 
+                                       end: `${window.TurboState.endDay.y}-${String(window.TurboState.endDay.m + 1).padStart(2,'0')}-${String(window.TurboState.endDay.d).padStart(2,'0')}` };
+                    
+                    transaction.update(carRef, { bookedRanges: [...currentRanges, newRange] });
+
+                    // Guardar la reserva
+                    const newResDocRef = doc(resRef);
+                    transaction.set(newResDocRef, {
+                        carId: window.TurboState.selectedCar.id, carName: window.TurboState.selectedCar.name,
+                        clientName: esc(n), clientPhone: esc(p), clientEmail: esc(email), clientAddress: esc(address),
+                        pickupLocation: esc(location), pickupTime: esc(time), extras: esc(extrasStr),
+                        startDate: startDate, endDate: endDate, totalPrice: totalStr,
+                        status: 'Pendiente',
+                        timestamp: new Date().toISOString()
+                    });
                 });
                 
-                // Enviar por EmailJS forzado con tus credenciales
-                try {
-                    const srv = window.SETTINGS.emailjsService?.trim() || 'service_salcl6o';
-                    const tpl = window.SETTINGS.emailjsTemplate?.trim() || 'template_vr6n7ll';
-                    const pub = window.SETTINGS.emailjsPublic?.trim() || '4W40WME2FB2Ku9-vZ';
-                    
-                    window.emailjs.init(pub);
-                    await window.emailjs.send(srv, tpl, {
-                        car_name: window.selectedCar.name,
-                        total_price: totalStr,
-                        dates: `${startDate} al ${endDate}`,
-                        time: time,
-                        location: location,
-                        client_name: n,
-                        client_phone: p,
-                        client_email: email,
-                        client_address: address,
-                        extras: extrasStr || 'Ninguno'
-                    });
-                    console.log('EmailJS enviado con éxito');
-                } catch(e) { console.error('Error detallado enviando EmailJS:', e); }
+                // Enviar notificación EmailJS
+                if (window.SETTINGS.emailjsPublic && window.SETTINGS.emailjsService && window.SETTINGS.emailjsTemplate) {
+                    try {
+                        const srv = window.SETTINGS.emailjsService.trim();
+                        const tpl = window.SETTINGS.emailjsTemplate.trim();
+                        
+                        await window.emailjs.send(srv, tpl, {
+                            car_name: window.TurboState.selectedCar.name,
+                            total_price: totalStr,
+                            dates: `${startDate} al ${endDate}`,
+                            time: time,
+                            location: location,
+                            client_name: n,
+                            client_phone: p,
+                            client_email: email,
+                            client_address: address,
+                            extras: extrasStr || 'Ninguno'
+                        });
+                    } catch(e) { console.error('Error EmailJS:', e); }
+                }
                 
-                // Reinicio Total Automático de variables
-                window.startDay = null; window.endDay = null; window.searchData = { location: '', time: '' };
+                window.TurboState.startDay = null; window.TurboState.endDay = null; window.TurboState.searchData = { location: '', time: '' };
                 document.getElementById('searchLocation').value = ''; document.getElementById('homeTime').value = '';
                 document.getElementById('dateInput').value = window.T('dates');
+                
+                document.getElementById('clientName').value = '';
+                document.getElementById('clientPhone').value = '';
+                document.getElementById('clientEmail').value = '';
+                document.getElementById('clientAddress').value = '';
+
                 document.querySelectorAll('[id$="Grid"]').forEach(g => window.generateCalendar(g.id));
                 
-                // Mostrar Modal de Exito y restaurar botón en segundo plano
                 document.getElementById('successModal').classList.remove('hidden');
                 if(btn) { btn.innerHTML = originalBtnText; btn.disabled = false; }
                 
             } catch(err) {
-                console.error(err); window.showNotif(window.T('errRes'));
+                console.error(err); window.showNotif(err.message || window.T('errRes'));
                 if(btn) { btn.innerHTML = originalBtnText; btn.disabled = false; }
             }
         };
@@ -1155,10 +1156,12 @@
             window.goHome(); 
         };
 
-        // --- CALENDARIO Y BLOQUEOS ---
         window.isDateBlocked = (dateObj, car) => {
-            if (!car || !car.bookedRanges) return false;
             const checkTime = new Date(dateObj.y, dateObj.m, dateObj.d).getTime();
+            const today = new Date(); today.setHours(0,0,0,0);
+            if (checkTime < today.getTime()) return true;
+
+            if (!car || !car.bookedRanges) return false;
             return car.bookedRanges.some(range => {
                 const start = new Date(range.start + 'T00:00:00').getTime();
                 const end = new Date(range.end + 'T23:59:59').getTime();
@@ -1170,39 +1173,39 @@
             const grid = document.getElementById(gridId);
             if(!grid) return;
             grid.innerHTML = '';
-            const daysInMonth = new Date(window.currentYear, window.currentMonth + 1, 0).getDate();
-            const carToValidate = (gridId === 'detailCalendarGrid') ? window.selectedCar : null;
+            const daysInMonth = new Date(window.TurboState.currentYear, window.TurboState.currentMonth + 1, 0).getDate();
+            const carToValidate = (gridId === 'detailCalendarGrid') ? window.TurboState.selectedCar : null;
 
             for (let i = 1; i <= daysInMonth; i++) {
                 const day = document.createElement('div');
                 day.className = 'calendar-day py-2 text-[12px] font-bold text-center rounded-full transition-colors text-gray-800';
                 day.innerText = i;
                 
-                const currentDateObj = { d: i, m: window.currentMonth, y: window.currentYear };
+                const currentDateObj = { d: i, m: window.TurboState.currentMonth, y: window.TurboState.currentYear };
                 
                 if (window.isDateBlocked(currentDateObj, carToValidate)) {
                     day.classList.add('disabled', 'line-through', 'text-gray-300');
                 } else {
                     day.classList.add('cursor-pointer', 'hover:bg-gray-100');
-                    if (window.startDay && window.startDay.d === i && window.startDay.m === window.currentMonth && window.startDay.y === window.currentYear) day.classList.add('selected');
-                    if (window.endDay && window.endDay.d === i && window.endDay.m === window.currentMonth && window.endDay.y === window.currentYear) day.classList.add('selected');
+                    if (window.TurboState.startDay && window.TurboState.startDay.d === i && window.TurboState.startDay.m === window.TurboState.currentMonth && window.TurboState.startDay.y === window.TurboState.currentYear) day.classList.add('selected');
+                    if (window.TurboState.endDay && window.TurboState.endDay.d === i && window.TurboState.endDay.m === window.TurboState.currentMonth && window.TurboState.endDay.y === window.TurboState.currentYear) day.classList.add('selected');
                     
-                    if (window.startDay && window.endDay) {
-                        const current = new Date(window.currentYear, window.currentMonth, i).getTime();
-                        const s = new Date(window.startDay.y, window.startDay.m, window.startDay.d).getTime();
-                        const e = new Date(window.endDay.y, window.endDay.m, window.endDay.d).getTime();
+                    if (window.TurboState.startDay && window.TurboState.endDay) {
+                        const current = new Date(window.TurboState.currentYear, window.TurboState.currentMonth, i).getTime();
+                        const s = new Date(window.TurboState.startDay.y, window.TurboState.startDay.m, window.TurboState.startDay.d).getTime();
+                        const e = new Date(window.TurboState.endDay.y, window.TurboState.endDay.m, window.TurboState.endDay.d).getTime();
                         if (current > s && current < e) day.classList.add('in-range');
                     }
 
                     day.onclick = (e) => {
                         e.stopPropagation();
                         const clickedTime = new Date(currentDateObj.y, currentDateObj.m, currentDateObj.d).getTime();
-                        if (!window.startDay || (window.startDay && window.endDay)) {
-                            window.startDay = currentDateObj; window.endDay = null;
+                        if (!window.TurboState.startDay || (window.TurboState.startDay && window.TurboState.endDay)) {
+                            window.TurboState.startDay = currentDateObj; window.TurboState.endDay = null;
                         } else {
-                            const startTime = new Date(window.startDay.y, window.startDay.m, window.startDay.d).getTime();
-                            if (clickedTime > startTime) window.endDay = currentDateObj;
-                            else { window.startDay = currentDateObj; window.endDay = null; }
+                            const startTime = new Date(window.TurboState.startDay.y, window.TurboState.startDay.m, window.TurboState.startDay.d).getTime();
+                            if (clickedTime > startTime) window.TurboState.endDay = currentDateObj;
+                            else { window.TurboState.startDay = currentDateObj; window.TurboState.endDay = null; }
                         }
                         window.updateAllDateDisplays();
                         window.updateTotalPrice(); 
@@ -1215,11 +1218,11 @@
 
         window.changeMonth = (e, delta, prefix) => {
             if (e) e.stopPropagation();
-            window.currentMonth += delta;
-            if (window.currentMonth > 11) { window.currentMonth = 0; window.currentYear++; }
-            if (window.currentMonth < 0) { window.currentMonth = 11; window.currentYear--; }
+            window.TurboState.currentMonth += delta;
+            if (window.TurboState.currentMonth > 11) { window.TurboState.currentMonth = 0; window.TurboState.currentYear++; }
+            if (window.TurboState.currentMonth < 0) { window.TurboState.currentMonth = 11; window.TurboState.currentYear--; }
             const el = document.getElementById(prefix + 'MonthTitle');
-            if (el) el.innerText = `${window.monthNames[window.currentMonth]} ${window.currentYear}`;
+            if (el) el.innerText = `${window.monthNames[window.TurboState.currentMonth]} ${window.TurboState.currentYear}`;
             window.generateCalendar(prefix + 'Grid');
         };
 
@@ -1240,8 +1243,8 @@
 
         window.clearDates = (e) => { 
             if (e) e.stopPropagation(); 
-            window.startDay = null; 
-            window.endDay = null; 
+            window.TurboState.startDay = null; 
+            window.TurboState.endDay = null; 
             window.updateAllDateDisplays(); 
             window.updateTotalPrice();
             document.querySelectorAll('[id$="Grid"]').forEach(g => window.generateCalendar(g.id)); 
@@ -1249,7 +1252,7 @@
 
         window.updateAllDateDisplays = () => {
             const fmt = (d) => d ? `${String(d.d).padStart(2,'0')}/${String(d.m + 1).padStart(2,'0')}` : "";
-            const txt = window.startDay && window.endDay ? `${fmt(window.startDay)} - ${fmt(window.endDay)}` : window.T('dates');
+            const txt = window.TurboState.startDay && window.TurboState.endDay ? `${fmt(window.TurboState.startDay)} - ${fmt(window.TurboState.endDay)}` : window.T('dates');
             const inputHome = document.getElementById('dateInput');
             const inputDetail = document.getElementById('detailDateInput');
             
@@ -1258,15 +1261,14 @@
 
             if(inputHome) inputHome.value = txt;
             if(inputDetail) inputDetail.value = txt;
-            if(startDisp) startDisp.innerText = window.startDay ? `${fmt(window.startDay)}/${window.startDay.y.toString().slice(-2)}` : "--/--/--";
-            if(endDisp) endDisp.innerText = window.endDay ? `${fmt(window.endDay)}/${window.endDay.y.toString().slice(-2)}` : "--/--/--";
+            if(startDisp) startDisp.innerText = window.TurboState.startDay ? `${fmt(window.TurboState.startDay)}/${window.TurboState.startDay.y.toString().slice(-2)}` : "--/--/--";
+            if(endDisp) endDisp.innerText = window.TurboState.endDay ? `${fmt(window.TurboState.endDay)}/${window.TurboState.endDay.y.toString().slice(-2)}` : "--/--/--";
 
             let msg = "";
-            if (window.startDay && window.endDay) {
-                const s = new Date(window.startDay.y, window.startDay.m, window.startDay.d).getTime();
-                const e = new Date(window.endDay.y, window.endDay.m, window.endDay.d).getTime();
-                let days = Math.ceil((e - s) / (1000 * 60 * 60 * 24));
-                if (days === 0) days = 1;
+            if (window.TurboState.startDay && window.TurboState.endDay) {
+                const s = new Date(window.TurboState.startDay.y, window.TurboState.startDay.m, window.TurboState.startDay.d).getTime();
+                const e = new Date(window.TurboState.endDay.y, window.TurboState.endDay.m, window.TurboState.endDay.d).getTime();
+                let days = Math.max(1, Math.ceil((e - s) / (1000 * 60 * 60 * 24)));
                 
                 if (days >= 1 && days <= 3) msg = window.T('promoMsg');
                 else if (days >= 4) msg = window.T('applyMsg');
@@ -1279,11 +1281,11 @@
         };
 
         window.getAvailableCars = () => {
-            if (!window.startDay || !window.endDay) return window.CARS;
-            const searchStart = new Date(window.startDay.y, window.startDay.m, window.startDay.d).getTime();
-            const searchEnd = new Date(window.endDay.y, window.endDay.m, window.endDay.d).getTime();
+            if (!window.TurboState.startDay || !window.TurboState.endDay) return window.TurboState.CARS;
+            const searchStart = new Date(window.TurboState.startDay.y, window.TurboState.startDay.m, window.TurboState.startDay.d).getTime();
+            const searchEnd = new Date(window.TurboState.endDay.y, window.TurboState.endDay.m, window.TurboState.endDay.d).getTime();
 
-            return window.CARS.filter(car => {
+            return window.TurboState.CARS.filter(car => {
                 const booked = car.bookedRanges || [];
                 return !booked.some(range => {
                     const blockStart = new Date(range.start + 'T00:00:00').getTime();
@@ -1293,15 +1295,14 @@
             });
         };
 
-        // --- ADMIN: INVENTARIO Y EDICIÓN ---
         window.renderAdminCars = () => {
             const list = document.getElementById('admin-car-list');
             if (!list) return;
-            if (window.CARS.length === 0) {
+            if (window.TurboState.CARS.length === 0) {
                 list.innerHTML = `<p class="text-sm text-gray-400 italic">No hay carros en la flota aún.</p>`;
                 return;
             }
-            list.innerHTML = window.CARS.map(car => {
+            list.innerHTML = window.TurboState.CARS.map(car => {
                 let blockedHtml = '';
                 if (car.bookedRanges && car.bookedRanges.length > 0) {
                     blockedHtml = `<div class="mt-3 flex flex-wrap gap-1.5">` + 
@@ -1314,22 +1315,22 @@
                     <div class="flex items-start gap-5">
                         <img src="${car.images && car.images[0] ? car.images[0] : ''}" class="w-24 h-16 object-cover rounded-xl shrink-0">
                         <div>
-                            <p class="font-bold text-base text-gray-900 tracking-tight">${car.name}</p>
-                            <p class="text-[11px] text-gray-500 font-medium uppercase tracking-widest mt-1">${car.type} • ${car.transmission || 'Automático'} • Q${car.price}/día</p>
+                            <p class="font-bold text-base text-gray-900 tracking-tight">${esc(car.name)}</p>
+                            <p class="text-[11px] text-gray-500 font-medium uppercase tracking-widest mt-1">${esc(car.type)} • ${esc(car.transmission) || 'Automático'} • Q${car.price}/día</p>
                             ${blockedHtml}
                         </div>
                     </div>
                     <div class="flex flex-wrap gap-2 shrink-0 self-end md:self-auto">
-                        <button onclick="editCar('${car.id}')" class="text-gray-600 hover:text-brand-dark bg-gray-50 hover:bg-gray-100 px-4 py-2 rounded-full text-xs font-semibold transition-colors"><i class="fa-solid fa-pen mr-1.5"></i>Editar</button>
-                        <button onclick="openBlockModal('${car.id}')" class="text-gray-600 hover:text-brand-dark bg-gray-50 hover:bg-gray-100 px-4 py-2 rounded-full text-xs font-semibold transition-colors"><i class="fa-solid fa-calendar-xmark mr-1.5"></i>Bloqueos</button>
-                        <button onclick="deleteCar('${car.id}')" class="text-red-500 hover:text-red-700 bg-red-50 hover:bg-red-100 w-8 h-8 rounded-full text-xs font-semibold transition-colors flex items-center justify-center"><i class="fa-solid fa-trash"></i></button>
+                        <button onclick="editCar('${esc(car.id)}')" class="text-gray-600 hover:text-brand-dark bg-gray-50 hover:bg-gray-100 px-4 py-2 rounded-full text-xs font-semibold transition-colors"><i class="fa-solid fa-pen mr-1.5"></i>Editar</button>
+                        <button onclick="openBlockModal('${esc(car.id)}')" class="text-gray-600 hover:text-brand-dark bg-gray-50 hover:bg-gray-100 px-4 py-2 rounded-full text-xs font-semibold transition-colors"><i class="fa-solid fa-calendar-xmark mr-1.5"></i>Bloqueos</button>
+                        <button onclick="deleteCar('${esc(car.id)}')" class="text-red-500 hover:text-red-700 bg-red-50 hover:bg-red-100 w-8 h-8 rounded-full text-xs font-semibold transition-colors flex items-center justify-center"><i class="fa-solid fa-trash"></i></button>
                     </div>
                 </div>
             `}).join('');
         };
 
         window.editCar = (id) => {
-            const car = window.CARS.find(c => c.id === id);
+            const car = window.TurboState.CARS.find(c => c.id === id);
             if(!car) return;
             window.editingCarId = id;
             
@@ -1402,18 +1403,18 @@
             } finally { btn.disabled = false; btn.innerText = window.editingCarId ? "Actualizar Vehículo" : "Guardar Vehículo"; }
         };
 
-        window.deleteCar = async (id) => {
-            if(confirm('¿Seguro que querés borrar este carro definitivamente?')) {
+        window.deleteCar = (id) => {
+            window.showConfirmModal('¿Seguro que querés borrar este carro definitivamente?', async () => {
                 try { await deleteDoc(doc(db, 'artifacts', currentAppId, 'public', 'data', 'cars', id)); window.showNotif('Carro eliminado'); } 
                 catch(err) { window.showNotif('Error al borrar'); }
-            }
+            });
         };
 
         // --- ADMIN: BLOQUEO DE FECHAS ---
         window.openBlockModal = (carId) => {
             currentBlockingCarId = carId;
-            const car = window.CARS.find(c => c.id === carId);
-            document.getElementById('blockDatesCarName').innerText = `Vehículo: ${car.name}`;
+            const car = window.TurboState.CARS.find(c => c.id === carId);
+            document.getElementById('blockDatesCarName').innerText = `Vehículo: ${esc(car.name)}`;
             document.getElementById('blockStartDate').value = '';
             document.getElementById('blockEndDate').value = '';
             
@@ -1421,8 +1422,8 @@
             if (car.bookedRanges && car.bookedRanges.length > 0) {
                 ul.innerHTML = car.bookedRanges.map((range, index) => 
                     `<li class="flex justify-between items-center bg-gray-50 p-4 rounded-xl border border-gray-100 text-sm">
-                        <span class="font-bold text-gray-700">${range.start} <i class="fa-solid fa-arrow-right text-gray-400 mx-2 text-xs"></i> ${range.end}</span>
-                        <button onclick="removeBlock('${carId}', ${index})" class="text-red-500 hover:text-red-700 text-xs font-semibold px-3 py-1.5 hover:bg-red-50 rounded-md transition-colors">Quitar</button>
+                        <span class="font-bold text-gray-700">${esc(range.start)} <i class="fa-solid fa-arrow-right text-gray-400 mx-2 text-xs"></i> ${esc(range.end)}</span>
+                        <button onclick="removeBlock('${esc(carId)}', ${index})" class="text-red-500 hover:text-red-700 text-xs font-semibold px-3 py-1.5 hover:bg-red-50 rounded-md transition-colors">Quitar</button>
                     </li>`
                 ).join('');
             } else {
@@ -1446,7 +1447,7 @@
         };
 
         window.removeBlock = async (carId, index) => {
-            const car = window.CARS.find(c => c.id === carId);
+            const car = window.TurboState.CARS.find(c => c.id === carId);
             try {
                 await updateDoc(doc(db, 'artifacts', currentAppId, 'public', 'data', 'cars', carId), { bookedRanges: arrayRemove(car.bookedRanges[index]) });
                 window.openBlockModal(carId);
@@ -1474,7 +1475,7 @@
 
             const fillSelect = (id, list) => {
                 const el = document.getElementById(id);
-                if(el) el.innerHTML = `<option value="">Seleccionar...</option>` + list.map(c => `<option value="${c}">${c}</option>`).join('');
+                if(el) el.innerHTML = `<option value="">Seleccionar...</option>` + list.map(c => `<option value="${esc(c)}">${esc(c)}</option>`).join('');
             };
             fillSelect('adminCarType', window.SETTINGS.categories || []);
 
@@ -1482,8 +1483,8 @@
             if(eqContainer) {
                 eqContainer.innerHTML = (window.SETTINGS.equipment || []).map(e => `
                     <label class="inline-flex items-center cursor-pointer bg-white border border-gray-200 rounded-xl px-4 py-2.5 hover:bg-gray-50 transition-colors">
-                        <input type="checkbox" class="eq-checkbox rounded text-brand-orange focus:ring-brand-orange w-4 h-4 border-gray-300" value="${e}">
-                        <span class="ml-2.5 text-sm font-medium text-gray-700">${e}</span>
+                        <input type="checkbox" class="eq-checkbox rounded text-brand-orange focus:ring-brand-orange w-4 h-4 border-gray-300" value="${esc(e)}">
+                        <span class="ml-2.5 text-sm font-medium text-gray-700">${esc(e)}</span>
                     </label>`).join('');
             }
 
@@ -1491,7 +1492,7 @@
                 const el = document.getElementById(id);
                 if(el) el.innerHTML = (window.SETTINGS[listKey] || []).map((v, i) => `
                     <li class="flex justify-between items-center bg-white p-3.5 rounded-xl border border-gray-100 text-sm shadow-sm">
-                        <span class="font-medium text-gray-700">${v}</span> <button onclick="deleteSetting('${listKey}', ${i})" class="text-gray-400 hover:text-red-500 transition-colors"><i class="fa-solid fa-trash"></i></button>
+                        <span class="font-medium text-gray-700">${esc(v)}</span> <button onclick="deleteSetting('${listKey}', ${i})" class="text-gray-400 hover:text-red-500 transition-colors"><i class="fa-solid fa-trash"></i></button>
                     </li>`).join('');
             };
             fillList('categoriesListAdmin', 'categories');
@@ -1502,7 +1503,7 @@
             if(extraListAdmin) {
                 extraListAdmin.innerHTML = (window.SETTINGS.extras || []).map((ex, i) => `
                     <li class="flex justify-between items-center bg-white p-3.5 rounded-xl border border-gray-100 text-sm shadow-sm">
-                        <span class="font-medium text-gray-700">${ex.name} <strong class="text-brand-orange ml-1 text-xs">${ex.price > 0 ? 'Q'+ex.price : '(Gratis)'}</strong></span>
+                        <span class="font-medium text-gray-700">${esc(ex.name)} <strong class="text-brand-orange ml-1 text-xs">${ex.price > 0 ? 'Q'+ex.price : '(Gratis)'}</strong></span>
                         <button onclick="deleteSetting('extras', ${i})" class="text-gray-400 hover:text-red-500 transition-colors"><i class="fa-solid fa-trash"></i></button>
                     </li>`).join('');
             }
@@ -1511,7 +1512,7 @@
             if(hdList) {
                 hdList.innerHTML = (window.SETTINGS.highDemandRanges || []).map((r, i) => `
                     <li class="bg-red-50/50 p-4 rounded-xl border border-red-100 flex justify-between items-center text-sm">
-                        <span class="font-bold text-red-800">${r.start} <i class="fa-solid fa-arrow-right text-red-300 mx-2 text-xs"></i> ${r.end}</span>
+                        <span class="font-bold text-red-800">${esc(r.start)} <i class="fa-solid fa-arrow-right text-red-300 mx-2 text-xs"></i> ${esc(r.end)}</span>
                         <button onclick="deleteSetting('highDemandRanges', ${i})" class="text-red-400 hover:text-red-600 transition-colors"><i class="fa-solid fa-trash"></i></button>
                     </li>
                 `).join('');
@@ -1522,8 +1523,8 @@
                 faqAdminList.innerHTML = window.SETTINGS.faqs.map((f, i) => `
                     <li class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm relative">
                         <button onclick="deleteSetting('faqs', ${i})" class="absolute top-4 right-4 text-gray-300 hover:text-red-500 transition-colors"><i class="fa-solid fa-trash"></i></button>
-                        <p class="font-bold text-base text-gray-900 pr-8 tracking-tight">${f.q}</p>
-                        <p class="text-sm text-gray-500 mt-2 leading-relaxed">${f.a}</p>
+                        <p class="font-bold text-base text-gray-900 pr-8 tracking-tight">${esc(f.q)}</p>
+                        <p class="text-sm text-gray-500 mt-2 leading-relaxed">${esc(f.a)}</p>
                     </li>
                 `).join('');
             }
@@ -1558,7 +1559,7 @@
             if(bgInput.files && bgInput.files.length > 0) {
                 window.SETTINGS.hero.bgs = [];
                 for(let i=0; i<bgInput.files.length; i++) {
-                    window.SETTINGS.hero.bgs.push(await compressImage(bgInput.files[i], true)); // True para alta calidad
+                    window.SETTINGS.hero.bgs.push(await compressImage(bgInput.files[i], true)); 
                 }
             }
             await window.saveSettingsToFirebase(); window.applyPublicSettings(); window.showNotif("¡Portada actualizada!"); bgInput.value = ''; 
@@ -1607,23 +1608,24 @@
         };
 
         window.deleteSetting = (type, index) => {
-            if(confirm('¿Borrar definitivamente?')) {
+            window.showConfirmModal('¿Borrar definitivamente?', () => {
                 window.SETTINGS[type].splice(index, 1);
                 window.renderAdminSettings(); window.saveSettingsToFirebase(); window.applyPublicSettings();
-            }
+            });
         };
 
         window.renderAdminReservations = () => {
             const list = document.getElementById('admin-reservations-list');
             if(!list) return;
-            if(window.RESERVATIONS.length === 0) {
+            if(window.TurboState.RESERVATIONS.length === 0) {
                 list.innerHTML = `<tr><td colspan="7" class="px-6 py-8 text-center text-gray-500 font-medium">No hay reservas registradas.</td></tr>`;
                 return;
             }
 
-            const sortedRes = window.RESERVATIONS.sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
+            const sortedRes = window.TurboState.RESERVATIONS.sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
+            const paginatedRes = sortedRes.slice(0, 100);
 
-            list.innerHTML = sortedRes.map(res => {
+            list.innerHTML = paginatedRes.map(res => {
                 let statusClass = 'bg-gray-100 text-gray-700';
                 if(res.status === 'Atendida') statusClass = 'bg-blue-50 text-blue-600';
                 else if(res.status === 'En ruta') statusClass = 'bg-orange-50 text-orange-600';
@@ -1632,33 +1634,33 @@
                 return `
                 <tr class="hover:bg-gray-50 transition-colors border-b border-gray-50">
                     <td class="px-6 py-5 align-top">
-                        <p class="font-bold text-gray-900 mb-1">${res.clientName}</p>
-                        <p class="text-xs text-gray-500"><i class="fa-brands fa-whatsapp text-green-500 mr-1"></i> ${res.clientPhone}</p>
+                        <p class="font-bold text-gray-900 mb-1">${esc(res.clientName)}</p>
+                        <p class="text-xs text-gray-500"><i class="fa-brands fa-whatsapp text-green-500 mr-1"></i> ${esc(res.clientPhone)}</p>
                     </td>
-                    <td class="px-6 py-5 font-semibold text-gray-800 align-top">${res.carName}</td>
+                    <td class="px-6 py-5 font-semibold text-gray-800 align-top">${esc(res.carName)}</td>
                     <td class="px-6 py-5 align-top">
-                        <p class="text-sm font-bold text-gray-900 mb-1">${res.startDate} al ${res.endDate}</p>
-                        <p class="text-xs text-gray-500">${res.pickupTime} | ${res.pickupLocation}</p>
+                        <p class="text-sm font-bold text-gray-900 mb-1">${esc(res.startDate)} al ${esc(res.endDate)}</p>
+                        <p class="text-xs text-gray-500">${esc(res.pickupTime)} | ${esc(res.pickupLocation)}</p>
                     </td>
                     <td class="px-6 py-5 align-top">
-                        <p class="text-xs text-gray-500 w-48 truncate mb-1" title="${res.clientEmail}"><i class="fa-solid fa-envelope mr-1"></i> ${res.clientEmail}</p>
-                        <p class="text-xs text-gray-500 w-48 truncate" title="${res.clientAddress}"><i class="fa-solid fa-map-pin mr-1"></i> ${res.clientAddress}</p>
-                        ${res.extras ? `<p class="text-[10px] text-brand-orange mt-2 bg-orange-50 inline-block px-2 py-1 rounded-md font-medium">Extras: ${res.extras.replace(/\n/g, ', ')}</p>` : ''}
+                        <p class="text-xs text-gray-500 w-48 truncate mb-1" title="${esc(res.clientEmail)}"><i class="fa-solid fa-envelope mr-1"></i> ${esc(res.clientEmail)}</p>
+                        <p class="text-xs text-gray-500 w-48 truncate" title="${esc(res.clientAddress)}"><i class="fa-solid fa-map-pin mr-1"></i> ${esc(res.clientAddress)}</p>
+                        ${res.extras ? `<p class="text-[10px] text-brand-orange mt-2 bg-orange-50 inline-block px-2 py-1 rounded-md font-medium">Extras: ${esc(res.extras).replace(/\n/g, ', ')}</p>` : ''}
                     </td>
-                    <td class="px-6 py-5 font-bold text-brand-dark align-top tracking-tight text-base">${res.totalPrice}</td>
+                    <td class="px-6 py-5 font-bold text-brand-dark align-top tracking-tight text-base">${esc(res.totalPrice)}</td>
                     <td class="px-6 py-5 text-center align-top">
                         <span class="px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-widest ${statusClass}">
-                            ${res.status || 'Pendiente'}
+                            ${esc(res.status) || 'Pendiente'}
                         </span>
                     </td>
                     <td class="px-6 py-5 text-center flex flex-wrap justify-center gap-1.5 w-48 align-top">
-                        <button onclick="changeResStatus('${res.id}', 'Pendiente')" class="text-[10px] font-bold uppercase tracking-wider bg-white border border-gray-200 px-3 py-1.5 rounded-full text-gray-500 hover:bg-gray-50 transition-colors shadow-sm">Pendiente</button>
-                        <button onclick="changeResStatus('${res.id}', 'Atendida')" class="text-[10px] font-bold uppercase tracking-wider bg-white border border-gray-200 px-3 py-1.5 rounded-full text-blue-600 hover:bg-blue-50 transition-colors shadow-sm">Atender</button>
+                        <button onclick="changeResStatus('${esc(res.id)}', 'Pendiente')" class="text-[10px] font-bold uppercase tracking-wider bg-white border border-gray-200 px-3 py-1.5 rounded-full text-gray-500 hover:bg-gray-50 transition-colors shadow-sm">Pendiente</button>
+                        <button onclick="changeResStatus('${esc(res.id)}', 'Atendida')" class="text-[10px] font-bold uppercase tracking-wider bg-white border border-gray-200 px-3 py-1.5 rounded-full text-blue-600 hover:bg-blue-50 transition-colors shadow-sm">Atender</button>
                         ${res.status === 'En ruta' ? 
-                            `<button onclick="changeResStatus('${res.id}', 'Entregado')" class="text-[10px] font-bold uppercase tracking-wider bg-green-500 border border-green-600 px-3 py-1.5 rounded-full text-white hover:bg-green-600 transition-colors shadow-sm">Recibir Carro</button>` : 
-                            `<button onclick="finalizeRes('${res.id}')" class="text-[10px] font-bold uppercase tracking-wider bg-orange-500 border border-orange-600 px-3 py-1.5 rounded-full text-white hover:bg-orange-600 transition-colors shadow-sm">Finalizar</button>`
+                            `<button onclick="changeResStatus('${esc(res.id)}', 'Entregado')" class="text-[10px] font-bold uppercase tracking-wider bg-green-500 border border-green-600 px-3 py-1.5 rounded-full text-white hover:bg-green-600 transition-colors shadow-sm">Recibir Carro</button>` : 
+                            `<button onclick="finalizeRes('${esc(res.id)}')" class="text-[10px] font-bold uppercase tracking-wider bg-orange-500 border border-orange-600 px-3 py-1.5 rounded-full text-white hover:bg-orange-600 transition-colors shadow-sm">Finalizar</button>`
                         }
-                        <button onclick="deleteReservation('${res.id}')" class="text-xs font-bold w-8 h-8 rounded-full text-gray-400 hover:bg-red-50 hover:text-red-500 transition-colors ml-1" title="Eliminar"><i class="fa-solid fa-trash"></i></button>
+                        <button onclick="deleteReservation('${esc(res.id)}')" class="text-xs font-bold w-8 h-8 rounded-full text-gray-400 hover:bg-red-50 hover:text-red-500 transition-colors ml-1" title="Eliminar"><i class="fa-solid fa-trash"></i></button>
                     </td>
                 </tr>
                 `;
@@ -1671,21 +1673,20 @@
         };
 
         window.finalizeRes = (id) => {
-            if(confirm('¿Seguro que deseas FINALIZAR esta reserva? El vehículo pasará a estado "En Ruta".')) {
+            window.showConfirmModal('¿Seguro que deseas FINALIZAR esta reserva? El vehículo pasará a estado "En Ruta".', () => {
                 window.changeResStatus(id, 'En ruta');
-            }
+            });
         };
 
         window.deleteReservation = async (id) => {
-            if(confirm('¿Seguro que querés borrar este registro de reserva? No se puede deshacer.')) {
+            window.showConfirmModal('¿Seguro que querés borrar este registro de reserva? No se puede deshacer.', async () => {
                 try { await deleteDoc(doc(db, 'artifacts', currentAppId, 'public', 'data', 'reservations', id)); window.showNotif('Reserva eliminada de la base de datos.'); } 
                 catch(e) { window.showNotif("Error al eliminar."); }
-            }
+            });
         };
 
-        // --- TRADUCCIÓN DEL DOM ---
         window.translateDOM = () => {
-            if (window.LANG !== 'en') return;
+            if (window.TurboState.LANG !== 'en') return;
             document.querySelectorAll('[data-en]').forEach(el => {
                 if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') el.placeholder = el.getAttribute('data-en');
                 else if (el.tagName === 'OPTION') el.innerText = el.getAttribute('data-en');
@@ -1704,44 +1705,44 @@
                 const bgs = window.SETTINGS.hero.bgs || (window.SETTINGS.hero.bg ? [window.SETTINGS.hero.bg] : []);
                 
                 if (bgs.length > 0) {
-                    localStorage.setItem('turboHeroBg', bgs[0]);
-                    heroEl.style.backgroundImage = `linear-gradient(to right, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0) 100%), url('${bgs[0]}')`;
-                    clearInterval(heroBgInterval);
+                    try { localStorage.setItem('turboHeroBg', bgs[0]); } catch(e){}
+                    heroEl.style.backgroundImage = `linear-gradient(to right, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0) 100%), url('${esc(bgs[0])}')`;
+                    if(heroBgInterval) clearInterval(heroBgInterval);
+                    
                     if (bgs.length > 1) {
                         currentBgIndex = 0;
                         heroBgInterval = setInterval(() => {
                             currentBgIndex = (currentBgIndex + 1) % bgs.length;
-                            heroEl.style.backgroundImage = `linear-gradient(to right, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0) 100%), url('${bgs[currentBgIndex]}')`;
+                            heroEl.style.backgroundImage = `linear-gradient(to right, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0) 100%), url('${esc(bgs[currentBgIndex])}')`;
                         }, 5000);
                     }
                 }
                 const titleEl = document.getElementById('heroTitle');
                 if(titleEl && window.SETTINGS.hero.title) {
                     titleEl.innerText = window.SETTINGS.hero.title;
-                    localStorage.setItem('turboHeroTitle', window.SETTINGS.hero.title);
+                    try { localStorage.setItem('turboHeroTitle', window.SETTINGS.hero.title); } catch(e){}
                 }
                 const subEl = document.getElementById('heroSubtitle');
                 if(subEl && window.SETTINGS.hero.subtitle) {
                     subEl.innerText = window.SETTINGS.hero.subtitle;
-                    localStorage.setItem('turboHeroSub', window.SETTINGS.hero.subtitle);
+                    try { localStorage.setItem('turboHeroSub', window.SETTINGS.hero.subtitle); } catch(e){}
                 }
             }
 
             const locSelect = document.getElementById('searchLocation');
-            if(locSelect) locSelect.innerHTML = `<option value="" data-en="Select location">${window.LANG === 'en' ? 'Select location' : 'Seleccionar ubicación'}</option>` + (window.SETTINGS.locations||[]).map(l => `<option value="${l}">${l}</option>`).join('');
+            if(locSelect) locSelect.innerHTML = `<option value="" data-en="Select location">${window.TurboState.LANG === 'en' ? 'Select location' : 'Seleccionar ubicación'}</option>` + (window.SETTINGS.locations||[]).map(l => `<option value="${esc(l)}">${esc(l)}</option>`).join('');
 
             const faqContainer = document.getElementById('faq-public-container');
             if (faqContainer) {
                 faqContainer.innerHTML = (!window.SETTINGS.faqs || window.SETTINGS.faqs.length === 0) ? `<p class="text-center text-gray-500">${window.T('noFaq')}</p>` : 
                 window.SETTINGS.faqs.map(faq => `
                     <div class="bg-white p-8 rounded-[2rem] border border-gray-100 shadow-[0_4px_20px_rgb(0,0,0,0.03)] text-left hover:shadow-md transition-shadow">
-                        <h4 class="font-bold text-xl mb-3 tracking-tight text-gray-900"><i class="fa-solid fa-circle-question text-brand-orange mr-3"></i>${faq.q}</h4>
-                        <p class="text-gray-500 text-sm leading-relaxed ml-8 pl-1">${faq.a}</p>
+                        <h4 class="font-bold text-xl mb-3 tracking-tight text-gray-900"><i class="fa-solid fa-circle-question text-brand-orange mr-3"></i>${esc(faq.q)}</h4>
+                        <p class="text-gray-500 text-sm leading-relaxed ml-8 pl-1">${esc(faq.a)}</p>
                     </div>`).join('');
             }
         };
 
-        // --- DETECCION DE UBICACION ---
         async function detectUserLocation() {
             try {
                 const res = await fetch('https://ipapi.co/json/');
@@ -1749,29 +1750,22 @@
                 const country = data.country_code;
                 const langs = data.languages || ''; 
                 
-                if (country === 'US') {
-                    window.CURRENCY = 'USD'; window.LANG = 'en';
-                } else if (country === 'GT') {
-                    window.CURRENCY = 'GTQ'; window.LANG = 'es';
-                } else {
-                    window.CURRENCY = 'USD'; window.LANG = langs.includes('es') ? 'es' : 'en';
-                }
-            } catch (e) {
-                console.warn('Geolocalización falló. Usando default (GT/ES).');
-            }
-            if (window.LANG === 'en') window.translateDOM();
+                if (country === 'US') { window.TurboState.CURRENCY = 'USD'; window.TurboState.LANG = 'en'; } 
+                else if (country === 'GT') { window.TurboState.CURRENCY = 'GTQ'; window.TurboState.LANG = 'es'; } 
+                else { window.TurboState.CURRENCY = 'USD'; window.TurboState.LANG = langs.includes('es') ? 'es' : 'en'; }
+            } catch (e) { console.warn('Geolocalización falló. Usando default (GT/ES).'); }
+            if (window.TurboState.LANG === 'en') window.translateDOM();
         }
 
-        // --- INIT APP ---
         function listenToData() {
             onSnapshot(collection(db, 'artifacts', currentAppId, 'public', 'data', 'cars'), (snap) => {
-                window.CARS = snap.empty ? [] : snap.docs.map(d => ({ id: d.id, ...d.data() }));
+                window.TurboState.CARS = snap.empty ? [] : snap.docs.map(d => ({ id: d.id, ...d.data() }));
                 window.renderCars(window.getAvailableCars());
                 if(!document.getElementById('admin-view').classList.contains('hidden')) window.renderAdminCars();
             });
 
             onSnapshot(collection(db, 'artifacts', currentAppId, 'public', 'data', 'reservations'), (snap) => {
-                window.RESERVATIONS = snap.empty ? [] : snap.docs.map(d => ({ id: d.id, ...d.data() }));
+                window.TurboState.RESERVATIONS = snap.empty ? [] : snap.docs.map(d => ({ id: d.id, ...d.data() }));
                 if(!document.getElementById('admin-view').classList.contains('hidden')) window.renderAdminReservations();
             });
 
@@ -1779,20 +1773,26 @@
                 if (docSnap.exists()) {
                     let data = docSnap.data();
                     if(data.extras && typeof data.extras[0] === 'string') data.extras = data.extras.map(e => ({name: e, price: 0}));
-                    // Proteger claves de EmailJS
-                    if (!data.emailjsPublic) data.emailjsPublic = '4W40WME2FB2Ku9-vZ';
-                    if (!data.emailjsService) data.emailjsService = 'service_salcl6o';
-                    if (!data.emailjsTemplate) data.emailjsTemplate = 'template_vr6n7ll';
+                    if (!data.emailjsPublic) data.emailjsPublic = '';
+                    if (!data.emailjsService) data.emailjsService = '';
+                    if (!data.emailjsTemplate) data.emailjsTemplate = '';
                     window.SETTINGS = { ...window.SETTINGS, ...data };
                 } else setDoc(docSnap.ref, window.SETTINGS);
-                window.applyPublicSettings(); window.renderAdminSettings(); window.updateTotalPrice(); window.renderCars(window.getAvailableCars());
+                
+                if (window.SETTINGS.emailjsPublic) {
+                    try { window.emailjs.init(window.SETTINGS.emailjsPublic.trim()); } catch(e){}
+                }
+
+                window.applyPublicSettings(); 
+                window.renderAdminSettings(); 
+                window.updateTotalPrice(); 
+                window.renderCars(window.getAvailableCars());
             });
         }
 
         async function initApp() {
-            await detectUserLocation(); // Detecta país ANTES de cargar los carros
+            await detectUserLocation();
             try {
-                const configToUse = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : myFirebaseConfig;
                 const appInstance = initializeApp(configToUse);
                 auth = getAuth(appInstance); db = getFirestore(appInstance);
                 if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) await signInWithCustomToken(auth, __initial_auth_token);
@@ -1817,6 +1817,7 @@
             if (!e.target.closest('.calendar-wrapper')) document.querySelectorAll('.calendar-modal').forEach(m => m.style.display = 'none');
             if (e.target.id === 'loginModal') window.closeLoginModal();
             if (e.target.id === 'blockDatesModal') window.closeBlockModal();
+            if (e.target.id === 'customConfirmModal') window.closeConfirmModal();
         });
     </script>
 </body>
